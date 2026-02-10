@@ -220,4 +220,20 @@
     <string name="media_controls">Στοιχεία ελέγχου πολυμέσων</string>
     <string name="no_device_registered">Δεν έχει καταχωρηθεί συσκευή.</string>
     <string name="code_version">Έκδοση %1$s</string>
+    <string name="yellow_menu_button">Κίτρινο</string>
+    <string name="blue_menu_button">Μπλε</string>
+    <string name="green_menu_button">Πράσινο</string>
+    <string name="red_menu_button">Κόκκινο</string>
+    <string name="more_buttons">Περισσότερα κουμπιά</string>
+    <string name="stop">Τερματισμός</string>
+    <string name="repeat">Επανάληψη</string>
+    <string name="previous_track">Προηγούμενο κομμάτι</string>
+    <string name="next_track">Επόμενο κομμάτι</string>
+    <string name="rewind">Επαναφορά</string>
+    <string name="forward">Μπροστά</string>
+    <string name="volume_up">Ένταση +</string>
+    <string name="volume_down">Ένταση -</string>
+    <string name="brightness_up">Φωτεινότητα +</string>
+    <string name="brightness_down">Φωτεινότητα -</string>
+    <string name="screenshot">Στιγμιότυπο οθόνης</string>
 </resources>
