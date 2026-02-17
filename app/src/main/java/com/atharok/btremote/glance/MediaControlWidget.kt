@@ -38,8 +38,8 @@ import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_MULTIMEDIA_NEXT
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_MULTIMEDIA_PLAY_PAUSE
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_MULTIMEDIA_PREVIOUS
-import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_DEC
-import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_INC
+import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_DOWN
+import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_UP
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -188,7 +188,7 @@ class MediaControlWidget : GlanceAppWidget(), KoinComponent {
                 GlanceCustomIconButton(
                     imageProvider = ImageProvider(R.drawable.round_volume_down_24),
                     contentDescription = context.getString(R.string.volume_down),
-                    onClick = mediaControlAction(context, ACTION_VOLUME_DEC),
+                    onClick = mediaControlAction(context, ACTION_VOLUME_DOWN),
                     rippleOverride = R.drawable.glance_button_ripple_left,
                     backgroundDrawable = R.drawable.glance_button_shape_left,
                     backgroundColor = GlanceTheme.colors.tertiary,
@@ -199,7 +199,7 @@ class MediaControlWidget : GlanceAppWidget(), KoinComponent {
                 GlanceCustomIconButton(
                     imageProvider = ImageProvider(R.drawable.round_volume_up_24),
                     contentDescription = context.getString(R.string.volume_up),
-                    onClick = mediaControlAction(context, ACTION_VOLUME_INC),
+                    onClick = mediaControlAction(context, ACTION_VOLUME_UP),
                     rippleOverride = R.drawable.glance_button_ripple_right,
                     backgroundDrawable = R.drawable.glance_button_shape_right,
                     backgroundColor = GlanceTheme.colors.tertiary,

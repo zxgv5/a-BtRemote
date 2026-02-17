@@ -1,6 +1,7 @@
 package com.atharok.btremote.ui.views.remote
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,74 +10,35 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.atharok.btremote.R
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.BackButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.BrightnessVerticalButtons
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.ClosedCaptionsButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.HomeButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.MenuButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.MultimediaLayout
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.PowerButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton0
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton1
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton2
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton3
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton4
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton5
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton6
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton7
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton8
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelButton9
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelVerticalButtons
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.VolumeMuteButton
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.VolumeVerticalButtons
+import com.atharok.btremote.common.utils.AppIcons
+import com.atharok.btremote.domain.entities.remoteInput.ChannelButtonProperties
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
+import com.atharok.btremote.ui.components.customButtons.ChannelSurfaceButton
+import com.atharok.btremote.ui.components.customButtons.IconSurfaceButton
+import com.atharok.btremote.ui.components.customButtons.RemoteIconSurfaceButton
 
 @Composable
 fun RemoteView(
-    multimediaPlayPauseTouchDown: () -> Unit,
-    multimediaPreviousTouchDown: () -> Unit,
-    multimediaNextTouchDown: () -> Unit,
-    volumeUpTouchDown: () -> Unit,
-    volumeDownTouchDown: () -> Unit,
-    volumeMuteTouchDown: () -> Unit,
-    closedCaptionsTouchDown: () -> Unit,
-    backTouchDown: () -> Unit,
-    homeTouchDown: () -> Unit,
-    menuTouchDown: () -> Unit,
-    powerTouchDown: () -> Unit,
-    tvChannelUpTouchDown: () -> Unit,
-    tvChannelDownTouchDown: () -> Unit,
-    tvChannel1TouchDown: () -> Unit,
-    tvChannel2TouchDown: () -> Unit,
-    tvChannel3TouchDown: () -> Unit,
-    tvChannel4TouchDown: () -> Unit,
-    tvChannel5TouchDown: () -> Unit,
-    tvChannel6TouchDown: () -> Unit,
-    tvChannel7TouchDown: () -> Unit,
-    tvChannel8TouchDown: () -> Unit,
-    tvChannel9TouchDown: () -> Unit,
-    tvChannel0TouchDown: () -> Unit,
-    remoteTouchUp: () -> Unit,
-    keyboardTouchUp: () -> Unit,
-    modifier: Modifier = Modifier
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    sendKeyboardKeyReport: (ByteArray) -> Unit,
+    modifier: Modifier = Modifier,
+    buttonShape: Shape = CircleShape
 ) {
-    val shape = CircleShape
     val padding: Dp = dimensionResource(id = R.dimen.padding_normal)
 
     Column(modifier = modifier) {
-        MultimediaLayout(
-            multimediaPlayPauseTouchDown = multimediaPlayPauseTouchDown,
-            multimediaPreviousTouchDown = multimediaPreviousTouchDown,
-            multimediaNextTouchDown = multimediaNextTouchDown,
-            remoteTouchUp = remoteTouchUp,
+        MultimediaButtonsLayout(
+            sendRemoteKeyReport = sendRemoteKeyReport,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(padding),
-            shape = shape
+            shape = buttonShape
         )
 
         Row(
@@ -85,190 +47,157 @@ fun RemoteView(
                 .weight(4f),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
-
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                VolumeVerticalButtons(
-                    volumeUpButtonTouchDown = volumeUpTouchDown,
-                    volumeDownButtonTouchDown = volumeDownTouchDown,
-                    buttonTouchUp = remoteTouchUp,
+                VerticalButtonsLayout(
+                    topButtonProperties = RemoteButtonProperties.VolumeUpButton,
+                    bottomButtonProperties = RemoteButtonProperties.VolumeDownButton,
+                    sendRemoteKeyReport = sendRemoteKeyReport,
                     modifier = Modifier
                         .weight(2f)
                         .padding(padding)
                         .align(Alignment.Start),
-                    shape = shape
+                    shape = buttonShape
                 )
 
-                VolumeMuteButton(
-                    touchDown = volumeMuteTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.VolumeMuteButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                BackButton(
-                    touchDown = backTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.BackButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                TVChannelButton1(
-                    touchDown = tvChannel1TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel1Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton4(
-                    touchDown = tvChannel4TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel4Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton7(
-                    touchDown = tvChannel7TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel7Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                HomeButton(
-                    touchDown = homeTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.HomeButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                TVChannelButton2(
-                    touchDown = tvChannel2TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel2Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton5(
-                    touchDown = tvChannel5TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel5Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton8(
-                    touchDown = tvChannel8TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel8Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton0(
-                    touchDown = tvChannel0TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel0Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                TVChannelButton3(
-                    touchDown = tvChannel3TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel3Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton6(
-                    touchDown = tvChannel6TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel6Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                TVChannelButton9(
-                    touchDown = tvChannel9TouchDown,
-                    touchUp = keyboardTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                ChannelSurfaceButton(
+                    properties = ChannelButtonProperties.Channel9Button,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                MenuButton(
-                    touchDown = menuTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.MenuButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
             }
 
             Column(
                 modifier = Modifier.weight(1f)
             ) {
-                TVChannelVerticalButtons(
-                    tvChannelUpButtonTouchDown = tvChannelUpTouchDown,
-                    tvChannelDownButtonTouchDown = tvChannelDownTouchDown,
-                    buttonTouchUp = remoteTouchUp,
+                VerticalButtonsLayout(
+                    topButtonProperties = RemoteButtonProperties.ChannelUpButton,
+                    bottomButtonProperties = RemoteButtonProperties.ChannelDownButton,
+                    sendRemoteKeyReport = sendRemoteKeyReport,
                     modifier = Modifier
                         .weight(2f)
                         .padding(padding)
                         .align(Alignment.End),
-                    shape = shape
+                    shape = buttonShape
                 )
 
-                ClosedCaptionsButton(
-                    touchDown = closedCaptionsTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.ClosedCaptionsButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
 
-                PowerButton(
-                    touchDown = powerTouchDown,
-                    touchUp = remoteTouchUp,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
+                RemoteIconSurfaceButton(
+                    properties = RemoteButtonProperties.PowerButton,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.weight(1f).padding(padding),
+                    shape = buttonShape
                 )
             }
         }
@@ -277,52 +206,38 @@ fun RemoteView(
 
 @Composable
 fun MinimalistRemoteView(
-    multimediaPlayPauseTouchDown: () -> Unit,
-    multimediaPreviousTouchDown: () -> Unit,
-    multimediaNextTouchDown: () -> Unit,
-    volumeUpTouchDown: () -> Unit,
-    volumeDownTouchDown: () -> Unit,
-    volumeMuteTouchDown: () -> Unit,
-    closedCaptionsTouchDown: () -> Unit,
-    backTouchDown: () -> Unit,
-    homeTouchDown: () -> Unit,
-    menuTouchDown: () -> Unit,
-    powerTouchDown: () -> Unit,
-    brightnessUpTouchDown: () -> Unit,
-    brightnessDownTouchDown: () -> Unit,
-    remoteTouchUp: () -> Unit,
-    showTVChannelButtons: () -> Unit,
-    modifier: Modifier = Modifier
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    onTVChannelButtonsChanged: () -> Unit,
+    onMoreButtonsVisibleChanged: () -> Unit,
+    modifier: Modifier = Modifier,
+    buttonShape: Shape = CircleShape
 ) {
-    val shape = CircleShape
     val padding: Dp = dimensionResource(id = R.dimen.padding_normal)
 
     Column(modifier = modifier) {
-        MultimediaLayout(
-            multimediaPlayPauseTouchDown = multimediaPlayPauseTouchDown,
-            multimediaPreviousTouchDown = multimediaPreviousTouchDown,
-            multimediaNextTouchDown = multimediaNextTouchDown,
-            remoteTouchUp = remoteTouchUp,
+        MultimediaButtonsLayout(
+            sendRemoteKeyReport = sendRemoteKeyReport,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(padding),
-            shape = shape
+            shape = buttonShape
         )
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(2f),
+            modifier = Modifier.fillMaxWidth().weight(2f),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f).padding(padding)) {
-                VolumeVerticalButtons(
-                    volumeUpButtonTouchDown = volumeUpTouchDown,
-                    volumeDownButtonTouchDown = volumeDownTouchDown,
-                    buttonTouchUp = remoteTouchUp,
-                    modifier = Modifier.align(Alignment.Start),
-                    shape = shape
+            Box(
+                modifier = Modifier.weight(1f).padding(padding),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                VerticalButtonsLayout(
+                    topButtonProperties = RemoteButtonProperties.VolumeUpButton,
+                    bottomButtonProperties = RemoteButtonProperties.VolumeDownButton,
+                    sendRemoteKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier,
+                    shape = buttonShape
                 )
             }
 
@@ -332,82 +247,88 @@ fun MinimalistRemoteView(
                 Row(
                     modifier = Modifier.weight(1f)
                 ) {
-                    VolumeMuteButton(
-                        touchDown = volumeMuteTouchDown,
-                        touchUp = remoteTouchUp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(padding),
-                        shape = shape
+                    RemoteIconSurfaceButton(
+                        properties = RemoteButtonProperties.VolumeMuteButton,
+                        sendKeyReport = sendRemoteKeyReport,
+                        modifier = Modifier.weight(1f).padding(padding),
+                        shape = buttonShape
                     )
 
-                    ClosedCaptionsButton(
-                        touchDown = closedCaptionsTouchDown,
-                        touchUp = remoteTouchUp,
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(padding),
-                        shape = shape
+                    RemoteIconSurfaceButton(
+                        properties = RemoteButtonProperties.ClosedCaptionsButton,
+                        sendKeyReport = sendRemoteKeyReport,
+                        modifier = Modifier.weight(1f).padding(padding),
+                        shape = buttonShape
                     )
                 }
-                TVChannelButton(
-                    touchDown = {},
-                    touchUp = showTVChannelButtons,
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(padding),
-                    shape = shape
-                )
+
+                Row(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    IconSurfaceButton(
+                        image = AppIcons.TVChannel,
+                        contentDescription = stringResource(id = R.string.tv),
+                        touchDown = {},
+                        touchUp = onTVChannelButtonsChanged,
+                        modifier = Modifier.weight(1f).padding(padding),
+                        shape = buttonShape
+                    )
+
+                    IconSurfaceButton(
+                        image = AppIcons.MoreHoriz,
+                        contentDescription = stringResource(id = R.string.more_buttons),
+                        touchDown = {},
+                        touchUp = onMoreButtonsVisibleChanged,
+                        modifier = Modifier.weight(1f).padding(padding),
+                        shape = buttonShape
+                    )
+                }
             }
 
-            Column(modifier = Modifier.weight(1f).padding(padding)) {
-                BrightnessVerticalButtons(
-                    brightnessUpButtonTouchDown = brightnessUpTouchDown,
-                    brightnessDownButtonTouchDown = brightnessDownTouchDown,
-                    buttonTouchUp = remoteTouchUp,
-                    modifier = Modifier.align(Alignment.End),
-                    shape = shape
+            Box(
+                modifier = Modifier.weight(1f).padding(padding),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                VerticalButtonsLayout(
+                    topButtonProperties = RemoteButtonProperties.BrightnessUpButton,
+                    bottomButtonProperties = RemoteButtonProperties.BrightnessDownButton,
+                    sendRemoteKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier,
+                    shape = buttonShape
                 )
             }
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(1f),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
-            BackButton(
-                touchDown = backTouchDown,
-                touchUp = remoteTouchUp,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(padding),
-                shape = shape
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.BackButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
             )
-            HomeButton(
-                touchDown = homeTouchDown,
-                touchUp = remoteTouchUp,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(padding),
-                shape = shape
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.HomeButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
             )
-            MenuButton(
-                touchDown = menuTouchDown,
-                touchUp = remoteTouchUp,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(padding),
-                shape = shape
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.MenuButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
             )
-            PowerButton(
-                touchDown = powerTouchDown,
-                touchUp = remoteTouchUp,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(padding),
-                shape = shape
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.PowerButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
             )
         }
     }

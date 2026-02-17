@@ -69,9 +69,9 @@ import androidx.compose.material.icons.rounded.Toys
 import androidx.compose.material.icons.rounded.Usb
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.Watch
-import org.koin.core.component.KoinComponent
+import com.atharok.btremote.common.utils.icons.RoundPlayPause
 
-object AppIcons: KoinComponent {
+object AppIcons {
 
     // ---- UI ----
 
@@ -106,14 +106,15 @@ object AppIcons: KoinComponent {
     val VolumeDown get() = Icons.AutoMirrored.Rounded.VolumeDown
     val BrightnessUp get() = Icons.Rounded.BrightnessHigh
     val BrightnessDown get() = Icons.Rounded.BrightnessLow
-    val MultimediaPreviousTrack get() = Icons.Rounded.SkipPrevious
-    val MultimediaNextTrack get() = Icons.Rounded.SkipNext
-    val MultimediaRewind get() = Icons.Rounded.FastRewind
-    val MultimediaForward get() = Icons.Rounded.FastForward
-    val MultimediaPlay get() = Icons.Rounded.PlayArrow
-    val MultimediaPause get() = Icons.Rounded.Pause
-    val MultimediaStop get() = Icons.Rounded.Stop
-    val MultimediaRepeat get() = Icons.Rounded.Repeat
+    val PreviousTrack get() = Icons.Rounded.SkipPrevious
+    val NextTrack get() = Icons.Rounded.SkipNext
+    val Rewind get() = Icons.Rounded.FastRewind
+    val Forward get() = Icons.Rounded.FastForward
+    val PlayPause get() = RoundPlayPause
+    val Play get() = Icons.Rounded.PlayArrow
+    val Pause get() = Icons.Rounded.Pause
+    val Stop get() = Icons.Rounded.Stop
+    val Repeat get() = Icons.Rounded.Repeat
     val Up get() = Icons.Rounded.KeyboardArrowUp
     val Left get() = Icons.AutoMirrored.Rounded.KeyboardArrowLeft
     val Right get() = Icons.AutoMirrored.Rounded.KeyboardArrowRight

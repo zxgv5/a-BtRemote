@@ -1,5 +1,6 @@
-package com.atharok.btremote.ui.views.keyboard
+package com.atharok.btremote.ui.components.customButtons
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,56 +9,67 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.atharok.btremote.R
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.IconAdvancedKeyboardKey
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TextAdvancedKeyboardKey
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TextAdvancedKeyboardModifierKey
+import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
+import com.atharok.btremote.domain.entities.remoteInput.ChannelButtonProperties
 import com.atharok.btremote.ui.components.AdaptiveText
-import com.atharok.btremote.ui.components.ButtonContentTemplate
-import com.atharok.btremote.ui.components.RemoteButtonSurface
+import com.atharok.btremote.ui.theme.surfaceElevationMedium
+import com.atharok.btremote.ui.theme.surfaceElevationShadow
+
+// ---- Channel Button ----
 
 @Composable
-fun KeyboardKeyView(
-    touchDown: () -> Unit,
-    touchUp: () -> Unit,
+fun ChannelSurfaceButton(
+    properties: ChannelButtonProperties,
+    sendKeyReport: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape,
-    elevation: Dp,
-    content: @Composable () -> Unit
+    @FloatRange(from = 0.0, to = 1.0) percent: Float = 0.45f,
+    shape: Shape = RectangleShape,
+    elevation: Dp = surfaceElevationMedium(),
+    shadowElevation: Dp = surfaceElevationShadow()
 ) {
-    RemoteButtonSurface(
+    SurfaceButton(
+        touchDown = { sendKeyReport(properties.input) },
+        touchUp = { sendKeyReport(REMOTE_INPUT_NONE) },
         modifier = modifier,
         shape = shape,
-        elevation = elevation
+        elevation = elevation,
+        shadowElevation = shadowElevation
     ) {
-        ButtonContentTemplate(
-            touchDown = touchDown,
-            touchUp = touchUp,
-            shape = shape
-        ) {
-            content()
-        }
+        AdaptiveText(
+            text = properties.text,
+            percent = percent,
+            modifier = Modifier.fillMaxSize(),
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
+// ---- Keyboard Key ----
+
 @Composable
-fun TextAdvancedKeyboardKeyView(
-    keyboardKey: TextAdvancedKeyboardKey,
+fun CharacterKeyboardKey(
+    text: String,
     touchDown: () -> Unit,
     touchUp: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape,
-    elevation: Dp
+    textSecondary: String? = null,
+    textTertiary: String? = null,
+    shape: Shape = RoundedCornerShape(dimensionResource(id = R.dimen.keyboard_key_corner_radius)),
+    elevation: Dp = surfaceElevationMedium()
 ) {
-    KeyboardKeyView(
+    SurfaceButton(
         touchDown = touchDown,
         touchUp = touchUp,
         modifier = modifier,
@@ -67,10 +79,10 @@ fun TextAdvancedKeyboardKeyView(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(dimensionResource(id = R.dimen.padding_small)),
+                .padding(dimensionResource(id = R.dimen.padding_min)),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            keyboardKey.textSecondary?.let {
+            textSecondary?.let {
                 AdaptiveText(
                     text = it,
                     percent = 0.8f,
@@ -84,13 +96,13 @@ fun TextAdvancedKeyboardKeyView(
             }
 
             AdaptiveText(
-                text = keyboardKey.text,
+                text = text,
                 percent = 0.8f,
                 modifier = Modifier.fillMaxWidth().weight(1f),
                 textAlign = TextAlign.Center
             )
 
-            keyboardKey.textTertiary?.let {
+            textTertiary?.let {
                 AdaptiveText(
                     text = it,
                     percent = 0.8f,
@@ -107,39 +119,16 @@ fun TextAdvancedKeyboardKeyView(
 }
 
 @Composable
-fun IconAdvancedKeyboardKeyView(
-    keyboardKey: IconAdvancedKeyboardKey,
+fun TextKeyboardKey(
+    text: String,
     touchDown: () -> Unit,
     touchUp: () -> Unit,
     modifier: Modifier = Modifier,
-    shape: Shape,
-    elevation: Dp
+    shape: Shape = RoundedCornerShape(dimensionResource(id = R.dimen.keyboard_key_corner_radius)),
+    elevation: Dp = surfaceElevationMedium(),
+    textAlign: TextAlign = TextAlign.Center
 ) {
-    KeyboardKeyView(
-        touchDown = touchDown,
-        touchUp = touchUp,
-        modifier = modifier,
-        shape = shape,
-        elevation = elevation
-    ) {
-        Icon(
-            imageVector = keyboardKey.icon,
-            contentDescription = keyboardKey.contentDescription,
-            modifier = Modifier.fillMaxSize(0.35f)
-        )
-    }
-}
-
-@Composable
-fun TextAdvancedKeyboardModifierKeyView(
-    keyboardKey: TextAdvancedKeyboardModifierKey,
-    touchDown: () -> Unit,
-    touchUp: () -> Unit,
-    modifier: Modifier = Modifier,
-    shape: Shape,
-    elevation: Dp
-) {
-    KeyboardKeyView(
+    SurfaceButton(
         touchDown = touchDown,
         touchUp = touchUp,
         modifier = modifier,
@@ -149,17 +138,14 @@ fun TextAdvancedKeyboardModifierKeyView(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    horizontal = dimensionResource(id = R.dimen.padding_medium),
-                    vertical = dimensionResource(id = R.dimen.padding_small)
-                ),
+                .padding(dimensionResource(id = R.dimen.padding_min)),
             contentAlignment = Alignment.Center
         ) {
             AdaptiveText(
-                text = keyboardKey.text,
+                text = text,
                 percent = 0.8f,
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.333f),
-                textAlign = keyboardKey.textAlign
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(1f / 3f),
+                textAlign = textAlign
             )
         }
     }

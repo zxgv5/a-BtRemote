@@ -19,13 +19,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.atharok.btremote.R
-import com.atharok.btremote.ui.components.AutoConnectDropdownMenuItem
-import com.atharok.btremote.ui.components.FavoriteDeviceDropdownMenuItem
+import com.atharok.btremote.common.utils.AppIcons
+import com.atharok.btremote.ui.components.BasicDropdownMenuItem
 import com.atharok.btremote.ui.components.MoreOverflowMenu
 import com.atharok.btremote.ui.components.TextMedium
 import com.atharok.btremote.ui.components.TextNormal
 import com.atharok.btremote.ui.components.TextNormalSecondary
-import com.atharok.btremote.ui.components.UnpairDropdownMenuItem
 import com.atharok.btremote.ui.theme.surfaceElevationHigh
 
 @Composable
@@ -108,23 +107,36 @@ fun DeviceItemView(
 
         Box(contentAlignment = Alignment.CenterEnd) {
             MoreOverflowMenu { closeDropdownMenu: () -> Unit ->
-                AutoConnectDropdownMenuItem(
-                    autoConnect = {
+
+                // Auto Connect
+                BasicDropdownMenuItem(
+                    text = stringResource(id = R.string.automatic_connect),
+                    icon = AppIcons.EnabledAutoConnect,
+                    onClick = {
+                        closeDropdownMenu()
                         autoConnect()
-                        closeDropdownMenu()
                     }
                 )
-                FavoriteDeviceDropdownMenuItem(
-                    isFavoriteDevice = isFavoriteDevice,
-                    onFavoriteDeviceChanged = {
+
+                // Favorite
+                BasicDropdownMenuItem(
+                    text = stringResource(
+                        id = if(isFavoriteDevice) R.string.remove_from_favorites else R.string.add_to_favorites
+                    ),
+                    icon = AppIcons.Favorite,
+                    onClick = {
+                        closeDropdownMenu()
                         onFavoriteDeviceChanged()
-                        closeDropdownMenu()
                     }
                 )
-                UnpairDropdownMenuItem(
-                    unpair = {
-                        unpair()
+
+                // Unpair
+                BasicDropdownMenuItem(
+                    text = stringResource(id = R.string.unpair),
+                    icon = AppIcons.BluetoothUnpair,
+                    onClick = {
                         closeDropdownMenu()
+                        unpair()
                     }
                 )
             }

@@ -14,6 +14,7 @@ import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
 import com.atharok.btremote.common.utils.checkBluetoothConnectPermission
 import com.atharok.btremote.common.utils.isMacAddress
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -180,7 +181,7 @@ class BluetoothHidCore(
                         delay(DELAY_BETWEEN_KEY_PRESSES_IN_MILLIS)
                     }
                     if(shouldSendEnter) {
-                        hidDevice.sendReport(device, KEYBOARD_REPORT_ID, VirtualKeyboardLayout.KEYBOARD_KEY_ENTER)
+                        hidDevice.sendReport(device, KEYBOARD_REPORT_ID, RemoteButtonProperties.KeyboardEnterButton.input)
                         delay(DELAY_BETWEEN_KEY_PRESSES_IN_MILLIS)
                         hidDevice.sendReport(device, KEYBOARD_REPORT_ID, REMOTE_INPUT_NONE)
                     }

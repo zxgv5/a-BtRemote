@@ -33,7 +33,7 @@ import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.ui.components.AppScaffold
 import com.atharok.btremote.ui.components.MaterialButton
 import com.atharok.btremote.ui.components.MaterialOutlinedButton
-import com.atharok.btremote.ui.components.NavigateUpAction
+import com.atharok.btremote.ui.components.NavigateUpIconButton
 import com.atharok.btremote.ui.components.TextMedium
 import com.atharok.btremote.ui.components.TextNormalSecondary
 import kotlinx.coroutines.CoroutineScope
@@ -102,7 +102,7 @@ private fun StatelessDistantDevicePairScreen(
         title = stringResource(id = R.string.pairing_a_device),
         modifier = modifier,
         navigateUp = {
-            NavigateUpAction(navigateUp)
+            NavigateUpIconButton(navigateUp)
         }
     ) { innerPadding ->
 

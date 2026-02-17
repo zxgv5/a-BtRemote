@@ -31,8 +31,8 @@ import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_PICK
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_RIGHT
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_UP
-import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_DEC
-import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_INC
+import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_DOWN
+import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_VOLUME_UP
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -164,8 +164,8 @@ class BluetoothHidService : Service() {
 
     private fun configureRemoteViews(): RemoteViews {
         return RemoteViews(packageName, R.layout.notification_large_layout).apply {
-            this.setOnClickPendingIntent(R.id.notification_large_layout_volume_inc, createPendingIntent(ACTION_VOLUME_INC))
-            this.setOnClickPendingIntent(R.id.notification_large_layout_volume_dec, createPendingIntent(ACTION_VOLUME_DEC))
+            this.setOnClickPendingIntent(R.id.notification_large_layout_volume_inc, createPendingIntent(ACTION_VOLUME_UP))
+            this.setOnClickPendingIntent(R.id.notification_large_layout_volume_dec, createPendingIntent(ACTION_VOLUME_DOWN))
             this.setOnClickPendingIntent(R.id.notification_large_layout_play_pause, createPendingIntent(ACTION_MULTIMEDIA_PLAY_PAUSE))
             this.setOnClickPendingIntent(R.id.notification_large_layout_previous, createPendingIntent(ACTION_MULTIMEDIA_PREVIOUS))
             this.setOnClickPendingIntent(R.id.notification_large_layout_next, createPendingIntent(ACTION_MULTIMEDIA_NEXT))

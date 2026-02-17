@@ -39,14 +39,18 @@ private fun OverflowMenu(
 // ---- DropdownMenu ----
 
 @Composable
-fun MoreOverflowMenu(
+fun BasicOverflowMenu(
+    icon: ImageVector,
+    contentDescription: String,
     modifier: Modifier = Modifier,
     content: @Composable (closeDropdownMenu: () -> Unit) -> Unit
 ) {
     OverflowMenu(
         item = {
-            MoreAction(
-                showMenu = it,
+            BasicIconButton(
+                onClick = it,
+                icon = icon,
+                contentDescription = contentDescription,
                 modifier = modifier
             )
         },
@@ -55,17 +59,14 @@ fun MoreOverflowMenu(
 }
 
 @Composable
-fun BluetoothPairingOverflowMenu(
+fun MoreOverflowMenu(
     modifier: Modifier = Modifier,
     content: @Composable (closeDropdownMenu: () -> Unit) -> Unit
 ) {
-    OverflowMenu(
-        item = {
-            PairingNewDeviceAction(
-                onClick = it,
-                modifier = modifier
-            )
-        },
+    BasicOverflowMenu(
+        icon = AppIcons.MoreVert,
+        contentDescription = stringResource(id = R.string.more),
+        modifier = modifier,
         content = content
     )
 }
@@ -73,16 +74,16 @@ fun BluetoothPairingOverflowMenu(
 // ---- DropdownMenuItem ----
 
 @Composable
-private fun DropdownMenuItemTemplate(
+fun BasicDropdownMenuItem(
+    text: String,
+    icon: ImageVector,
     onClick: () -> Unit,
-    image: ImageVector,
-    title: String,
     modifier: Modifier = Modifier
 ) {
     DropdownMenuItem(
         text = {
             TextNormal(
-                text = title,
+                text = text,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
@@ -90,205 +91,10 @@ private fun DropdownMenuItemTemplate(
         modifier = modifier,
         leadingIcon = {
             Icon(
-                imageVector = image,
-                contentDescription = title,
-                modifier = Modifier.autoMirroredIcon(image)
+                imageVector = icon,
+                contentDescription = text,
+                modifier = Modifier.autoMirroredIcon(icon)
             )
         }
-    )
-}
-
-@Composable
-private fun DropdownMenuItemTemplate(
-    touchDown: () -> Unit,
-    touchUp: () -> Unit,
-    image: ImageVector,
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    StatefulRemoteButton(
-        touchDown = touchDown,
-        touchUp = touchUp
-    ) {
-        DropdownMenuItem(
-            text = {
-                TextNormal(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            onClick = {},
-            modifier = modifier,
-            leadingIcon = {
-                Icon(
-                    imageVector = image,
-                    contentDescription = title
-                )
-            },
-            interactionSource = it
-        )
-    }
-}
-
-@Composable
-fun ShowMoreButtonsDropdownMenuItem(
-    showMoreButtons: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = showMoreButtons,
-        image = AppIcons.MoreHoriz,
-        title = stringResource(id = R.string.more_buttons),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun BrightnessIncDropdownMenuItem(
-    touchDown: () -> Unit,
-    touchUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        touchDown = touchDown,
-        touchUp = touchUp,
-        image = AppIcons.BrightnessUp,
-        title = stringResource(id = R.string.brightness_up),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun BrightnessDecDropdownMenuItem(
-    touchDown: () -> Unit,
-    touchUp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        touchDown = touchDown,
-        touchUp = touchUp,
-        image = AppIcons.BrightnessDown,
-        title = stringResource(id = R.string.brightness_down),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DisconnectDropdownMenuItem(
-    disconnect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = disconnect,
-        image = AppIcons.Disconnect,
-        title = stringResource(id = R.string.disconnect),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun HelpDropdownMenuItem(
-    showHelp: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = showHelp,
-        image = AppIcons.Help,
-        title = stringResource(id = R.string.help),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun SettingsDropdownMenuItem(
-    navigateToSettings: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = navigateToSettings,
-        image = AppIcons.Settings,
-        title = stringResource(id = R.string.settings),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun UnpairDropdownMenuItem(
-    unpair: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = unpair,
-        image = AppIcons.BluetoothUnpair,
-        title = stringResource(id = R.string.unpair),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun AutoConnectDropdownMenuItem(
-    autoConnect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = autoConnect,
-        image = AppIcons.EnabledAutoConnect,
-        title = stringResource(id = R.string.automatic_connect),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun FavoriteDeviceDropdownMenuItem(
-    isFavoriteDevice: Boolean,
-    onFavoriteDeviceChanged: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = onFavoriteDeviceChanged,
-        image = AppIcons.Favorite,
-        title = stringResource(
-            id = if(isFavoriteDevice) R.string.remove_from_favorites else R.string.add_to_favorites
-        ),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DeviceDiscoveryDropdownMenuItem(
-    navigateToDeviceDiscoveryScreen: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = navigateToDeviceDiscoveryScreen,
-        image = AppIcons.BluetoothPairing,
-        title = stringResource(id = R.string.pairing_a_device),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun DistantDevicePairDropdownMenuItem(
-    navigateToDistantDevicePairScreen: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = navigateToDistantDevicePairScreen,
-        image = AppIcons.BluetoothPairing,
-        title = stringResource(id = R.string.pairing_from_the_remote_device),
-        modifier = modifier
-    )
-}
-
-@Composable
-fun EnterBluetoothAddressManuallyDropdownMenuItem(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    DropdownMenuItemTemplate(
-        onClick = onClick,
-        image = AppIcons.Keyboard,
-        title = stringResource(id = R.string.enter_bluetooth_address_manually),
-        modifier = modifier
     )
 }

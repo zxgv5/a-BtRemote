@@ -1,17 +1,18 @@
 package com.atharok.btremote.ui.views.keyboard
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -22,8 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -32,8 +31,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.AppIcons
-import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
+import com.atharok.btremote.ui.components.customButtons.IconRawButton
+import com.atharok.btremote.ui.components.customButtons.RemoteIconSurfaceButton
 import com.atharok.btremote.ui.theme.surfaceElevationHigh
 
 @Composable
@@ -83,11 +83,15 @@ private fun StatelessKeyboardView(
     sendTextReport: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = dimensionResource(id = R.dimen.padding_medium)),
+                .wrapContentHeight(unbounded = true),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small)),
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
@@ -95,7 +99,6 @@ private fun StatelessKeyboardView(
                 onValueChange = onTextChange,
                 modifier = Modifier
                     .weight(4f)
-                    .padding(end = dimensionResource(id = R.dimen.padding_min))
                     .focusRequester(focusRequester),
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
@@ -109,20 +112,22 @@ private fun StatelessKeyboardView(
                     }
                 )
             )
-            IconButton(
-                onClick = {
+
+            IconRawButton(
+                image = AppIcons.Send,
+                contentDescription = stringResource(id = R.string.send),
+                touchDown = {},
+                touchUp = {
                     sendTextReport(text, false)
                     if(mustClearInputField) {
                         onTextChange("")
                     }
                 },
-                modifier = Modifier.weight(1f).padding(start = dimensionResource(id = R.dimen.padding_min))
-            ) {
-                Icon(
-                    imageVector = AppIcons.Send,
-                    contentDescription = stringResource(id = R.string.send)
-                )
-            }
+                modifier = Modifier.weight(1f).fillMaxSize(),
+                shape = CircleShape,
+                iconFillFraction = 1f,
+                iconPadding = dimensionResource(id = R.dimen.padding_medium)
+            )
         }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -131,7 +136,6 @@ private fun StatelessKeyboardView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight(unbounded = true)
-                    .padding(top = dimensionResource(id = R.dimen.padding_medium))
             )
         }
     }
@@ -140,104 +144,84 @@ private fun StatelessKeyboardView(
 @Composable
 private fun AdditionalKeyboardKeysLayout(
     sendKeyboardKeyReport: (ByteArray) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    spaceBetweenButtons: Dp = dimensionResource(id = R.dimen.padding_small)
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(spaceBetweenButtons)
+    ) {
         Row(
-            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_min))
+            modifier = Modifier.fillMaxWidth()
         ) {
-            VirtualKeyboardKey(
-                image = AppIcons.SpaceBar,
-                contentDescription = stringResource(id = R.string.space_bar),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_SPACE_BAR,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(3f).padding(end = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardSpaceBarButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(3f)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardArrowUp,
-                contentDescription = stringResource(id = R.string.up),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_UP,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(horizontal = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardUpButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f).padding(horizontal = spaceBetweenButtons)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardScreenshot,
-                contentDescription = stringResource(id = R.string.print_screen),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_PRINT_SCREEN,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(start = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardPrintScreenButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f)
             )
         }
 
         Row(
-            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_min))
+            modifier = Modifier.fillMaxWidth()
         ) {
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardBackspace,
-                contentDescription = stringResource(id = R.string.delete),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_DELETE,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(end = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardBackspaceButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardEnter,
-                contentDescription = stringResource(id = R.string.enter),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_ENTER,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(horizontal = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardEnterButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f).padding(horizontal = spaceBetweenButtons)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardArrowLeft,
-                contentDescription = stringResource(id = R.string.left),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_LEFT,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(horizontal = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardLeftButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardArrowDown,
-                contentDescription = stringResource(id = R.string.down),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_DOWN,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(horizontal = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardDownButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f).padding(horizontal = spaceBetweenButtons)
             )
 
-            VirtualKeyboardKey(
-                image = AppIcons.KeyboardArrowRight,
-                contentDescription = stringResource(id = R.string.right),
-                bytes = VirtualKeyboardLayout.KEYBOARD_KEY_RIGHT,
-                sendKeyboardKey = sendKeyboardKeyReport,
-                modifier = Modifier.weight(1f).padding(start = dimensionResource(id = R.dimen.padding_min))
+            VirtualKeyboardButton(
+                properties = RemoteButtonProperties.KeyboardRightButton,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f)
             )
         }
     }
 }
 
 @Composable
-private fun VirtualKeyboardKey(
-    image: ImageVector,
-    contentDescription: String,
-    bytes: ByteArray,
-    sendKeyboardKey: (ByteArray) -> Unit,
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(dimensionResource(id = R.dimen.keyboard_key_corner_radius)),
-    elevation: Dp = surfaceElevationHigh()
+private fun VirtualKeyboardButton(
+    properties: RemoteButtonProperties,
+    sendKeyboardKeyReport: (ByteArray) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    KeyboardKeyView(
-        touchDown = { sendKeyboardKey(bytes) },
-        touchUp = { sendKeyboardKey(REMOTE_INPUT_NONE) },
+    RemoteIconSurfaceButton(
+        properties = properties,
+        sendKeyReport = sendKeyboardKeyReport,
         modifier = modifier,
-        shape = shape,
-        elevation = elevation
-    ) {
-        Icon(
-            imageVector = image,
-            contentDescription = contentDescription,
-            modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
-        )
-    }
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.keyboard_key_corner_radius)),
+        elevation = surfaceElevationHigh(),
+        iconFillFraction = 1f,
+        iconPadding = dimensionResource(id = R.dimen.padding_medium)
+    )
 }

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.atharok.btremote.R
 import com.atharok.btremote.ui.components.AppScaffold
 import com.atharok.btremote.ui.components.MaterialButton
-import com.atharok.btremote.ui.components.SettingsAction
+import com.atharok.btremote.ui.components.SettingsIconButton
 import com.atharok.btremote.ui.components.TextMedium
 import com.atharok.btremote.ui.components.TextNormalSecondary
 
@@ -46,7 +46,7 @@ fun ActivationView(
         modifier = modifier,
         scrollBehavior = null,
         topBarActions = {
-            SettingsAction(navigateToSettings)
+            SettingsIconButton(navigateToSettings)
         }
     ) { innerPadding ->
         Box(

@@ -1,13 +1,14 @@
 package com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard
 
 import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardKey
 
 class GreekVirtualKeyboardLayout: VirtualKeyboardLayout() {
 
     protected override val keyboardInputs: Map<Char, ByteArray> by lazy {
         mapOf(
-            ' ' to KEYBOARD_KEY_SPACE_BAR,
+            ' ' to RemoteButtonProperties.KeyboardSpaceBarButton.input,
 
             '`' to byteArrayOf(0x00, KeyboardKey.ROW_1_KEY_00.byte),
             '1' to byteArrayOf(0x00, KeyboardKey.ROW_1_KEY_01.byte),

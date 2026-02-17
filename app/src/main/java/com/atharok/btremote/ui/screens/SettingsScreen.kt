@@ -56,7 +56,7 @@ import com.atharok.btremote.presentation.viewmodel.SettingsViewModel
 import com.atharok.btremote.ui.components.AppScaffold
 import com.atharok.btremote.ui.components.FadeAnimatedContent
 import com.atharok.btremote.ui.components.ListDialog
-import com.atharok.btremote.ui.components.NavigateUpAction
+import com.atharok.btremote.ui.components.NavigateUpIconButton
 import com.atharok.btremote.ui.components.TextNormal
 import com.atharok.btremote.ui.components.TextNormalSecondary
 import org.koin.androidx.compose.koinViewModel
@@ -83,7 +83,7 @@ fun SettingsScreen(
         title = stringResource(id = R.string.settings),
         modifier = modifier,
         navigateUp = {
-            NavigateUpAction(navigateUp)
+            NavigateUpIconButton(navigateUp)
         }
     ) { innerPadding ->
 

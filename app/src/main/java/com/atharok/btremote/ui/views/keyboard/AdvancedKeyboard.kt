@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.getAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.AdvancedKeyboardKey
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.AdvancedKeyboardLayout
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TextAdvancedKeyboardModifierKey
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TextAdvancedKeyboardKey
 import com.atharok.btremote.ui.theme.surfaceElevationHigh
 
 @Composable
@@ -105,17 +106,17 @@ fun AdvancedKeyboard(
                             .weight(1f),
                         horizontalArrangement = Arrangement.Absolute.spacedBy(dimensionResource(id = R.dimen.padding_small))
                     ) {
-                        keyboardRow.forEach { keyboardKey ->
-                            keyboardKey.keyView(
-                                { // touchDown
-                                    if (keyboardKey is TextAdvancedKeyboardModifierKey) {
+                        keyboardRow.forEach { keyboardKey: AdvancedKeyboardKey ->
+                            keyboardKey.KeyboardKeyView(
+                                touchDown = {
+                                    if (keyboardKey is TextAdvancedKeyboardKey) {
                                         modifierKeyByte = (modifierKeyByte + it).toByte()
                                     } else {
                                         keyByte = it
                                     }
                                 },
-                                { // touchUp
-                                    if (keyboardKey is TextAdvancedKeyboardModifierKey) {
+                                touchUp = {
+                                    if (keyboardKey is TextAdvancedKeyboardKey) {
                                         modifierKeyByte = (modifierKeyByte - it).toByte()
                                     } else {
                                         // If 'it' is the last input pressed
@@ -124,9 +125,9 @@ fun AdvancedKeyboard(
                                         }
                                     }
                                 },
-                                Modifier.weight(keyboardKey.weight),
-                                shape,
-                                keyElevation
+                                modifier = Modifier.weight(keyboardKey.weight),
+                                shape = shape,
+                                elevation = keyElevation
                             )
                         }
                     }

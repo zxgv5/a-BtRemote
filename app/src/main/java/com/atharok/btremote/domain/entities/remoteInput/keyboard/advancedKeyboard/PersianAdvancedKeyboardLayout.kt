@@ -6,83 +6,83 @@ import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardKey
 class PersianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(context) {
 
     override val line1: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_01.byte,
             weight = 1f,
             text = "1",
             textSecondary = "!",
             textTertiary = "۱"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_02.byte,
             weight = 1f,
             text = "2",
             textSecondary = "@",
             textTertiary = "۲"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_03.byte,
             weight = 1f,
             text = "3",
             textSecondary = "#",
             textTertiary = "۳"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_04.byte,
             weight = 1f,
             text = "4",
             textSecondary = "$",
             textTertiary = "۴"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_05.byte,
             weight = 1f,
             text = "5",
             textSecondary = "%",
             textTertiary = "۵"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_06.byte,
             weight = 1f,
             text = "6",
             textSecondary = "^",
             textTertiary = "۶"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_07.byte,
             weight = 1f,
             text = "7",
             textSecondary = "&",
             textTertiary = "۷"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_08.byte,
             weight = 1f,
             text = "8",
             textSecondary = "*",
             textTertiary = "۸"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_09.byte,
             weight = 1f,
             text = "9",
             textSecondary = ")",
             textTertiary = "۹"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_10.byte,
             weight = 1f,
             text = "0",
             textSecondary = "(",
             textTertiary = "۰"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_11.byte,
             weight = 1f,
             text = "-",
             textSecondary = "_"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_12.byte,
             weight = 1f,
             text = "=",
@@ -91,73 +91,73 @@ class PersianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(co
     )
 
     override val line2: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_00.byte,
             weight = 1f,
             text = "ض",
             textSecondary = "ً"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_01.byte,
             weight = 1f,
             text = "ص",
             textSecondary = "ٌ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_02.byte,
             weight = 1f,
             text = "ث",
             textSecondary = "ٍ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_03.byte,
             weight = 1f,
             text = "ق",
             textSecondary = "﷼"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_04.byte,
             weight = 1f,
             text = "ف",
             textSecondary = "،"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_05.byte,
             weight = 1f,
             text = "غ",
             textSecondary = "؛"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_06.byte,
             weight = 1f,
             text = "ع",
             textSecondary = ","
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_07.byte,
             weight = 1f,
             text = "ه",
             textSecondary = "]"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_08.byte,
             weight = 1f,
             text = "خ",
             textSecondary = "["
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_09.byte,
             weight = 1f,
             text = "ح",
             textSecondary = "\\"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_10.byte,
             weight = 1f,
             text = "ج",
             textSecondary = "}"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_11.byte,
             weight = 1f,
             text = "چ",
@@ -166,73 +166,73 @@ class PersianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(co
     )
 
     override val line3: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_00.byte,
             weight = 1f,
             text = "ش",
             textSecondary = "َ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_01.byte,
             weight = 1f,
             text = "س",
             textSecondary = "ُ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_02.byte,
             weight = 1f,
             text = "ی",
             textSecondary = "ِ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_03.byte,
             weight = 1f,
             text = "ب",
             textSecondary = "ّ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_04.byte,
             weight = 1f,
             text = "ل",
             textSecondary = "ۀ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_05.byte,
             weight = 1f,
             text = "ا",
             textSecondary = "آ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_06.byte,
             weight = 1f,
             text = "ت",
             textSecondary = "ـ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_07.byte,
             weight = 1f,
             text = "ن",
             textSecondary = "«"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_08.byte,
             weight = 1f,
             text = "م",
             textSecondary = "»"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_09.byte,
             weight = 1f,
             text = "ک",
             textSecondary = ":"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_10.byte,
             weight = 1f,
             text = "گ",
             textSecondary = "\""
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_11.byte,
             weight = 1f,
             text = "پ",
@@ -241,73 +241,73 @@ class PersianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(co
     )
 
     override val line4: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_00.byte,
             weight = 1f,
             text = "÷",
             textSecondary = "×"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_00.byte,
             weight = 1f,
             text = "پ",
             textSecondary = "|"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_01.byte,
             weight = 1f,
             text = "ظ",
             textSecondary = "ة"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_02.byte,
             weight = 1f,
             text = "ط",
             textSecondary = "ي"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_03.byte,
             weight = 1f,
             text = "ز",
             textSecondary = "ژ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_04.byte,
             weight = 1f,
             text = "ر",
             textSecondary = "ؤ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_05.byte,
             weight = 1f,
             text = "ذ",
             textSecondary = "أ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_06.byte,
             weight = 1f,
             text = "د",
             textSecondary = "إ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_07.byte,
             weight = 1f,
             text = "ئ",
             textSecondary = "ء"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_08.byte,
             weight = 1f,
             text = "و",
             textSecondary = "<"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_09.byte,
             weight = 1f,
             text = ".",
             textSecondary = ">"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_10.byte,
             weight = 1f,
             text = "/",

@@ -38,31 +38,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.atharok.btremote.R
-import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
+import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.common.utils.getKeyboardLayout
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.domain.entities.RemoteNavigationEntity
-import com.atharok.btremote.domain.entities.remoteInput.ChannelInput
 import com.atharok.btremote.domain.entities.remoteInput.MouseAction
-import com.atharok.btremote.domain.entities.remoteInput.RemoteInput
-import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardKey
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.settings.RemoteSettings
 import com.atharok.btremote.presentation.services.BluetoothHidService
 import com.atharok.btremote.presentation.viewmodel.RemoteViewModel
 import com.atharok.btremote.ui.components.AppScaffold
-import com.atharok.btremote.ui.components.DirectionButtonsAction
-import com.atharok.btremote.ui.components.DisconnectDropdownMenuItem
+import com.atharok.btremote.ui.components.BasicDropdownMenuItem
+import com.atharok.btremote.ui.components.BasicIconButton
 import com.atharok.btremote.ui.components.FadeAnimatedContent
-import com.atharok.btremote.ui.components.HelpDropdownMenuItem
-import com.atharok.btremote.ui.components.KeyboardAction
 import com.atharok.btremote.ui.components.LoadingDialog
 import com.atharok.btremote.ui.components.MoreOverflowMenu
-import com.atharok.btremote.ui.components.MouseAction
-import com.atharok.btremote.ui.components.RemoteAction
-import com.atharok.btremote.ui.components.SettingsDropdownMenuItem
-import com.atharok.btremote.ui.components.ShowMoreButtonsDropdownMenuItem
 import com.atharok.btremote.ui.theme.surfaceElevationMedium
 import com.atharok.btremote.ui.views.RemoteScreenHelpModalBottomSheet
 import com.atharok.btremote.ui.views.keyboard.AdvancedKeyboard
@@ -70,9 +61,9 @@ import com.atharok.btremote.ui.views.keyboard.AdvancedKeyboardModalBottomSheet
 import com.atharok.btremote.ui.views.keyboard.VirtualKeyboardModalBottomSheet
 import com.atharok.btremote.ui.views.mouse.MousePadLayout
 import com.atharok.btremote.ui.views.remote.MinimalistRemoteView
+import com.atharok.btremote.ui.views.remote.MoreButtonsDialog
 import com.atharok.btremote.ui.views.remote.RemoteView
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.MoreButtonsDialog
-import com.atharok.btremote.ui.views.remote.buttonsLayouts.TVChannelDialog
+import com.atharok.btremote.ui.views.remote.TVChannelDialog
 import com.atharok.btremote.ui.views.remoteNavigation.RemoteDirectionalPadNavigation
 import com.atharok.btremote.ui.views.remoteNavigation.RemoteSwipeNavigation
 import org.koin.androidx.compose.koinViewModel
@@ -102,13 +93,13 @@ fun RemoteScreen(
     var navigationToggle by rememberSaveable { mutableStateOf(NavigationToggle.DIRECTION) }
 
     // Keyboard
-    var showKeyboard: Boolean by rememberSaveable { mutableStateOf(false) }
+    var isKeyboardVisible: Boolean by rememberSaveable { mutableStateOf(false) }
 
     // More Buttons
-    var showMoreButtons: Boolean by rememberSaveable { mutableStateOf(false) }
+    var isMoreButtonsVisible: Boolean by rememberSaveable { mutableStateOf(false) }
 
     // Help
-    var showHelpBottomSheet: Boolean by remember { mutableStateOf(false) }
+    var isHelpBottomSheetVisible: Boolean by remember { mutableStateOf(false) }
 
     BackHandler(enabled = true, onBack = closeApp)
 
@@ -138,18 +129,19 @@ fun RemoteScreen(
                 navigationToggle = navigationToggle,
                 onNavigationToggleChanged = { navigationToggle = it },
                 useAdvancedKeyboardIntegrated = remoteSettings.useAdvancedKeyboard && remoteSettings.useAdvancedKeyboardIntegrated,
-                showKeyboard = showKeyboard,
-                onShowKeyboardChanged = { showKeyboard = it },
-                showMoreButtons = showMoreButtons,
-                onShowMoreButtonsChanged = { showMoreButtons = it },
-                showHelpBottomSheet = showHelpBottomSheet,
-                onShowHelpBottomSheetChanged = { showHelpBottomSheet = it }
+                isKeyboardVisible = isKeyboardVisible,
+                onKeyboardVisibleChanged = { isKeyboardVisible = it },
+                isMoreButtonsVisible = isMoreButtonsVisible,
+                onMoreButtonsVisibleChanged = { isMoreButtonsVisible = it },
+                isHelpBottomSheetVisible = isHelpBottomSheetVisible,
+                onHelpBottomSheetVisibleChanged = { isHelpBottomSheetVisible = it }
             )
         },
         remoteLayout = {
             RemoteLayout(
                 useMinimalistRemote = remoteSettings.useMinimalistRemote,
-                showAdvancedKeyboard = remoteSettings.useAdvancedKeyboard && remoteSettings.useAdvancedKeyboardIntegrated && showKeyboard,
+                isAdvancedKeyboardVisible = remoteSettings.useAdvancedKeyboard && remoteSettings.useAdvancedKeyboardIntegrated && isKeyboardVisible,
+                onMoreButtonsVisibleChanged = { isMoreButtonsVisible = !isMoreButtonsVisible },
                 keyboardLanguage = remoteSettings.keyboardLanguage,
                 sendRemoteKeyReport = remoteViewModel.sendRemoteReport,
                 sendKeyboardKeyReport = remoteViewModel.sendKeyboardReport
@@ -178,27 +170,27 @@ fun RemoteScreen(
                         }
                     )
                 }
-                showHelpBottomSheet -> {
+                isHelpBottomSheetVisible -> {
                     RemoteScreenHelpModalBottomSheet(
-                        onDismissRequest = { showHelpBottomSheet = false },
+                        onDismissRequest = { isHelpBottomSheetVisible = false },
                         modifier = modifier
                     )
                 }
-                showKeyboard && (!remoteSettings.useAdvancedKeyboard || !remoteSettings.useAdvancedKeyboardIntegrated) -> {
+                isKeyboardVisible && (!remoteSettings.useAdvancedKeyboard || !remoteSettings.useAdvancedKeyboardIntegrated) -> {
                     KeyboardModalBottomSheet(
                         useAdvancedKeyboard = remoteSettings.useAdvancedKeyboard,
                         keyboardLanguage = remoteSettings.keyboardLanguage,
                         mustClearInputField = remoteSettings.mustClearInputField,
                         sendKeyboardKeyReport = remoteViewModel.sendKeyboardReport,
                         sendTextReport = remoteViewModel.sendTextReport,
-                        onShowKeyboardChanged = { showKeyboard = it }
+                        onShowKeyboardChanged = { isKeyboardVisible = it }
                     )
                 }
-                showMoreButtons -> {
+                isMoreButtonsVisible -> {
                     MoreButtonsDialog(
                         sendRemoteKeyReport = remoteViewModel.sendRemoteReport,
                         sendKeyboardKeyReport = remoteViewModel.sendKeyboardReport,
-                        onDismissRequest = { showMoreButtons = false }
+                        onDismissRequest = { isMoreButtonsVisible = false }
                     )
                 }
             }
@@ -326,12 +318,13 @@ private fun RemotePortraitView(
 @Composable
 private fun RemoteLayout(
     useMinimalistRemote: Boolean,
-    showAdvancedKeyboard: Boolean,
+    isAdvancedKeyboardVisible: Boolean,
+    onMoreButtonsVisibleChanged: () -> Unit,
     keyboardLanguage: KeyboardLanguage,
     sendRemoteKeyReport: (ByteArray) -> Unit,
     sendKeyboardKeyReport: (ByteArray) -> Unit
 ) {
-    FadeAnimatedContent(targetState = showAdvancedKeyboard) {
+    FadeAnimatedContent(targetState = isAdvancedKeyboardVisible) {
         if (it) {
             AdvancedKeyboard(
                 keyboardLanguage = keyboardLanguage,
@@ -344,33 +337,9 @@ private fun RemoteLayout(
         } else {
             RemoteButtonsLayouts(
                 useMinimalistRemote = useMinimalistRemote,
-                multimediaPlayPauseTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_PLAY_PAUSE) },
-                multimediaPreviousTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_REWIND) },
-                multimediaNextTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_FORWARD) },
-                volumeUpTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_VOLUME_UP) },
-                volumeDownTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_VOLUME_DOWN) },
-                volumeMuteTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_VOLUME_MUTE) },
-                closedCaptionsTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_CLOSED_CAPTIONS) },
-                backTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_BACK) },
-                homeTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_HOME) },
-                menuTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU) },
-                powerTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_POWER) },
-                brightnessUpTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_BRIGHTNESS_UP) },
-                brightnessDownTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_BRIGHTNESS_DOWN) },
-                tvChannelUpTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_CHANNEL_UP) },
-                tvChannelDownTouchDown = { sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_CHANNEL_DOWN) },
-                tvChannel1TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_1) },
-                tvChannel2TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_2) },
-                tvChannel3TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_3) },
-                tvChannel4TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_4) },
-                tvChannel5TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_5) },
-                tvChannel6TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_6) },
-                tvChannel7TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_7) },
-                tvChannel8TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_8) },
-                tvChannel9TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_9) },
-                tvChannel0TouchDown = { sendKeyboardKeyReport(ChannelInput.CHANNEL_INPUT_0) },
-                remoteTouchUp = { sendRemoteKeyReport(REMOTE_INPUT_NONE) },
-                keyboardTouchUp = { sendKeyboardKeyReport(REMOTE_INPUT_NONE) },
+                onMoreButtonsVisibleChanged = onMoreButtonsVisibleChanged,
+                sendRemoteKeyReport = sendRemoteKeyReport,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
             )
         }
     }
@@ -379,106 +348,35 @@ private fun RemoteLayout(
 @Composable
 private fun RemoteButtonsLayouts(
     useMinimalistRemote: Boolean,
-    multimediaPlayPauseTouchDown: () -> Unit,
-    multimediaPreviousTouchDown: () -> Unit,
-    multimediaNextTouchDown: () -> Unit,
-    volumeUpTouchDown: () -> Unit,
-    volumeDownTouchDown: () -> Unit,
-    volumeMuteTouchDown: () -> Unit,
-    closedCaptionsTouchDown: () -> Unit,
-    backTouchDown: () -> Unit,
-    homeTouchDown: () -> Unit,
-    menuTouchDown: () -> Unit,
-    powerTouchDown: () -> Unit,
-    brightnessUpTouchDown: () -> Unit,
-    brightnessDownTouchDown: () -> Unit,
-    tvChannelUpTouchDown: () -> Unit,
-    tvChannelDownTouchDown: () -> Unit,
-    tvChannel1TouchDown: () -> Unit,
-    tvChannel2TouchDown: () -> Unit,
-    tvChannel3TouchDown: () -> Unit,
-    tvChannel4TouchDown: () -> Unit,
-    tvChannel5TouchDown: () -> Unit,
-    tvChannel6TouchDown: () -> Unit,
-    tvChannel7TouchDown: () -> Unit,
-    tvChannel8TouchDown: () -> Unit,
-    tvChannel9TouchDown: () -> Unit,
-    tvChannel0TouchDown: () -> Unit,
-    remoteTouchUp: () -> Unit,
-    keyboardTouchUp: () -> Unit,
+    onMoreButtonsVisibleChanged: () -> Unit,
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    sendKeyboardKeyReport: (ByteArray) -> Unit
 ) {
     if (useMinimalistRemote) {
-        var showTVChannelButtons: Boolean by remember { mutableStateOf(false) }
+        var isTVChannelButtonsVisible: Boolean by remember { mutableStateOf(false) }
 
         MinimalistRemoteView(
-            multimediaPlayPauseTouchDown = multimediaPlayPauseTouchDown,
-            multimediaPreviousTouchDown = multimediaPreviousTouchDown,
-            multimediaNextTouchDown = multimediaNextTouchDown,
-            volumeUpTouchDown = volumeUpTouchDown,
-            volumeDownTouchDown = volumeDownTouchDown,
-            volumeMuteTouchDown = volumeMuteTouchDown,
-            closedCaptionsTouchDown = closedCaptionsTouchDown,
-            backTouchDown = backTouchDown,
-            homeTouchDown = homeTouchDown,
-            menuTouchDown = menuTouchDown,
-            powerTouchDown = powerTouchDown,
-            brightnessUpTouchDown = brightnessUpTouchDown,
-            brightnessDownTouchDown = brightnessDownTouchDown,
-            remoteTouchUp = remoteTouchUp,
-            showTVChannelButtons = {
-                showTVChannelButtons = !showTVChannelButtons
+            sendRemoteKeyReport = sendRemoteKeyReport,
+            onTVChannelButtonsChanged = {
+                isTVChannelButtonsVisible = !isTVChannelButtonsVisible
             },
+            onMoreButtonsVisibleChanged = onMoreButtonsVisibleChanged,
             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_normal))
         )
 
-        if (showTVChannelButtons) {
+        if (isTVChannelButtonsVisible) {
             TVChannelDialog(
-                tvChannelUpTouchDown = tvChannelUpTouchDown,
-                tvChannelDownTouchDown = tvChannelDownTouchDown,
-                tvChannel1TouchDown = tvChannel1TouchDown,
-                tvChannel2TouchDown = tvChannel2TouchDown,
-                tvChannel3TouchDown = tvChannel3TouchDown,
-                tvChannel4TouchDown = tvChannel4TouchDown,
-                tvChannel5TouchDown = tvChannel5TouchDown,
-                tvChannel6TouchDown = tvChannel6TouchDown,
-                tvChannel7TouchDown = tvChannel7TouchDown,
-                tvChannel8TouchDown = tvChannel8TouchDown,
-                tvChannel9TouchDown = tvChannel9TouchDown,
-                tvChannel0TouchDown = tvChannel0TouchDown,
-                remoteTouchUp = remoteTouchUp,
-                keyboardTouchUp = keyboardTouchUp,
+                sendRemoteKeyReport = sendRemoteKeyReport,
+                sendKeyboardKeyReport = sendKeyboardKeyReport,
                 onDismissRequest = {
-                    showTVChannelButtons = false
+                    isTVChannelButtonsVisible = false
                 }
             )
         }
     } else {
         RemoteView(
-            multimediaPlayPauseTouchDown = multimediaPlayPauseTouchDown,
-            multimediaPreviousTouchDown = multimediaPreviousTouchDown,
-            multimediaNextTouchDown = multimediaNextTouchDown,
-            volumeUpTouchDown = volumeUpTouchDown,
-            volumeDownTouchDown = volumeDownTouchDown,
-            volumeMuteTouchDown = volumeMuteTouchDown,
-            closedCaptionsTouchDown = closedCaptionsTouchDown,
-            backTouchDown = backTouchDown,
-            homeTouchDown = homeTouchDown,
-            menuTouchDown = menuTouchDown,
-            powerTouchDown = powerTouchDown,
-            tvChannelUpTouchDown = tvChannelUpTouchDown,
-            tvChannelDownTouchDown = tvChannelDownTouchDown,
-            tvChannel1TouchDown = tvChannel1TouchDown,
-            tvChannel2TouchDown = tvChannel2TouchDown,
-            tvChannel3TouchDown = tvChannel3TouchDown,
-            tvChannel4TouchDown = tvChannel4TouchDown,
-            tvChannel5TouchDown = tvChannel5TouchDown,
-            tvChannel6TouchDown = tvChannel6TouchDown,
-            tvChannel7TouchDown = tvChannel7TouchDown,
-            tvChannel8TouchDown = tvChannel8TouchDown,
-            tvChannel9TouchDown = tvChannel9TouchDown,
-            tvChannel0TouchDown = tvChannel0TouchDown,
-            remoteTouchUp = remoteTouchUp,
-            keyboardTouchUp = keyboardTouchUp,
+            sendRemoteKeyReport = sendRemoteKeyReport,
+            sendKeyboardKeyReport = sendKeyboardKeyReport,
             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_normal))
         )
     }
@@ -497,35 +395,9 @@ private fun NavigationLayout(
             NavigationToggle.DIRECTION -> {
                 RemotePadLayout(
                     remoteNavigationMode = remoteSettings.remoteNavigationEntity,
-                    upTouchDown = {
-                        sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU_UP)
-                    },
-                    downTouchDown = {
-                        sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU_DOWN)
-                    },
-                    leftTouchDown = {
-                        sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU_LEFT)
-                    },
-                    rightTouchDown = {
-                        sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU_RIGHT)
-                    },
-                    pickTouchDown = {
-                        if(remoteSettings.useEnterForSelection) {
-                            sendKeyboardKeyReport(byteArrayOf(0x00, KeyboardKey.KEY_ENTER.byte))
-                        } else {
-                            sendRemoteKeyReport(RemoteInput.REMOTE_INPUT_MENU_PICK)
-                        }
-                    },
-                    directionTouchUp = {
-                        sendRemoteKeyReport(REMOTE_INPUT_NONE)
-                    },
-                    pickTouchUp = {
-                        if(remoteSettings.useEnterForSelection) {
-                            sendKeyboardKeyReport(REMOTE_INPUT_NONE)
-                        } else {
-                            sendRemoteKeyReport(REMOTE_INPUT_NONE)
-                        }
-                    }
+                    sendRemoteKeyReport = sendRemoteKeyReport,
+                    sendKeyboardKeyReport = sendKeyboardKeyReport,
+                    useEnterForSelection = remoteSettings.useEnterForSelection,
                 )
             }
 
@@ -545,34 +417,22 @@ private fun NavigationLayout(
 @Composable
 private fun RemotePadLayout(
     remoteNavigationMode: RemoteNavigationEntity,
-    upTouchDown: () -> Unit,
-    downTouchDown: () -> Unit,
-    leftTouchDown: () -> Unit,
-    rightTouchDown: () -> Unit,
-    pickTouchDown: () -> Unit,
-    directionTouchUp: () -> Unit,
-    pickTouchUp: () -> Unit,
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    sendKeyboardKeyReport: (ByteArray) -> Unit,
+    useEnterForSelection: Boolean
 ) {
     if(remoteNavigationMode == RemoteNavigationEntity.D_PAD) {
         RemoteDirectionalPadNavigation(
-            upTouchDown = upTouchDown,
-            downTouchDown = downTouchDown,
-            leftTouchDown = leftTouchDown,
-            rightTouchDown = rightTouchDown,
-            pickTouchDown = pickTouchDown,
-            directionTouchUp = directionTouchUp,
-            pickTouchUp = pickTouchUp,
+            sendRemoteKeyReport = sendRemoteKeyReport,
+            sendKeyboardKeyReport = sendKeyboardKeyReport,
+            useEnterForSelection = useEnterForSelection,
             modifier = Modifier.aspectRatio(1f)
         )
     } else {
         RemoteSwipeNavigation(
-            upTouchDown = upTouchDown,
-            downTouchDown = downTouchDown,
-            leftTouchDown = leftTouchDown,
-            rightTouchDown = rightTouchDown,
-            pickTouchDown = pickTouchDown,
-            directionTouchUp = directionTouchUp,
-            pickTouchUp = pickTouchUp,
+            sendRemoteKeyReport = sendRemoteKeyReport,
+            sendKeyboardKeyReport = sendKeyboardKeyReport,
+            useEnterForSelection = useEnterForSelection,
             modifier = Modifier
         )
     }
@@ -620,87 +480,112 @@ private fun TopBarActions(
     navigationToggle: NavigationToggle,
     onNavigationToggleChanged: (NavigationToggle) -> Unit,
     useAdvancedKeyboardIntegrated: Boolean,
-    showKeyboard: Boolean,
-    onShowKeyboardChanged: (Boolean) -> Unit,
-    showMoreButtons: Boolean,
-    onShowMoreButtonsChanged: (Boolean) -> Unit,
-    showHelpBottomSheet: Boolean,
-    onShowHelpBottomSheetChanged: (Boolean) -> Unit
+    isKeyboardVisible: Boolean,
+    onKeyboardVisibleChanged: (Boolean) -> Unit,
+    isMoreButtonsVisible: Boolean,
+    onMoreButtonsVisibleChanged: (Boolean) -> Unit,
+    isHelpBottomSheetVisible: Boolean,
+    onHelpBottomSheetVisibleChanged: (Boolean) -> Unit
 ) {
     FadeAnimatedContent(targetState = navigationToggle) {
         when (it) {
             NavigationToggle.MOUSE -> {
-                DirectionButtonsAction(
-                    showDirectionButtons = {
+                BasicIconButton(
+                    onClick = {
                         onNavigationToggleChanged(NavigationToggle.DIRECTION)
-                    }
+                    },
+                    icon = AppIcons.Controller,
+                    contentDescription = stringResource(id = R.string.direction_arrows),
                 )
             }
 
             NavigationToggle.DIRECTION -> {
-                MouseAction(
-                    showMousePad = {
+                BasicIconButton(
+                    onClick = {
                         onNavigationToggleChanged(NavigationToggle.MOUSE)
-                    }
+                    },
+                    icon = AppIcons.Mouse,
+                    contentDescription = stringResource(id = R.string.mouse),
                 )
             }
         }
     }
 
     if(useAdvancedKeyboardIntegrated) {
-        FadeAnimatedContent(targetState = showKeyboard) {
+        FadeAnimatedContent(targetState = isKeyboardVisible) {
             when (it) {
                 true -> {
-                    RemoteAction(
-                        showRemote = {
-                            onShowKeyboardChanged(false)
-                        }
+                    // Remote
+                    BasicIconButton(
+                        onClick = { onKeyboardVisibleChanged(false) },
+                        icon = AppIcons.RemoteControl,
+                        contentDescription = stringResource(id = R.string.remote)
                     )
                 }
 
                 false -> {
-                    KeyboardAction(
-                        showKeyboard = {
-                            onShowKeyboardChanged(true)
-                        }
+                    // Keyboard
+                    BasicIconButton(
+                        onClick = { onKeyboardVisibleChanged(true) },
+                        icon = AppIcons.Keyboard,
+                        contentDescription = stringResource(id = R.string.keyboard)
                     )
                 }
             }
         }
     } else {
-        KeyboardAction(
-            showKeyboard = {
-                onShowKeyboardChanged(!showKeyboard)
-            }
+        // Keyboard
+        BasicIconButton(
+            onClick = { onKeyboardVisibleChanged(!isKeyboardVisible) },
+            icon = AppIcons.Keyboard,
+            contentDescription = stringResource(id = R.string.keyboard)
         )
     }
 
     MoreOverflowMenu { closeDropdownMenu: () -> Unit ->
-        ShowMoreButtonsDropdownMenuItem(
-            showMoreButtons = {
+
+        // More Buttons
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.more_buttons),
+            icon = AppIcons.MoreHoriz,
+            onClick = {
                 closeDropdownMenu()
-                onShowMoreButtonsChanged(!showMoreButtons)
+                onMoreButtonsVisibleChanged(!isMoreButtonsVisible)
             }
         )
-        DisconnectDropdownMenuItem(
-            disconnect = {
+
+        // Disconnect
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.disconnect),
+            icon = AppIcons.Disconnect,
+            onClick = {
                 closeDropdownMenu()
                 disconnectDevice()
             }
         )
+
+        // Divider
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(dimensionResource(id = R.dimen.padding_medium))
         )
-        HelpDropdownMenuItem(
-            showHelp = {
+
+        // Help
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.help),
+            icon = AppIcons.Help,
+            onClick = {
                 closeDropdownMenu()
-                onShowHelpBottomSheetChanged(!showHelpBottomSheet)
+                onHelpBottomSheetVisibleChanged(!isHelpBottomSheetVisible)
             }
         )
-        SettingsDropdownMenuItem(
-            navigateToSettings = {
+
+        // Settings
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.settings),
+            icon = AppIcons.Settings,
+            onClick = {
                 closeDropdownMenu()
                 navigateToSettings()
             }

@@ -3,106 +3,110 @@ package com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboa
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import com.atharok.btremote.ui.views.keyboard.IconAdvancedKeyboardKeyView
-import com.atharok.btremote.ui.views.keyboard.TextAdvancedKeyboardKeyView
-import com.atharok.btremote.ui.views.keyboard.TextAdvancedKeyboardModifierKeyView
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
+import com.atharok.btremote.ui.components.customButtons.CharacterKeyboardKey
+import com.atharok.btremote.ui.components.customButtons.IconSurfaceButton
+import com.atharok.btremote.ui.components.customButtons.TextKeyboardKey
 
 sealed class AdvancedKeyboardKey {
     abstract val byte: Byte
     abstract val weight: Float
-    abstract val keyView: @Composable (
+
+    @Composable
+    abstract fun KeyboardKeyView(
         touchDown: (Byte) -> Unit,
         touchUp: (Byte) -> Unit,
-        Modifier,
+        modifier: Modifier,
         shape: Shape,
         elevation: Dp
-    ) -> Unit
+    )
 }
 
-data class TextAdvancedKeyboardKey(
+data class CharacterAdvancedKeyboardKey(
     override val byte: Byte,
     override val weight: Float,
     val text: String,
     val textSecondary: String? = null,
     val textTertiary: String? = null
 ): AdvancedKeyboardKey() {
-    override val keyView: @Composable (
-        (Byte) -> Unit,
-        (Byte) -> Unit,
-        Modifier,
-        Shape,
-        Dp
-    ) -> Unit = { touchDown, touchUp, modifier, shape, elevation ->
-        TextAdvancedKeyboardKeyView(
-            keyboardKey = this,
-            touchDown = {
-                touchDown(byte)
-            },
-            touchUp = {
-                touchUp(byte)
-            },
+
+    @Composable
+    override fun KeyboardKeyView(
+        touchDown: (Byte) -> Unit,
+        touchUp: (Byte) -> Unit,
+        modifier: Modifier,
+        shape: Shape,
+        elevation: Dp
+    ) {
+        CharacterKeyboardKey(
+            text = text,
+            touchDown = { touchDown(byte) },
+            touchUp = { touchUp(byte) },
             modifier = modifier,
+            textSecondary = textSecondary,
+            textTertiary = textTertiary,
             shape = shape,
             elevation = elevation
+        )
+    }
+}
+
+data class TextAdvancedKeyboardKey(
+    override val byte: Byte,
+    override val weight: Float,
+    val text: String,
+    val textAlign: TextAlign = TextAlign.Center
+): AdvancedKeyboardKey() {
+
+    @Composable
+    override fun KeyboardKeyView(
+        touchDown: (Byte) -> Unit,
+        touchUp: (Byte) -> Unit,
+        modifier: Modifier,
+        shape: Shape,
+        elevation: Dp
+    ) {
+        TextKeyboardKey(
+            text = text,
+            touchDown = { touchDown(byte) },
+            touchUp = { touchUp(byte) },
+            modifier = modifier,
+            shape = shape,
+            elevation = elevation,
+            textAlign = textAlign
         )
     }
 }
 
 data class IconAdvancedKeyboardKey(
-    override val byte: Byte,
-    override val weight: Float,
-    val icon: ImageVector,
-    val contentDescription: String? = null
+    val properties: RemoteButtonProperties,
+    override val weight: Float
 ): AdvancedKeyboardKey() {
-    override val keyView: @Composable (
-            (Byte) -> Unit,
-            (Byte) -> Unit,
-            Modifier,
-            Shape,
-            Dp
-    ) -> Unit = { touchDown, touchUp, modifier, shape, elevation ->
-        IconAdvancedKeyboardKeyView(
-            keyboardKey = this,
-            touchDown = {
-                touchDown(byte)
-            },
-            touchUp = {
-                touchUp(byte)
-            },
-            modifier = modifier,
-            shape = shape,
-            elevation = elevation
-        )
-    }
-}
 
-data class TextAdvancedKeyboardModifierKey(
-    override val byte: Byte,
-    override val weight: Float,
-    val text: String,
-    val textAlign: TextAlign
-): AdvancedKeyboardKey() {
-    override val keyView: @Composable (
-            (Byte) -> Unit,
-            (Byte) -> Unit,
-            Modifier,
-            Shape,
-            Dp
-    ) -> Unit = { touchDown, touchUp, modifier, shape, elevation ->
-        TextAdvancedKeyboardModifierKeyView(
-            keyboardKey = this,
+    override val byte: Byte = properties.input[1]
+
+    @Composable
+    override fun KeyboardKeyView(
+        touchDown: (Byte) -> Unit,
+        touchUp: (Byte) -> Unit,
+        modifier: Modifier,
+        shape: Shape,
+        elevation: Dp
+    ) {
+        IconSurfaceButton(
+            image = properties.icon,
+            contentDescription = stringResource(properties.stringRes),
             touchDown = {
                 touchDown(byte)
             },
-            touchUp = {
-                touchUp(byte)
-            },
+            touchUp = { touchUp(byte) },
             modifier = modifier,
             shape = shape,
-            elevation = elevation
+            elevation = elevation,
+            iconFillFraction = 0.4f
         )
     }
 }

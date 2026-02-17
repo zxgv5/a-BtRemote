@@ -23,6 +23,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.AppIcons
+import com.atharok.btremote.common.utils.REMOTE_INPUT_NONE
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
 import com.atharok.btremote.ui.components.DefaultElevatedCard
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -42,49 +44,52 @@ private const val SWIPE_PAD_DETECTION_DISTANCE = 5
 
 @Composable
 fun RemoteSwipeNavigation(
-    upTouchDown: () -> Unit,
-    downTouchDown: () -> Unit,
-    leftTouchDown: () -> Unit,
-    rightTouchDown: () -> Unit,
-    pickTouchDown: () -> Unit,
-    directionTouchUp: () -> Unit,
-    pickTouchUp: () -> Unit,
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    sendKeyboardKeyReport: (ByteArray) -> Unit,
+    useEnterForSelection: Boolean,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(dimensionResource(id = R.dimen.card_corner_radius))
 ) {
     val haptic = LocalHapticFeedback.current
-
     var action: SwipeAction by remember { mutableStateOf(SwipeAction.NONE) }
 
     LaunchedEffect(action) {
         when(action) {
             SwipeAction.NONE -> {}
             SwipeAction.DIRECTION_RELEASE -> {
-                directionTouchUp()
+                sendRemoteKeyReport(REMOTE_INPUT_NONE)
                 action = SwipeAction.NONE
             }
             SwipeAction.PICK_RELEASE -> {
-                pickTouchUp()
+                if(useEnterForSelection) {
+                    sendKeyboardKeyReport(REMOTE_INPUT_NONE)
+                } else {
+                    sendRemoteKeyReport(REMOTE_INPUT_NONE)
+                }
                 action = SwipeAction.NONE
             }
             SwipeAction.UP -> {
-                upTouchDown()
+                sendRemoteKeyReport(RemoteButtonProperties.MenuUpButton.input)
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             }
             SwipeAction.LEFT -> {
-                leftTouchDown()
+                sendRemoteKeyReport(RemoteButtonProperties.MenuLeftButton.input)
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             }
             SwipeAction.RIGHT -> {
-                rightTouchDown()
+                sendRemoteKeyReport(RemoteButtonProperties.MenuRightButton.input)
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             }
             SwipeAction.DOWN -> {
-                downTouchDown()
+                sendRemoteKeyReport(RemoteButtonProperties.MenuDownButton.input)
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
             }
             SwipeAction.PICK -> {
-                pickTouchDown()
+                if(useEnterForSelection) {
+                    sendKeyboardKeyReport(RemoteButtonProperties.KeyboardEnterButton.input)
+                } else {
+                    sendRemoteKeyReport(RemoteButtonProperties.MenuPickButton.input)
+                }
                 haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                 action = SwipeAction.PICK_RELEASE
             }

@@ -1,4 +1,4 @@
-package com.atharok.btremote.ui.components
+package com.atharok.btremote.ui.components.customButtons
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
@@ -18,11 +18,12 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.Dp
+import com.atharok.btremote.ui.components.DefaultElevatedCard
 import com.atharok.btremote.ui.theme.surfaceElevationMedium
 import com.atharok.btremote.ui.theme.surfaceElevationShadow
 
 @Composable
-fun StatefulRemoteButton(
+private fun StatefulCustomButton(
     touchDown: () -> Unit,
     touchUp: () -> Unit,
     content: @Composable (interactionSource: MutableInteractionSource) -> Unit
@@ -47,13 +48,13 @@ fun StatefulRemoteButton(
 }
 
 @Composable
-fun ButtonContentTemplate(
+private fun CustomButton(
     touchDown: () -> Unit,
     touchUp: () -> Unit,
     shape: Shape,
     content: @Composable () -> Unit
 ) {
-    StatefulRemoteButton(
+    StatefulCustomButton(
         touchDown = touchDown,
         touchUp = touchUp
     ) {
@@ -74,8 +75,12 @@ fun ButtonContentTemplate(
     }
 }
 
+// ---- Surface Button ----
+
 @Composable
-fun RemoteButtonSurface(
+fun SurfaceButton(
+    touchDown: () -> Unit,
+    touchUp: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     elevation: Dp = surfaceElevationMedium(),
@@ -88,6 +93,31 @@ fun RemoteButtonSurface(
         elevation = elevation,
         shadowElevation = shadowElevation
     ) {
-        content()
+        CustomButton(
+            touchDown = touchDown,
+            touchUp = touchUp,
+            shape = shape,
+            content = content
+        )
+    }
+}
+
+// ---- Raw Button ----
+
+@Composable
+fun RawButton(
+    touchDown: () -> Unit,
+    touchUp: () -> Unit,
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    content: @Composable () -> Unit
+) {
+    Box(modifier = modifier) {
+        CustomButton(
+            touchDown = touchDown,
+            touchUp = touchUp,
+            shape = shape,
+            content = content
+        )
     }
 }

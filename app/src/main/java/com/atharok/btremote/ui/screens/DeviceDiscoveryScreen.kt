@@ -28,16 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.atharok.btremote.R
+import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.common.utils.arePermissionsGranted
 import com.atharok.btremote.domain.entities.DeviceEntity
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.presentation.viewmodel.DeviceDiscoveryViewModel
 import com.atharok.btremote.ui.components.AppScaffold
-import com.atharok.btremote.ui.components.HelpAction
+import com.atharok.btremote.ui.components.BasicIconButton
+import com.atharok.btremote.ui.components.HelpIconButton
 import com.atharok.btremote.ui.components.LoadingDialog
-import com.atharok.btremote.ui.components.NavigateUpAction
-import com.atharok.btremote.ui.components.RefreshAction
-import com.atharok.btremote.ui.components.SettingsAction
+import com.atharok.btremote.ui.components.NavigateUpIconButton
+import com.atharok.btremote.ui.components.SettingsIconButton
 import com.atharok.btremote.ui.components.TextNormalSecondary
 import com.atharok.btremote.ui.views.BluetoothScanningScreenHelpModalBottomSheet
 import com.atharok.btremote.ui.views.DeviceItemView
@@ -169,12 +170,16 @@ private fun StatelessBluetoothScanningScreen(
         title = stringResource(id = R.string.pairing_a_device),
         modifier = modifier,
         navigateUp = {
-            NavigateUpAction(navigateUp)
+            NavigateUpIconButton(navigateUp)
         },
         topBarActions = {
-            RefreshAction(refresh = startDiscovery)
-            HelpAction(showHelp = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
-            SettingsAction(navigateToSettings)
+            BasicIconButton(
+                onClick = startDiscovery,
+                icon = AppIcons.Refresh,
+                contentDescription = stringResource(id = R.string.refresh)
+            )
+            HelpIconButton(onClick = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
+            SettingsIconButton(navigateToSettings)
         }
     ) { innerPadding ->
 

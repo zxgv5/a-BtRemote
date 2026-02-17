@@ -1,5 +1,6 @@
 package com.atharok.btremote.ui.components
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +31,7 @@ import com.atharok.btremote.ui.theme.Typography
 @Composable
 fun AdaptiveText(
     text: String,
-    percent: Float,
+    @FloatRange(from = 0.0, to = 1.0) percent: Float,
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
     fontWeight: FontWeight? = null,

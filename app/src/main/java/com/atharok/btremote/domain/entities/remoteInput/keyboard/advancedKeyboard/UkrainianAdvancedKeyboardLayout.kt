@@ -6,84 +6,84 @@ import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardKey
 class UkrainianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(context) {
 
     override val line1: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_01.byte,
             weight = 1f,
             text = "1",
             textSecondary = "!",
             textTertiary = "¹"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_02.byte,
             weight = 1f,
             text = "2",
             textSecondary = "\"",
             textTertiary = "²"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_03.byte,
             weight = 1f,
             text = "3",
             textSecondary = "№",
             textTertiary = "§"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_04.byte,
             weight = 1f,
             text = "4",
             textSecondary = ";",
             textTertiary = "$"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_05.byte,
             weight = 1f,
             text = "5",
             textSecondary = "%",
             textTertiary = "°"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_06.byte,
             weight = 1f,
             text = "6",
             textSecondary = ":",
             textTertiary = "<"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_07.byte,
             weight = 1f,
             text = "7",
             textSecondary = "?",
             textTertiary = ">"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_08.byte,
             weight = 1f,
             text = "8",
             textSecondary = "*",
             textTertiary = "•"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_09.byte,
             weight = 1f,
             text = "9",
             textSecondary = "(",
             textTertiary = "["
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_10.byte,
             weight = 1f,
             text = "0",
             textSecondary = ")",
             textTertiary = "]"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_11.byte,
             weight = 1f,
             text = "-",
             textSecondary = "_",
             textTertiary = "—"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_12.byte,
             weight = 1f,
             text = "=",
@@ -93,69 +93,69 @@ class UkrainianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(
     )
 
     override val line2: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_00.byte,
             weight = 1f,
             text = "й",
             textTertiary = "ј"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_01.byte,
             weight = 1f,
             text = "ц",
             textTertiary = "џ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_02.byte,
             weight = 1f,
             text = "у",
             textTertiary = "ў"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_03.byte,
             weight = 1f,
             text = "к",
             textTertiary = "®"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_04.byte,
             weight = 1f,
             text = "е",
             textTertiary = "ё"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_05.byte,
             weight = 1f,
             text = "н",
             textTertiary = "њ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_06.byte,
             weight = 1f,
             text = "г",
             textTertiary = "ґ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_07.byte,
             weight = 1f,
             text = "ш"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_08.byte,
             weight = 1f,
             text = "щ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_09.byte,
             weight = 1f,
             text = "з"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_10.byte,
             weight = 1f,
             text = "х"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_2_KEY_11.byte,
             weight = 1f,
             text = "ї",
@@ -164,66 +164,66 @@ class UkrainianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(
     )
 
     override val line3: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_00.byte,
             weight = 1f,
             text = "ф"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_01.byte,
             weight = 1f,
             text = "і",
             textTertiary = "ы"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_02.byte,
             weight = 1f,
             text = "в"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_03.byte,
             weight = 1f,
             text = "а"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_04.byte,
             weight = 1f,
             text = "п"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_05.byte,
             weight = 1f,
             text = "р"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_06.byte,
             weight = 1f,
             text = "о"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_07.byte,
             weight = 1f,
             text = "л",
             textTertiary = "љ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_08.byte,
             weight = 1f,
             text = "д",
             textTertiary = "ђ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_09.byte,
             weight = 1f,
             text = "ж"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_10.byte,
             weight = 1f,
             text = "є",
             textTertiary = "э"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_3_KEY_11.byte,
             weight = 1f,
             text = "\\"
@@ -231,69 +231,69 @@ class UkrainianAdvancedKeyboardLayout(context: Context): AdvancedKeyboardLayout(
     )
 
     override val line4: Array<AdvancedKeyboardKey> = arrayOf(
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_1_KEY_00.byte,
             weight = 1f,
             text = "'",
             textSecondary = "ʼ",
             textTertiary = "´"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_00.byte,
             weight = 1f,
             text = "ґ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_01.byte,
             weight = 1f,
             text = "я"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_02.byte,
             weight = 1f,
             text = "ч",
             textTertiary = "ћ"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_03.byte,
             weight = 1f,
             text = "с",
             textTertiary = "©"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_04.byte,
             weight = 1f,
             text = "м"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_05.byte,
             weight = 1f,
             text = "и"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_06.byte,
             weight = 1f,
             text = "т",
             textTertiary = "™"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_07.byte,
             weight = 1f,
             text = "ь"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_08.byte,
             weight = 1f,
             text = "б",
             textTertiary = "«"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_09.byte,
             weight = 1f,
             text = "ю",
             textTertiary = "»"
         ),
-        TextAdvancedKeyboardKey(
+        CharacterAdvancedKeyboardKey(
             byte = KeyboardKey.ROW_4_KEY_10.byte,
             weight = 1f,
             text = ".",

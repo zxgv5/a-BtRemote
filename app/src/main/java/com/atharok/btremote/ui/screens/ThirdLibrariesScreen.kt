@@ -23,7 +23,7 @@ import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.domain.entities.ThirdLibrary
 import com.atharok.btremote.ui.components.AppScaffold
 import com.atharok.btremote.ui.components.MaterialFilledTonalButton
-import com.atharok.btremote.ui.components.NavigateUpAction
+import com.atharok.btremote.ui.components.NavigateUpIconButton
 import com.atharok.btremote.ui.components.TextMedium
 import com.atharok.btremote.ui.components.TextNormalSecondary
 
@@ -49,7 +49,7 @@ fun StatelessThirdLibrariesScreen(
         title = stringResource(id = R.string.third_party_library),
         modifier = modifier,
         navigateUp = {
-            NavigateUpAction(navigateUp)
+            NavigateUpIconButton(navigateUp)
         }
     ) { innerPadding ->
 

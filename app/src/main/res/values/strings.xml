@@ -162,6 +162,7 @@
     <string name="enter">Enter</string>
     <string name="escape">Esc</string>
     <string name="delete">Delete</string>
+    <string name="keyboard_tab">Tab</string>
     <string name="space_bar">Space Bar</string>
     <string name="print_screen">Print Screen</string>
     <string name="shift">Shift</string>
@@ -176,6 +177,7 @@
     <string name="down">Down</string>
     <string name="left">Left</string>
     <string name="right">Right</string>
+    <string name="play_pause">Play / Pause</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>

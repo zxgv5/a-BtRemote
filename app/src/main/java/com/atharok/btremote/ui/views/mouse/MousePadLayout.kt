@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.domain.entities.remoteInput.MouseAction
+import com.atharok.btremote.ui.components.customButtons.EmptySurfaceButton
+import com.atharok.btremote.ui.components.customButtons.IconSurfaceButton
 import kotlin.jvm.internal.Ref.BooleanRef
 import kotlin.jvm.internal.Ref.FloatRef
 
@@ -141,49 +143,49 @@ private fun MouseButtonsLayoutLTR(
     Row(modifier = modifier, horizontalArrangement = Arrangement.Absolute.Left) {
 
         // Start
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_LEFT) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
+            modifier = Modifier
+                .weight(0.38f)
+                .fillMaxHeight()
+                .padding(end = dimensionResource(id = R.dimen.padding_min)),
             shape = RoundedCornerShape(
                 topStart = 0.dp,
                 topEnd = 0.dp,
                 bottomEnd = 0.dp,
                 bottomStart = dimensionResource(id = R.dimen.card_corner_radius)
-            ),
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(end = dimensionResource(id = R.dimen.padding_min))
+            )
         )
 
         // Center
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_MIDDLE) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
-            shape = RectangleShape,
             modifier = Modifier
                 .weight(0.24f)
                 .fillMaxHeight()
                 .padding(
                     start = dimensionResource(id = R.dimen.padding_min),
                     end = dimensionResource(id = R.dimen.padding_min)
-                )
+                ),
+            shape = RectangleShape
         )
 
         // End
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_RIGHT) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
+            modifier = Modifier
+                .weight(0.38f)
+                .fillMaxHeight()
+                .padding(start = dimensionResource(id = R.dimen.padding_min)),
             shape = RoundedCornerShape(
                 topStart = 0.dp,
                 topEnd = 0.dp,
                 bottomEnd = dimensionResource(id = R.dimen.card_corner_radius),
                 bottomStart = 0.dp
-            ),
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(start = dimensionResource(id = R.dimen.padding_min))
+            )
         )
     }
 }
@@ -196,49 +198,49 @@ private fun MouseButtonsLayoutRTL(
     Row(modifier = modifier, horizontalArrangement = Arrangement.Absolute.Left) {
 
         // Start
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_LEFT) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
+            modifier = Modifier
+                .weight(0.38f)
+                .fillMaxHeight()
+                .padding(start = dimensionResource(id = R.dimen.padding_min)),
             shape = RoundedCornerShape(
                 topStart = 0.dp,
                 topEnd = 0.dp,
                 bottomEnd = dimensionResource(id = R.dimen.card_corner_radius),
                 bottomStart = 0.dp
-            ),
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(start = dimensionResource(id = R.dimen.padding_min))
+            )
         )
 
         // Center
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_MIDDLE) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
-            shape = RectangleShape,
             modifier = Modifier
                 .weight(0.24f)
                 .fillMaxHeight()
                 .padding(
                     start = dimensionResource(id = R.dimen.padding_min),
                     end = dimensionResource(id = R.dimen.padding_min)
-                )
+                ),
+            shape = RectangleShape
         )
 
         // End
-        MouseButton(
+        EmptySurfaceButton(
             touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_RIGHT) },
             touchUp = { onMouseActionChange(MouseAction.NONE) },
+            modifier = Modifier
+                .weight(0.38f)
+                .fillMaxHeight()
+                .padding(end = dimensionResource(id = R.dimen.padding_min)),
             shape = RoundedCornerShape(
                 topStart = 0.dp,
                 topEnd = 0.dp,
                 bottomEnd = 0.dp,
                 bottomStart = dimensionResource(id = R.dimen.card_corner_radius)
-            ),
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(end = dimensionResource(id = R.dimen.padding_min))
+            )
         )
     }
 }
@@ -252,7 +254,9 @@ private fun ScrollMouseButtonsLayout(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        ScrollMouseButton(
+        IconSurfaceButton(
+            image = AppIcons.MouseScrollUp,
+            contentDescription = stringResource(id = R.string.mouse_wheel_up),
             touchDown = {
                 onMouseScrollingChange(
                     MouseScrolling(
@@ -271,16 +275,16 @@ private fun ScrollMouseButtonsLayout(
                     )
                 )
             },
-            image = AppIcons.MouseScrollUp,
-            contentDescription = stringResource(id = R.string.mouse_wheel_up),
-            shape = RoundedCornerShape(topEnd = dimensionResource(id = R.dimen.card_corner_radius)),
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f)
-                .padding(bottom = dimensionResource(id = R.dimen.padding_min))
+                .padding(bottom = dimensionResource(id = R.dimen.padding_min)),
+            shape = RoundedCornerShape(topEnd = dimensionResource(id = R.dimen.card_corner_radius))
         )
 
-        ScrollMouseButton(
+        IconSurfaceButton(
+            image = AppIcons.MouseScrollDown,
+            contentDescription = stringResource(id = R.string.mouse_wheel_down),
             touchDown = {
                 onMouseScrollingChange(
                     MouseScrolling(
@@ -299,13 +303,11 @@ private fun ScrollMouseButtonsLayout(
                     )
                 )
             },
-            image = AppIcons.MouseScrollDown,
-            contentDescription = stringResource(id = R.string.mouse_wheel_down),
-            shape = RectangleShape,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f)
-                .padding(top = dimensionResource(id = R.dimen.padding_min))
+                .padding(top = dimensionResource(id = R.dimen.padding_min)),
+            shape = RectangleShape
         )
     }
 }

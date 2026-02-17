@@ -3,7 +3,7 @@ package com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboa
 import android.content.Context
 import androidx.compose.ui.text.style.TextAlign
 import com.atharok.btremote.R
-import com.atharok.btremote.common.utils.AppIcons
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardKey
 
 abstract class AdvancedKeyboardLayout(protected val context: Context) {
@@ -91,68 +91,60 @@ abstract class AdvancedKeyboardLayout(protected val context: Context) {
                     text = context.getString(R.string.escape)
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_TAB.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardTab
+                    properties = RemoteButtonProperties.KeyboardTabButton,
+                    weight = 1f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_PRINT_SCREEN.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardScreenshot
+                    properties = RemoteButtonProperties.KeyboardPrintScreenButton,
+                    weight = 1f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_UP_ARROW.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardArrowUp
+                    properties = RemoteButtonProperties.KeyboardUpButton,
+                    weight = 1f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_DELETE.byte,
-                    weight = 1.5f,
-                    icon = AppIcons.KeyboardBackspace
+                    properties = RemoteButtonProperties.KeyboardBackspaceButton,
+                    weight = 1.5f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_ENTER.byte,
-                    weight = 1.5f,
-                    icon = AppIcons.KeyboardEnter
+                    properties = RemoteButtonProperties.KeyboardEnterButton,
+                    weight = 1.5f
                 )
             ),
 
             // LShift, LMeta, Arrow Left, Arrow Down, Arrow Right, RMeta, RShift
             arrayOf(
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_SHIFT_LEFT.byte,
                     weight = 1f,
                     text = context.getString(R.string.shift),
                     textAlign = TextAlign.Start
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_META_LEFT.byte,
                     weight = 1f,
                     text = context.getString(R.string.meta),
                     textAlign = TextAlign.Start
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_LEFT_ARROW.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardArrowLeft
+                    properties = RemoteButtonProperties.KeyboardLeftButton,
+                    weight = 1f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_DOWN_ARROW.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardArrowDown
+                    properties = RemoteButtonProperties.KeyboardDownButton,
+                    weight = 1f
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_RIGHT_ARROW.byte,
-                    weight = 1f,
-                    icon = AppIcons.KeyboardArrowRight
+                    properties = RemoteButtonProperties.KeyboardRightButton,
+                    weight = 1f
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_META_RIGHT.byte,
                     weight = 1f,
                     text = context.getString(R.string.meta),
                     textAlign = TextAlign.End
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_SHIFT_RIGHT.byte,
                     weight = 1f,
                     text = context.getString(R.string.shift),
@@ -162,30 +154,29 @@ abstract class AdvancedKeyboardLayout(protected val context: Context) {
 
             // LCtrl, Alt, Space bar, Alt Gr, RCtrl
             arrayOf(
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_CTRL_LEFT.byte,
                     weight = 1f,
                     text = context.getString(R.string.ctrl),
                     textAlign = TextAlign.Start
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_ALT.byte,
                     weight = 1f,
                     text = context.getString(R.string.alt),
                     textAlign = TextAlign.Center
                 ),
                 IconAdvancedKeyboardKey(
-                    byte = KeyboardKey.KEY_SPACE_BAR.byte,
-                    weight = 3f,
-                    icon = AppIcons.SpaceBar
+                    properties = RemoteButtonProperties.KeyboardSpaceBarButton,
+                    weight = 3f
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_ALT_GR.byte,
                     weight = 1f,
                     text = context.getString(R.string.alt_gr),
                     textAlign = TextAlign.Center
                 ),
-                TextAdvancedKeyboardModifierKey(
+                TextAdvancedKeyboardKey(
                     byte = KeyboardKey.KEY_CTRL_RIGHT.byte,
                     weight = 1f,
                     text = context.getString(R.string.ctrl),

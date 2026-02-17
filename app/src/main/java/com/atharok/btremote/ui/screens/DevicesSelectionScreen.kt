@@ -45,14 +45,12 @@ import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.presentation.services.BluetoothHidService
 import com.atharok.btremote.presentation.viewmodel.DeviceSelectionViewModel
 import com.atharok.btremote.ui.components.AppScaffold
-import com.atharok.btremote.ui.components.BluetoothPairingOverflowMenu
+import com.atharok.btremote.ui.components.BasicDropdownMenuItem
+import com.atharok.btremote.ui.components.BasicOverflowMenu
 import com.atharok.btremote.ui.components.DefaultElevatedCard
-import com.atharok.btremote.ui.components.DeviceDiscoveryDropdownMenuItem
-import com.atharok.btremote.ui.components.DistantDevicePairDropdownMenuItem
-import com.atharok.btremote.ui.components.EnterBluetoothAddressManuallyDropdownMenuItem
-import com.atharok.btremote.ui.components.HelpAction
+import com.atharok.btremote.ui.components.HelpIconButton
 import com.atharok.btremote.ui.components.LoadingDialog
-import com.atharok.btremote.ui.components.SettingsAction
+import com.atharok.btremote.ui.components.SettingsIconButton
 import com.atharok.btremote.ui.components.SimpleDialog
 import com.atharok.btremote.ui.components.TemplateDialog
 import com.atharok.btremote.ui.components.TextLarge
@@ -292,29 +290,44 @@ private fun StatelessDevicesSelectionScreen(
         title = stringResource(id = R.string.devices),
         modifier = modifier,
         topBarActions = {
-            BluetoothPairingOverflowMenu { closeDropdownMenu: () -> Unit ->
-                DeviceDiscoveryDropdownMenuItem(
-                    navigateToDeviceDiscoveryScreen = {
-                        navigateToDeviceDiscoveryScreen()
-                        closeDropdownMenu()
-                    }
-                )
-                DistantDevicePairDropdownMenuItem(
-                    navigateToDistantDevicePairScreen = {
-                        navigateToDistantDevicePairScreen()
-                        closeDropdownMenu()
-                    }
-                )
-                EnterBluetoothAddressManuallyDropdownMenuItem(
+            BasicOverflowMenu(
+                icon = AppIcons.BluetoothPairing,
+                contentDescription = stringResource(id = R.string.pairing_a_device)
+            ) { closeDropdownMenu: () -> Unit ->
+
+                // Device Discovery
+                BasicDropdownMenuItem(
+                    text = stringResource(id = R.string.pairing_a_device),
+                    icon = AppIcons.BluetoothPairing,
                     onClick = {
-                        onShowBluetoothAddressDialogChanged(true)
                         closeDropdownMenu()
+                        navigateToDeviceDiscoveryScreen()
+                    }
+                )
+
+                // Distant Device Pair
+                BasicDropdownMenuItem(
+                    text = stringResource(id = R.string.pairing_from_the_remote_device),
+                    icon = AppIcons.BluetoothPairing,
+                    onClick = {
+                        closeDropdownMenu()
+                        navigateToDistantDevicePairScreen()
+                    }
+                )
+
+                // Show Bluetooth Address Dialog
+                BasicDropdownMenuItem(
+                    text = stringResource(id = R.string.enter_bluetooth_address_manually),
+                    icon = AppIcons.Keyboard,
+                    onClick = {
+                        closeDropdownMenu()
+                        onShowBluetoothAddressDialogChanged(true)
                     }
                 )
             }
 
-            HelpAction(showHelp = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
-            SettingsAction(navigateToSettings)
+            HelpIconButton(onClick = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
+            SettingsIconButton(navigateToSettings)
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)

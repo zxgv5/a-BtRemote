@@ -9,7 +9,7 @@ import com.atharok.btremote.common.utils.AppIcons.Help
 import com.atharok.btremote.common.utils.AppIcons.Mute
 import com.atharok.btremote.common.utils.AppIcons.VolumeDown
 import com.atharok.btremote.common.utils.AppIcons.VolumeUp
-import com.atharok.btremote.common.utils.AppIcons.getKoin
+import org.koin.mp.KoinPlatform.getKoin
 import java.util.Locale
 
 // Workaround for some icons which should not be mirrored in RTL layout.

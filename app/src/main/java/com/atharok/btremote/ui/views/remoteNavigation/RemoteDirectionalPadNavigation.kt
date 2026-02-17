@@ -1,7 +1,5 @@
 package com.atharok.btremote.ui.views.remoteNavigation
 
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,16 +15,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.atharok.btremote.R
-import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.common.utils.ArcShape
-import com.atharok.btremote.ui.components.RemoteButtonSurface
-import com.atharok.btremote.ui.components.StatefulRemoteButton
+import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
+import com.atharok.btremote.ui.components.customButtons.RemoteEmptySurfaceButton
 import com.atharok.btremote.ui.theme.surfaceElevationMedium
 import com.atharok.btremote.ui.theme.surfaceElevationShadow
 
@@ -37,16 +32,18 @@ private val RightArcShape = ArcShape(-45f, 90f)
 
 @Composable
 fun RemoteDirectionalPadNavigation(
-    upTouchDown: () -> Unit,
-    downTouchDown: () -> Unit,
-    leftTouchDown: () -> Unit,
-    rightTouchDown: () -> Unit,
-    pickTouchDown: () -> Unit,
-    directionTouchUp: () -> Unit,
-    pickTouchUp: () -> Unit,
+    sendRemoteKeyReport: (ByteArray) -> Unit,
+    sendKeyboardKeyReport: (ByteArray) -> Unit,
+    useEnterForSelection: Boolean,
     modifier: Modifier = Modifier,
     elevation: Dp = surfaceElevationMedium()
 ) {
+    val upButtonProperties = RemoteButtonProperties.MenuUpButton
+    val downButtonProperties = RemoteButtonProperties.MenuDownButton
+    val leftButtonProperties = RemoteButtonProperties.MenuLeftButton
+    val rightButtonProperties = RemoteButtonProperties.MenuRightButton
+    val pickButtonProperties = RemoteButtonProperties.MenuPickButton
+
     Box(
         modifier = modifier.shadow(
             elevation = surfaceElevationShadow(),
@@ -59,101 +56,96 @@ fun RemoteDirectionalPadNavigation(
         ) {
 
             // ---- Top ----
-            RemoteButtonSurface(
+            RemoteEmptySurfaceButton(
+                properties = upButtonProperties,
+                sendKeyReport = sendRemoteKeyReport,
                 modifier = Modifier.fillMaxSize(),
                 shape = TopArcShape,
                 elevation = elevation,
                 shadowElevation = 0.dp
-            ) {
-                DPadButton(touchDown = upTouchDown, touchUp = directionTouchUp)
-            }
+            )
 
             // ---- Bottom ----
-            RemoteButtonSurface(
+            RemoteEmptySurfaceButton(
+                properties = downButtonProperties,
+                sendKeyReport = sendRemoteKeyReport,
                 modifier = Modifier.fillMaxSize(),
                 shape = BottomArcShape,
                 elevation = elevation,
                 shadowElevation = 0.dp
-            ) {
-                DPadButton(touchDown = downTouchDown, touchUp = directionTouchUp)
-            }
+            )
 
             // ---- Left ----
-            RemoteButtonSurface(
+            RemoteEmptySurfaceButton(
+                properties = leftButtonProperties,
+                sendKeyReport = sendRemoteKeyReport,
                 modifier = Modifier.fillMaxSize(),
                 shape = LeftArcShape,
                 elevation = elevation,
                 shadowElevation = 0.dp
-            ) {
-                DPadButton(touchDown = leftTouchDown, touchUp = directionTouchUp)
-            }
+            )
 
             // ---- Right ----
-            RemoteButtonSurface(
+            RemoteEmptySurfaceButton(
+                properties = rightButtonProperties,
+                sendKeyReport = sendRemoteKeyReport,
                 modifier = Modifier.fillMaxSize(),
                 shape = RightArcShape,
                 elevation = elevation,
                 shadowElevation = 0.dp
-            ) {
-                DPadButton(touchDown = rightTouchDown, touchUp = directionTouchUp)
-            }
+            )
 
             // ---- Center ----
-            RemoteButtonSurface(
-                modifier = Modifier.fillMaxSize(0.3333f),
-                shape = CircleShape,
-                elevation = elevation,
-                shadowElevation = 0.dp
-            ) {
-                DPadButton(touchDown = pickTouchDown, touchUp = pickTouchUp)
+            if(useEnterForSelection) {
+                RemoteEmptySurfaceButton(
+                    properties = RemoteButtonProperties.KeyboardEnterButton,
+                    sendKeyReport = sendKeyboardKeyReport,
+                    modifier = Modifier.fillMaxSize(1f / 3f),
+                    shape = CircleShape,
+                    elevation = elevation,
+                    shadowElevation = 0.dp
+                )
+            } else {
+                RemoteEmptySurfaceButton(
+                    properties = pickButtonProperties,
+                    sendKeyReport = sendRemoteKeyReport,
+                    modifier = Modifier.fillMaxSize(1f / 3f),
+                    shape = CircleShape,
+                    elevation = elevation,
+                    shadowElevation = 0.dp
+                )
             }
         }
 
         // ---- Icons ----
         Column(modifier = Modifier.wrapContentSize()) {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
+                modifier = Modifier.fillMaxSize().weight(1f),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Spacer(Modifier.weight(1f).padding(8.dp))
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    imageVector = AppIcons.Up,
-                    contentDescription = stringResource(id = R.string.up),
+                DPadIcon(
+                    properties = upButtonProperties,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
                 Spacer(Modifier.weight(1f).padding(8.dp))
             }
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
+                modifier = Modifier.fillMaxWidth().weight(1f),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    imageVector = AppIcons.Left,
-                    contentDescription = stringResource(id = R.string.left)
+                DPadIcon(
+                    properties = leftButtonProperties,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    imageVector = AppIcons.Pick,
-                    contentDescription = stringResource(id = R.string.pick)
+                DPadIcon(
+                    properties = pickButtonProperties,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    imageVector = AppIcons.Right,
-                    contentDescription = stringResource(id = R.string.right)
+                DPadIcon(
+                    properties = rightButtonProperties,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
             }
 
@@ -162,12 +154,9 @@ fun RemoteDirectionalPadNavigation(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Spacer(Modifier.weight(1f).padding(8.dp))
-                Icon(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f),
-                    imageVector = AppIcons.Down,
-                    contentDescription = stringResource(id = R.string.down)
+                DPadIcon(
+                    properties = downButtonProperties,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
                 Spacer(Modifier.weight(1f).padding(8.dp))
             }
@@ -176,23 +165,13 @@ fun RemoteDirectionalPadNavigation(
 }
 
 @Composable
-private fun DPadButton(
-    touchDown: () -> Unit,
-    touchUp: () -> Unit
+private fun DPadIcon(
+    properties: RemoteButtonProperties,
+    modifier: Modifier = Modifier
 ) {
-    StatefulRemoteButton(
-        touchDown = touchDown,
-        touchUp = touchUp
-    ) {
-        Spacer(
-            modifier = Modifier
-                .fillMaxSize()
-                .clipToBounds()
-                .clickable(
-                    interactionSource = it,
-                    indication = LocalIndication.current,
-                    onClick = {}
-                )
-        )
-    }
+    Icon(
+        modifier = modifier,
+        imageVector = properties.icon,
+        contentDescription = stringResource(id = properties.stringRes)
+    )
 }
