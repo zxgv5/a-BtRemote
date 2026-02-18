@@ -223,4 +223,7 @@
     <string name="green_menu_button">绿</string>
     <string name="blue_menu_button">蓝</string>
     <string name="yellow_menu_button">黄</string>
+    <string name="use_mouse_navigation_by_default">默认使用鼠标导航</string>
+    <string name="keyboard_tab">Tab</string>
+    <string name="play_pause">播放/暂停</string>
 </resources>
