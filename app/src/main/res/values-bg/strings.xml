@@ -199,4 +199,20 @@
     <string name="media_controls">Контроли за медии</string>
     <string name="no_device_registered">На това устройство не е регистрирано нито едно устройство.</string>
     <string name="code_version">Версия %1$s</string>
+    <string name="more_buttons">Още бутони</string>
+    <string name="stop">Стоп</string>
+    <string name="repeat">Повторение</string>
+    <string name="previous_track">Предишна песен</string>
+    <string name="next_track">Следваща песен</string>
+    <string name="rewind">Превъртане назад</string>
+    <string name="forward">Напред</string>
+    <string name="volume_up">Увеличаване +</string>
+    <string name="volume_down">Намаляване -</string>
+    <string name="brightness_up">Яркост +</string>
+    <string name="brightness_down">Яркост -</string>
+    <string name="screenshot">Снимка на екрана</string>
+    <string name="red_menu_button">Червено</string>
+    <string name="green_menu_button">Зелено</string>
+    <string name="blue_menu_button">Синьо</string>
+    <string name="yellow_menu_button">Жълто</string>
 </resources>

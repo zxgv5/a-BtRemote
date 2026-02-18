@@ -8,7 +8,7 @@
         If you choose to translate it, ensure that the name is 11 characters or fewer if possible.
         If the text exceeds 11 characters, it's not a problem, but it may not display entirely in all launchers.
     -->
-    <string name="app_name">蓝牙遥控器</string>
+    <string name="app_name">BT Remote</string>
     <string name="bluetooth_permission_denied_message">您已拒绝蓝牙访问。</string>
     <string name="activation">激活</string>
     <string name="bluetooth_disabled_message">必须启用设备上的蓝牙才能连接到远程设备。</string>
@@ -207,4 +207,20 @@
     <string name="media_controls">媒体控制</string>
     <string name="no_device_registered">此设备上未注册任何设备。</string>
     <string name="code_version">版本 %1$s</string>
+    <string name="more_buttons">更多按钮</string>
+    <string name="stop">停止</string>
+    <string name="repeat">重复</string>
+    <string name="previous_track">上一首</string>
+    <string name="next_track">下一首</string>
+    <string name="rewind">快退</string>
+    <string name="forward">快进</string>
+    <string name="volume_up">音量 +</string>
+    <string name="volume_down">音量 -</string>
+    <string name="brightness_up">亮度 +</string>
+    <string name="brightness_down">亮度 -</string>
+    <string name="screenshot">截屏</string>
+    <string name="red_menu_button">红</string>
+    <string name="green_menu_button">绿</string>
+    <string name="blue_menu_button">蓝</string>
+    <string name="yellow_menu_button">黄</string>
 </resources>
