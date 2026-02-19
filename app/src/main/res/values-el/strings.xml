@@ -236,4 +236,7 @@
     <string name="brightness_up">Φωτεινότητα +</string>
     <string name="brightness_down">Φωτεινότητα -</string>
     <string name="screenshot">Στιγμιότυπο οθόνης</string>
+    <string name="use_mouse_navigation_by_default">Χρήση πλοήγησης με ποντίκι από προεπιλογή</string>
+    <string name="keyboard_tab">Καρτέλα</string>
+    <string name="play_pause">Αναπαραγωγή / Παύση</string>
 </resources>
