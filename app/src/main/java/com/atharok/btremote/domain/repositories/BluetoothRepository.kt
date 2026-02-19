@@ -4,6 +4,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.atharok.btremote.domain.entities.DeviceEntity
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
+import com.atharok.btremote.domain.resources.Result
 import kotlinx.coroutines.flow.StateFlow
 
 interface BluetoothRepository {
@@ -25,7 +26,7 @@ interface BluetoothRepository {
 
     fun getLocalDeviceName(): String
     fun getBondedDevices(): List<DeviceEntity>
-    fun unpairDevice(address: String): Boolean
+    fun unpairDevice(address: String?): Result<Boolean>
 
     // ---- BluetoothHidCore ----
 

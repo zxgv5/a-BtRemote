@@ -3,11 +3,13 @@ package com.atharok.btremote.ui.screens
 import android.bluetooth.BluetoothHidDevice
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -62,7 +64,7 @@ import com.atharok.btremote.ui.views.DevicesSelectionScreenHelpModalBottomSheet
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
-private data class InternalDevice(val name: String = "", val macAddress: String = "")
+private data class InternalDevice(val name: String, val macAddress: String)
 
 @Composable
 fun DevicesSelectionScreen(
@@ -84,13 +86,13 @@ fun DevicesSelectionScreen(
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 
     val devices: List<DeviceEntity> by viewModel.devicesFlow.collectAsStateWithLifecycle()
-    val autoConnectionDeviceAddress: String by viewModel.getAutoConnectDeviceAddressFlow().collectAsStateWithLifecycle("")
+    val autoConnectDeviceAddress: String by viewModel.getAutoConnectDeviceAddressFlow().collectAsStateWithLifecycle("")
     val favoriteDevices: List<String> by viewModel.getFavoriteDevices().collectAsStateWithLifecycle(emptyList())
 
     var showBluetoothAddressDialog: Boolean by remember { mutableStateOf(false) }
     var showHelpBottomSheet: Boolean by remember { mutableStateOf(false) }
-    var deviceToAutoConnect: InternalDevice by remember { mutableStateOf(InternalDevice()) }
-    var deviceToUnpair: InternalDevice by remember { mutableStateOf(InternalDevice()) }
+    var deviceToAutoConnect: InternalDevice? by remember { mutableStateOf(null) }
+    var deviceToUnpair: InternalDevice? by remember { mutableStateOf(null) }
 
     BackHandler(enabled = true, onBack = closeApp)
 
@@ -124,127 +126,105 @@ fun DevicesSelectionScreen(
     StatelessDevicesSelectionScreen(
         snackbarHostState = snackbarHostState,
         isBluetoothServiceRunning = isBluetoothServiceRunning,
-        isBluetoothHidProfileRegistered = isBluetoothHidProfileRegistered,
-        bluetoothDeviceHidConnectionState = bluetoothDeviceHidConnectionState,
 
-        favoriteDevices = devices.filter { it.macAddress in favoriteDevices },
-        nonFavoriteDevices = devices.filter { it.macAddress !in favoriteDevices },
         connectDevice = {
             if(!viewModel.connectDevice(macAddress = it)) {
                 viewModel.disconnectDevice()
                 viewModel.connectDevice(macAddress = it)
             }
         },
-        autoConnectDeviceAddress = autoConnectionDeviceAddress,
-        navigateToDeviceDiscoveryScreen = navigateToDeviceDiscoveryScreen,
-        navigateToDistantDevicePairScreen = navigateToDistantDevicePairScreen,
-        navigateToSettings = navigateToSettings,
-
-        failureHidConnectionDialog = {
-            SimpleDialog(
-                confirmButtonText = stringResource(id = R.string.retry),
-                dismissButtonText = stringResource(id = R.string.close),
-                onConfirmation = {
-                    BluetoothHidService.stop(context) // isBluetoothServiceRunning becomes false, so the service will be restarted via LaunchedEffect(isBluetoothServiceRunning)
-                },
-                onDismissRequest = closeApp,
-                dialogTitle = stringResource(id = R.string.error),
-                dialogText = stringResource(id = R.string.bluetooth_failed_to_register_app_message)
-            )
-        },
-        connectingDialog = {
-            LoadingDialog(
-                title = stringResource(id = R.string.connection),
-                message = stringResource(id = R.string.bluetooth_device_connecting_message, bluetoothDeviceHidConnectionState.deviceName),
-                buttonText = stringResource(id = android.R.string.cancel),
-                onButtonClick = {
-                    viewModel.disconnectDevice()
-                }
-            )
-        },
-        bluetoothAddressDialog = {
-            BluetoothAddressDialog(
-                connectDevice = {
-                    showBluetoothAddressDialog = false
-                    viewModel.connectDevice(it)
-                },
-                close = {
-                    showBluetoothAddressDialog = false
-                }
-            )
-        },
-        helpBottomSheet = {
-            DevicesSelectionScreenHelpModalBottomSheet(
-                onDismissRequest = { showHelpBottomSheet = false }
-            )
-        },
-        unpairDeviceDialog = {
-            SimpleDialog(
-                confirmButtonText = stringResource(id = R.string.unpair),
-                dismissButtonText = stringResource(id = android.R.string.cancel),
-                onConfirmation = {
-                    val msg = if(viewModel.unpairDevice(deviceToUnpair.macAddress)) {
-                        context.getString(R.string.unpair_device_successful)
-                    } else {
-                        context.getString(R.string.unpair_device_failure)
-                    }
-                    coroutineScope.launch { snackbarHostState.showSnackbar(msg) }
-                    deviceToUnpair = InternalDevice()
-                },
-                onDismissRequest = {
-                    deviceToUnpair = InternalDevice()
-                },
-                dialogTitle = deviceToUnpair.name,
-                dialogText = stringResource(id = R.string.unpair_device_warning_message)
-            )
-        },
-        autoConnectDeviceDialog = {
-            if(autoConnectionDeviceAddress == deviceToAutoConnect.macAddress) {
-                // Disabled auto connect
-                SimpleDialog(
-                    confirmButtonText = stringResource(id = android.R.string.ok),
-                    dismissButtonText = stringResource(id = android.R.string.cancel),
-                    onConfirmation = {
-                        viewModel.saveAutoConnectDeviceAddress("")
-                        deviceToAutoConnect = InternalDevice()
-                    },
-                    onDismissRequest = {
-                        deviceToAutoConnect = InternalDevice()
-                    },
-                    dialogTitle = deviceToAutoConnect.name,
-                    dialogText = stringResource(id = R.string.disabled_automatic_connection_message)
-                )
-            } else {
-                // Enabled auto connect
-                SimpleDialog(
-                    confirmButtonText = stringResource(id = android.R.string.ok),
-                    dismissButtonText = stringResource(id = android.R.string.cancel),
-                    onConfirmation = {
-                        viewModel.saveAutoConnectDeviceAddress(deviceToAutoConnect.macAddress)
-                        deviceToAutoConnect = InternalDevice()
-                    },
-                    onDismissRequest = {
-                        deviceToAutoConnect = InternalDevice()
-                    },
-                    dialogTitle = deviceToAutoConnect.name,
-                    dialogText = stringResource(id = R.string.enabled_automatic_connection_message)
-                )
-            }
-        },
-
-        showBluetoothAddressDialog = showBluetoothAddressDialog,
-        onShowBluetoothAddressDialogChanged = { showBluetoothAddressDialog = it },
-        showHelpBottomSheet = showHelpBottomSheet,
-        onShowHelpBottomSheetChanged = { showHelpBottomSheet = it },
-        deviceToUnpair = deviceToUnpair,
-        onDeviceToUnpairChanged = { deviceToUnpair = it },
-        deviceToAutoConnect = deviceToAutoConnect,
-        onDeviceToAutoConnectChanged = { deviceToAutoConnect = it },
+        favoriteDevices = devices.filter { it.macAddress in favoriteDevices },
+        nonFavoriteDevices = devices.filter { it.macAddress !in favoriteDevices },
         saveFavoriteDevice = {
             if(favoriteDevices.contains(it)) {
                 viewModel.saveFavoriteDevices(favoriteDevices - it)
             } else {
                 viewModel.saveFavoriteDevices(favoriteDevices + it)
+            }
+        },
+        autoConnectDeviceAddress = autoConnectDeviceAddress,
+        onDeviceToAutoConnectChanged = { deviceToAutoConnect = it },
+        onDeviceToUnpairChanged = { deviceToUnpair = it },
+
+        topBarActions = {
+            TopBarActions(
+                navigateToDeviceDiscoveryScreen = navigateToDeviceDiscoveryScreen,
+                navigateToDistantDevicePairScreen = navigateToDistantDevicePairScreen,
+                navigateToSettings = navigateToSettings,
+                onShowBluetoothAddressDialogChanged = { showBluetoothAddressDialog = it },
+                showHelpBottomSheet = showHelpBottomSheet,
+                onShowHelpBottomSheetChanged = { showHelpBottomSheet = it }
+            )
+        },
+
+        overlayView = {
+            // Dialog / ModalBottomSheet
+            when {
+                isBluetoothServiceRunning && !isBluetoothHidProfileRegistered -> {
+                    SimpleDialog(
+                        confirmButtonText = stringResource(id = R.string.retry),
+                        dismissButtonText = stringResource(id = R.string.close),
+                        onConfirmation = {
+                            BluetoothHidService.stop(context) // isBluetoothServiceRunning becomes false, so the service will be restarted via LaunchedEffect(isBluetoothServiceRunning)
+                        },
+                        onDismissRequest = closeApp,
+                        dialogTitle = stringResource(id = R.string.error),
+                        dialogText = stringResource(id = R.string.bluetooth_failed_to_register_app_message)
+                    )
+                }
+                bluetoothDeviceHidConnectionState.state == BluetoothHidDevice.STATE_CONNECTING -> {
+                    LoadingDialog(
+                        title = stringResource(id = R.string.connection),
+                        message = stringResource(id = R.string.bluetooth_device_connecting_message, bluetoothDeviceHidConnectionState.deviceName),
+                        buttonText = stringResource(id = android.R.string.cancel),
+                        onButtonClick = {
+                            viewModel.disconnectDevice()
+                        }
+                    )
+                }
+                showHelpBottomSheet -> {
+                    DevicesSelectionScreenHelpModalBottomSheet(
+                        onDismissRequest = { showHelpBottomSheet = false }
+                    )
+                }
+                showBluetoothAddressDialog -> {
+                    BluetoothAddressDialog(
+                        connectDevice = {
+                            showBluetoothAddressDialog = false
+                            viewModel.connectDevice(it)
+                        },
+                        close = {
+                            showBluetoothAddressDialog = false
+                        }
+                    )
+                }
+                deviceToUnpair != null -> {
+                    UnpairDeviceDialog(
+                        title = deviceToUnpair?.name ?: "",
+                        unpairDevice = {
+                            val result = viewModel.unpairDevice(deviceToUnpair?.macAddress)
+                            coroutineScope.launch { snackbarHostState.showSnackbar(result.message) }
+                            deviceToUnpair = null
+                        },
+                        onDismissRequest = {
+                            deviceToUnpair = null
+                        }
+                    )
+                }
+                deviceToAutoConnect != null -> {
+                    AutoConnectDeviceDialog(
+                        deviceName = deviceToAutoConnect?.name ?: "",
+                        deviceAddress = deviceToAutoConnect?.macAddress ?: "",
+                        currentAutoConnectDeviceAddress = autoConnectDeviceAddress,
+                        saveAutoConnectDeviceAddress = {
+                            viewModel.saveAutoConnectDeviceAddress(it)
+                            deviceToAutoConnect = null
+                        },
+                        onDismissRequest = {
+                            deviceToAutoConnect = null
+                        }
+                    )
+                }
             }
         },
 
@@ -256,79 +236,24 @@ fun DevicesSelectionScreen(
 private fun StatelessDevicesSelectionScreen(
     snackbarHostState: SnackbarHostState,
     isBluetoothServiceRunning: Boolean,
-    isBluetoothHidProfileRegistered: Boolean,
-    bluetoothDeviceHidConnectionState: DeviceHidConnectionState,
 
+    connectDevice: (String) -> Unit,
     favoriteDevices: List<DeviceEntity>,
     nonFavoriteDevices: List<DeviceEntity>,
-    connectDevice: (String) -> Unit,
-    autoConnectDeviceAddress: String,
-    navigateToDeviceDiscoveryScreen: () -> Unit,
-    navigateToDistantDevicePairScreen: () -> Unit,
-    navigateToSettings: () -> Unit,
-
-    failureHidConnectionDialog: @Composable () -> Unit,
-    connectingDialog: @Composable () -> Unit,
-    helpBottomSheet: @Composable () -> Unit,
-    bluetoothAddressDialog: @Composable () -> Unit,
-    unpairDeviceDialog: @Composable () -> Unit,
-    autoConnectDeviceDialog: @Composable () -> Unit,
-
-    showBluetoothAddressDialog: Boolean,
-    onShowBluetoothAddressDialogChanged: (Boolean) -> Unit,
-    showHelpBottomSheet: Boolean,
-    onShowHelpBottomSheetChanged: (Boolean) -> Unit,
-    deviceToUnpair: InternalDevice,
-    onDeviceToUnpairChanged: (InternalDevice) -> Unit,
-    deviceToAutoConnect: InternalDevice,
-    onDeviceToAutoConnectChanged: (InternalDevice) -> Unit,
     saveFavoriteDevice: (String) -> Unit,
+    autoConnectDeviceAddress: String,
+    onDeviceToAutoConnectChanged: (InternalDevice) -> Unit,
+    onDeviceToUnpairChanged: (InternalDevice) -> Unit,
+
+    topBarActions: @Composable (RowScope.() -> Unit),
+    overlayView: @Composable () -> Unit,
 
     modifier: Modifier = Modifier
 ) {
     AppScaffold(
         title = stringResource(id = R.string.devices),
         modifier = modifier,
-        topBarActions = {
-            BasicOverflowMenu(
-                icon = AppIcons.BluetoothPairing,
-                contentDescription = stringResource(id = R.string.pairing_a_device)
-            ) { closeDropdownMenu: () -> Unit ->
-
-                // Device Discovery
-                BasicDropdownMenuItem(
-                    text = stringResource(id = R.string.pairing_a_device),
-                    icon = AppIcons.BluetoothPairing,
-                    onClick = {
-                        closeDropdownMenu()
-                        navigateToDeviceDiscoveryScreen()
-                    }
-                )
-
-                // Distant Device Pair
-                BasicDropdownMenuItem(
-                    text = stringResource(id = R.string.pairing_from_the_remote_device),
-                    icon = AppIcons.BluetoothPairing,
-                    onClick = {
-                        closeDropdownMenu()
-                        navigateToDistantDevicePairScreen()
-                    }
-                )
-
-                // Show Bluetooth Address Dialog
-                BasicDropdownMenuItem(
-                    text = stringResource(id = R.string.enter_bluetooth_address_manually),
-                    icon = AppIcons.Keyboard,
-                    onClick = {
-                        closeDropdownMenu()
-                        onShowBluetoothAddressDialogChanged(true)
-                    }
-                )
-            }
-
-            HelpIconButton(onClick = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
-            SettingsIconButton(navigateToSettings)
-        },
+        topBarActions = topBarActions,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         }
@@ -347,14 +272,7 @@ private fun StatelessDevicesSelectionScreen(
         )
 
         // Dialog / ModalBottomSheet
-        when {
-            isBluetoothServiceRunning && !isBluetoothHidProfileRegistered -> failureHidConnectionDialog()
-            bluetoothDeviceHidConnectionState.state == BluetoothHidDevice.STATE_CONNECTING -> connectingDialog()
-            showHelpBottomSheet -> helpBottomSheet()
-            showBluetoothAddressDialog -> bluetoothAddressDialog()
-            deviceToUnpair.macAddress != "" -> unpairDeviceDialog()
-            deviceToAutoConnect.macAddress != "" -> autoConnectDeviceDialog()
-        }
+        overlayView()
     }
 }
 
@@ -511,6 +429,55 @@ private fun InfoView(
 }
 
 @Composable
+private fun TopBarActions(
+    navigateToDeviceDiscoveryScreen: () -> Unit,
+    navigateToDistantDevicePairScreen: () -> Unit,
+    navigateToSettings: () -> Unit,
+    onShowBluetoothAddressDialogChanged: (Boolean) -> Unit,
+    showHelpBottomSheet: Boolean,
+    onShowHelpBottomSheetChanged: (Boolean) -> Unit,
+) {
+    BasicOverflowMenu(
+        icon = AppIcons.BluetoothPairing,
+        contentDescription = stringResource(id = R.string.pairing_a_device)
+    ) { closeDropdownMenu: () -> Unit ->
+
+        // Device Discovery
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.pairing_a_device),
+            icon = AppIcons.BluetoothPairing,
+            onClick = {
+                closeDropdownMenu()
+                navigateToDeviceDiscoveryScreen()
+            }
+        )
+
+        // Distant Device Pair
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.pairing_from_the_remote_device),
+            icon = AppIcons.BluetoothPairing,
+            onClick = {
+                closeDropdownMenu()
+                navigateToDistantDevicePairScreen()
+            }
+        )
+
+        // Show Bluetooth Address Dialog
+        BasicDropdownMenuItem(
+            text = stringResource(id = R.string.enter_bluetooth_address_manually),
+            icon = AppIcons.Keyboard,
+            onClick = {
+                closeDropdownMenu()
+                onShowBluetoothAddressDialogChanged(true)
+            }
+        )
+    }
+
+    HelpIconButton(onClick = { onShowHelpBottomSheetChanged(!showHelpBottomSheet) })
+    SettingsIconButton(navigateToSettings)
+}
+
+@Composable
 private fun BluetoothAddressDialog(
     connectDevice: (String) -> Unit,
     close: () -> Unit,
@@ -570,5 +537,54 @@ private fun BluetoothAddressDialog(
         },
         dismissButtonText = stringResource(id = R.string.close),
         onDismissRequest = close
+    )
+}
+
+@Composable
+private fun UnpairDeviceDialog(
+    title: String,
+    unpairDevice: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    SimpleDialog(
+        confirmButtonText = stringResource(id = R.string.unpair),
+        dismissButtonText = stringResource(id = android.R.string.cancel),
+        onConfirmation = unpairDevice,
+        onDismissRequest = onDismissRequest,
+        dialogTitle = title,
+        dialogText = stringResource(id = R.string.unpair_device_warning_message)
+    )
+}
+
+@Composable
+private fun AutoConnectDeviceDialog(
+    deviceName: String,
+    deviceAddress: String,
+    currentAutoConnectDeviceAddress: String,
+    saveAutoConnectDeviceAddress: (String) -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    val macAddressToAutoConnect: String
+    @StringRes val messageRes: Int
+
+    if(deviceAddress == currentAutoConnectDeviceAddress) {
+        // Disabled auto connect
+        macAddressToAutoConnect = ""
+        messageRes = R.string.disabled_automatic_connection_message
+    } else {
+        // Enabled/Replaced auto connect
+        macAddressToAutoConnect = deviceAddress
+        messageRes = R.string.enabled_automatic_connection_message
+    }
+
+    SimpleDialog(
+        confirmButtonText = stringResource(id = android.R.string.ok),
+        dismissButtonText = stringResource(id = android.R.string.cancel),
+        onConfirmation = {
+            saveAutoConnectDeviceAddress(macAddressToAutoConnect)
+        },
+        onDismissRequest = onDismissRequest,
+        dialogTitle = deviceName,
+        dialogText = stringResource(messageRes)
     )
 }

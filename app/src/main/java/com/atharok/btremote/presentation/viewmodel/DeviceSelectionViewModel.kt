@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.atharok.btremote.common.extensions.capitalizeFirstChar
 import com.atharok.btremote.domain.entities.DeviceEntity
+import com.atharok.btremote.domain.resources.Result
 import com.atharok.btremote.domain.usecases.DeviceSelectionUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -38,13 +39,13 @@ class DeviceSelectionViewModel(
 
     // ---- Unpair device ----
 
-    fun unpairDevice(address: String): Boolean {
-        val success = useCase.unpairDevice(address)
-        if(success) {
+    fun unpairDevice(address: String?): Result<Boolean> {
+        val result: Result<Boolean> = useCase.unpairDevice(address)
+        if(result.value) {
             runBlocking { delay(200L) } // -> Small delay to allow the system to complete updating the device removal.
             findBondedDevices(context = Dispatchers.Main)
         }
-        return success
+        return result
     }
 
     // ---- Settings ----

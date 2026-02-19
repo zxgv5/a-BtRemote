@@ -9,6 +9,7 @@ import com.atharok.btremote.domain.entities.DeviceEntity
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
 import com.atharok.btremote.domain.repositories.BluetoothRepository
+import com.atharok.btremote.domain.resources.Result
 import kotlinx.coroutines.flow.StateFlow
 
 class BluetoothRepositoryImpl(
@@ -46,7 +47,7 @@ class BluetoothRepositoryImpl(
 
     override fun getBondedDevices(): List<DeviceEntity> = bluetoothLocalData.getBondedDevices()
 
-    override fun unpairDevice(address: String): Boolean = bluetoothLocalData.unpairDevice(address)
+    override fun unpairDevice(address: String?): Result<Boolean> = bluetoothLocalData.unpairDevice(address)
 
     // ---- BluetoothHidCore ----
 

@@ -6,6 +6,7 @@ import com.atharok.btremote.R
 import com.atharok.btremote.common.extensions.unpair
 import com.atharok.btremote.common.utils.checkBluetoothConnectPermission
 import com.atharok.btremote.domain.entities.DeviceEntity
+import com.atharok.btremote.domain.resources.Result
 
 class BluetoothLocalData(
     private val context: Context,
@@ -38,5 +39,22 @@ class BluetoothLocalData(
 
     // ---- Unpair ----
 
-    fun unpairDevice(address: String): Boolean = adapter?.getRemoteDevice(address)?.unpair() == true
+    fun unpairDevice(address: String?): Result<Boolean> {
+        return if (address == null) {
+            Result(
+                value = false,
+                message = context.getString(R.string.unpair_device_failure)
+            )
+        } else {
+            val isUnpaired = adapter?.getRemoteDevice(address)?.unpair() == true
+
+            val messageRes =
+                if (isUnpaired) R.string.unpair_device_successful else R.string.unpair_device_failure
+
+            Result(
+                value = isUnpaired,
+                message = context.getString(messageRes)
+            )
+        }
+    }
 }

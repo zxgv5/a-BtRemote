@@ -3,6 +3,7 @@ package com.atharok.btremote.domain.usecases
 import com.atharok.btremote.domain.entities.DeviceEntity
 import com.atharok.btremote.domain.repositories.BluetoothRepository
 import com.atharok.btremote.domain.repositories.DataStoreRepository
+import com.atharok.btremote.domain.resources.Result
 import kotlinx.coroutines.flow.Flow
 
 class DeviceSelectionUseCase(
@@ -24,7 +25,7 @@ class DeviceSelectionUseCase(
 
     fun getBondedDevices(): List<DeviceEntity> = bluetoothRepository.getBondedDevices()
 
-    fun unpairDevice(address: String): Boolean = bluetoothRepository.unpairDevice(address)
+    fun unpairDevice(address: String?): Result<Boolean> = bluetoothRepository.unpairDevice(address)
 
     // ---- DataStore ----
 
