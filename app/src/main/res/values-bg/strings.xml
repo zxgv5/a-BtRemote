@@ -215,4 +215,7 @@
     <string name="green_menu_button">Зелено</string>
     <string name="blue_menu_button">Синьо</string>
     <string name="yellow_menu_button">Жълто</string>
+    <string name="use_mouse_navigation_by_default">Използване на навигация с мишката по подразбиране</string>
+    <string name="keyboard_tab">Раздел</string>
+    <string name="play_pause">Възпроизвеждане / Пауза</string>
 </resources>
