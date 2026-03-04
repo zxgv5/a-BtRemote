@@ -1,30 +1,29 @@
 package com.atharok.btremote.ui.components
 
 import androidx.annotation.FloatRange
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import com.atharok.btremote.ui.theme.Typography
+import kotlin.math.max
 
 // ---- Adaptive ----
 
@@ -35,31 +34,41 @@ fun AdaptiveText(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified,
     fontWeight: FontWeight? = null,
-    textAlign: TextAlign? = null
+    fontFamily: FontFamily? = FontFamily.Monospace,
+    textAlign: TextAlign = TextAlign.Unspecified
 ) {
     require(percent in 0f..1f) { "Percentage must be between 0 and 1" }
 
-    var containerSize by remember { mutableStateOf(Size.Zero) }
+    val density = LocalDensity.current
 
-    Box(
-        modifier = modifier.onGloballyPositioned { coordinates ->
-            containerSize = coordinates.size.toSize()
-        },
+    BoxWithConstraints(
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        Text(
+        val containerWidth = maxWidth
+        val containerHeight = maxHeight
+        val targetFontSize = with(density) {
+            containerWidth.times(percent).coerceAtMost(containerHeight.times(percent)).toSp()
+        }
+        val minFontSize = targetFontSize.div(10f)
+        val stepSize = max(minFontSize.value, 0.0001f).sp
+        BasicText(
             text = text,
             modifier = Modifier.fillMaxWidth(),
-            color = color,
             style = TextStyle(
-                fontSize = with(LocalDensity.current) {
-                    (containerSize.width * percent).coerceAtMost(containerSize.height * percent).toSp()
-                }
+                color = if (color.isSpecified) color else LocalContentColor.current,
+                fontWeight = fontWeight,
+                fontFamily = fontFamily,
+                fontSize = targetFontSize,
+                textAlign = textAlign
             ),
-            fontWeight = fontWeight,
-            textAlign = textAlign,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            overflow = TextOverflow.Clip,
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                stepSize = stepSize,
+                minFontSize = minFontSize,
+                maxFontSize = targetFontSize
+            )
         )
     }
 }
