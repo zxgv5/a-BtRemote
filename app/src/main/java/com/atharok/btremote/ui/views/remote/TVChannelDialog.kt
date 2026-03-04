@@ -1,14 +1,17 @@
 package com.atharok.btremote.ui.views.remote
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -28,6 +31,7 @@ fun TVChannelDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val orientation = LocalConfiguration.current.orientation
     TemplateDialog(
         title = {
             TextLarge(text = stringResource(R.string.tv))
@@ -36,7 +40,10 @@ fun TVChannelDialog(
             TVChannelLayout(
                 sendRemoteKeyReport = sendRemoteKeyReport,
                 sendKeyboardKeyReport = sendKeyboardKeyReport,
-                modifier = Modifier.aspectRatio(3f / 4f)
+                modifier = if(orientation == Configuration.ORIENTATION_LANDSCAPE)
+                    Modifier.fillMaxSize()
+                else
+                    Modifier.aspectRatio(3f / 4f)
             )
         },
         modifier = modifier,
