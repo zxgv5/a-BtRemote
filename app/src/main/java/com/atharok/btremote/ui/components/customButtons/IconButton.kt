@@ -83,7 +83,7 @@ fun RemoteIconSurfaceButton(
 // ---- Raw Button ----
 
 @Composable
-fun IconRawButton(
+private fun IconRawButton(
     image: ImageVector,
     contentDescription: String,
     touchDown: () -> Unit,

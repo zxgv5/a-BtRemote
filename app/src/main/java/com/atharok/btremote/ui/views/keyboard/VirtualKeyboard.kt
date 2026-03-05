@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.domain.entities.remoteInput.RemoteButtonProperties
-import com.atharok.btremote.ui.components.customButtons.IconRawButton
+import com.atharok.btremote.ui.components.BasicIconButton
 import com.atharok.btremote.ui.components.customButtons.RemoteIconSurfaceButton
 import com.atharok.btremote.ui.theme.surfaceElevationHigh
 
@@ -113,21 +112,19 @@ private fun StatelessKeyboardView(
                 )
             )
 
-            IconRawButton(
-                image = AppIcons.Send,
-                contentDescription = stringResource(id = R.string.send),
-                touchDown = {},
-                touchUp = {
+            BasicIconButton(
+                onClick = {
                     sendTextReport(text, false)
                     if(mustClearInputField) {
                         onTextChange("")
                     }
                 },
-                modifier = Modifier.weight(1f).fillMaxSize(),
-                shape = CircleShape,
-                iconFillFraction = 1f,
-                iconPadding = dimensionResource(id = R.dimen.padding_medium)
+                icon = AppIcons.Send,
+                contentDescription = stringResource(id = R.string.send),
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                shape = CircleShape
             )
+
         }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {

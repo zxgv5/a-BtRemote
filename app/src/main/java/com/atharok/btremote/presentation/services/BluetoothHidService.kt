@@ -18,8 +18,8 @@ import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.NOTIFICATION_CHANNEL_ID
 import com.atharok.btremote.common.utils.NOTIFICATION_ID
 import com.atharok.btremote.domain.usecases.BluetoothHidServiceUseCase
-import com.atharok.btremote.presentation.glance.MediaControlWidget
 import com.atharok.btremote.presentation.activities.MainActivity
+import com.atharok.btremote.presentation.glance.MediaControlWidget
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_BACK
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_DISCONNECT
 import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.Companion.ACTION_DOWN
