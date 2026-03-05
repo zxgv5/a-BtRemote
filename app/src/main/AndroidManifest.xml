@@ -74,7 +74,7 @@
         </activity>
 
         <receiver
-            android:name=".glance.MediaControlWidgetReceiver"
+            android:name=".presentation.glance.MediaControlWidgetReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

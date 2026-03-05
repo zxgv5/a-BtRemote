@@ -1,4 +1,4 @@
-package com.atharok.btremote.glance
+package com.atharok.btremote.presentation.glance
 
 import android.bluetooth.BluetoothHidDevice
 import android.content.Context

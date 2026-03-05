@@ -1,4 +1,4 @@
-package com.atharok.btremote.glance
+package com.atharok.btremote.presentation.glance
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit

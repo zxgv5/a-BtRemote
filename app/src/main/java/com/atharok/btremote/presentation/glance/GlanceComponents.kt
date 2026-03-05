@@ -1,4 +1,4 @@
-package com.atharok.btremote.glance
+package com.atharok.btremote.presentation.glance
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
