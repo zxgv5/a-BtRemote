@@ -44,7 +44,7 @@ fun RemoteView(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(4f),
+                .weight(3f),
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
         ) {
             Column(
@@ -63,13 +63,6 @@ fun RemoteView(
 
                 RemoteIconSurfaceButton(
                     properties = RemoteButtonProperties.VolumeMuteButton,
-                    sendKeyReport = sendRemoteKeyReport,
-                    modifier = Modifier.weight(1f).padding(padding),
-                    shape = buttonShape
-                )
-
-                RemoteIconSurfaceButton(
-                    properties = RemoteButtonProperties.BackButton,
                     sendKeyReport = sendRemoteKeyReport,
                     modifier = Modifier.weight(1f).padding(padding),
                     shape = buttonShape
@@ -99,13 +92,6 @@ fun RemoteView(
                     modifier = Modifier.weight(1f).padding(padding),
                     shape = buttonShape
                 )
-
-                RemoteIconSurfaceButton(
-                    properties = RemoteButtonProperties.HomeButton,
-                    sendKeyReport = sendRemoteKeyReport,
-                    modifier = Modifier.weight(1f).padding(padding),
-                    shape = buttonShape
-                )
             }
 
             Column(
@@ -127,13 +113,6 @@ fun RemoteView(
 
                 ChannelSurfaceButton(
                     properties = ChannelButtonProperties.Channel8Button,
-                    sendKeyReport = sendKeyboardKeyReport,
-                    modifier = Modifier.weight(1f).padding(padding),
-                    shape = buttonShape
-                )
-
-                ChannelSurfaceButton(
-                    properties = ChannelButtonProperties.Channel0Button,
                     sendKeyReport = sendKeyboardKeyReport,
                     modifier = Modifier.weight(1f).padding(padding),
                     shape = buttonShape
@@ -163,13 +142,6 @@ fun RemoteView(
                     modifier = Modifier.weight(1f).padding(padding),
                     shape = buttonShape
                 )
-
-                RemoteIconSurfaceButton(
-                    properties = RemoteButtonProperties.MenuButton,
-                    sendKeyReport = sendRemoteKeyReport,
-                    modifier = Modifier.weight(1f).padding(padding),
-                    shape = buttonShape
-                )
             }
 
             Column(
@@ -192,14 +164,47 @@ fun RemoteView(
                     modifier = Modifier.weight(1f).padding(padding),
                     shape = buttonShape
                 )
-
-                RemoteIconSurfaceButton(
-                    properties = RemoteButtonProperties.PowerButton,
-                    sendKeyReport = sendRemoteKeyReport,
-                    modifier = Modifier.weight(1f).padding(padding),
-                    shape = buttonShape
-                )
             }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().weight(1f),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.BackButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
+            )
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.HomeButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
+            )
+
+            ChannelSurfaceButton(
+                properties = ChannelButtonProperties.Channel0Button,
+                sendKeyReport = sendKeyboardKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
+            )
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.MenuButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
+            )
+
+            RemoteIconSurfaceButton(
+                properties = RemoteButtonProperties.PowerButton,
+                sendKeyReport = sendRemoteKeyReport,
+                modifier = Modifier.weight(1f).padding(padding),
+                shape = buttonShape
+            )
         }
     }
 }
@@ -301,7 +306,7 @@ fun MinimalistRemoteView(
 
         Row(
             modifier = Modifier.fillMaxWidth().weight(1f),
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             RemoteIconSurfaceButton(
                 properties = RemoteButtonProperties.BackButton,

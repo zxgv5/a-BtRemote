@@ -66,7 +66,7 @@ private fun MoreButtonsLayout(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            horizontalArrangement = Arrangement.Absolute.spacedBy(padding)
         ) {
             MoreRemoteIconLayout(
                 properties = RemoteButtonProperties.PlayButton,
@@ -102,7 +102,7 @@ private fun MoreButtonsLayout(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            horizontalArrangement = Arrangement.Absolute.spacedBy(padding)
         ) {
             MoreRemoteIconLayout(
                 properties = RemoteButtonProperties.RewindButton,
@@ -138,7 +138,7 @@ private fun MoreButtonsLayout(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            horizontalArrangement = Arrangement.Absolute.spacedBy(padding)
         ) {
             MoreRemoteIconLayout(
                 properties = RemoteButtonProperties.ClosedCaptionsButton,
@@ -174,7 +174,7 @@ private fun MoreButtonsLayout(
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(padding)
+            horizontalArrangement = Arrangement.Absolute.spacedBy(padding)
         ) {
             MoreRemoteIconLayout(
                 properties = RemoteButtonProperties.RedMenuButton,
