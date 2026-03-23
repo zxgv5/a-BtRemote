@@ -178,7 +178,7 @@
     <string name="keyboard_polish">Польский</string>
     <string name="space_bar">Пробел</string>
     <string name="advanced_keyboard">Расширенная клавиатура</string>
-    <string name="closed_captions">Скрытые субтитры</string>
+    <string name="closed_captions">Субтитры</string>
     <string name="menu">Меню</string>
     <string name="meta">Meta</string>
     <string name="ctrl">Ctrl</string>
@@ -220,4 +220,23 @@
     <string name="connect">Подключиться</string>
     <string name="media_controls">Управление медиа</string>
     <string name="code_version">Версия %1$s</string>
+    <string name="stop">Cтоп</string>
+    <string name="use_mouse_navigation_by_default">Использовать навигацию мышью по умолчанию</string>
+    <string name="screenshot">Скриншот</string>
+    <string name="more_buttons">Доп. кнопки</string>
+    <string name="repeat">Повтор</string>
+    <string name="previous_track">Предыдущий трек</string>
+    <string name="play_pause">Играть / Пауза</string>
+    <string name="next_track">Следующий трек</string>
+    <string name="rewind">Перемотать назад</string>
+    <string name="forward">Перемотать вперёд</string>
+    <string name="volume_up">Громкость +</string>
+    <string name="volume_down">Громкость -</string>
+    <string name="brightness_up">Яркость +</string>
+    <string name="brightness_down">Яркость -</string>
+    <string name="red_menu_button">Красная</string>
+    <string name="green_menu_button">Зелёная</string>
+    <string name="blue_menu_button">Синяя</string>
+    <string name="yellow_menu_button">Жёлтая</string>
+    <string name="keyboard_tab">Вкладка</string>
 </resources>
