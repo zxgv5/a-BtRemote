@@ -18,7 +18,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -43,7 +42,6 @@ private const val MAX_PAGES = 5
 
 @Composable
 fun DistantDevicePairScreen(
-    isBluetoothEnabled: Boolean,
     localDeviceName: String,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -59,12 +57,6 @@ fun DistantDevicePairScreen(
             localDeviceName = localDeviceName,
             verticalPadding = context.getDimensionDp(R.dimen.padding_large)
         )
-    }
-
-    LaunchedEffect(isBluetoothEnabled) {
-        if(!isBluetoothEnabled) {
-            navigateUp()
-        }
     }
 
     StatelessDistantDevicePairScreen(

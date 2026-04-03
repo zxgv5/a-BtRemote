@@ -110,7 +110,6 @@ private fun DeviceDiscoveryScreen(
     LaunchedEffect(isBluetoothEnabled) {
         if(!isBluetoothEnabled) {
             deviceDiscoveryViewModel.cancelDiscovery()
-            navigateUp()
         }
     }
 

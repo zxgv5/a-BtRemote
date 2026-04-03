@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,6 +79,16 @@ fun BtRemoteApp(
                     isBluetoothEnabled = isBluetoothEnabled,
                     onBluetoothEnabledChanged = { isBluetoothEnabled = it }
                 )
+
+                LaunchedEffect(isBluetoothEnabled) {
+                    if (!isBluetoothEnabled) {
+                        BluetoothHidService.stop(context)
+                        navController.popBackStack(
+                            route = AppNavDestination.BluetoothActivationDestination.route,
+                            inclusive = false
+                        )
+                    }
+                }
 
                 // ---- NavHost ----
 
@@ -181,7 +192,6 @@ fun BtRemoteApp(
 
                     distantDevicePairScreen = {
                         DistantDevicePairScreen(
-                            isBluetoothEnabled = isBluetoothEnabled,
                             localDeviceName = appScopeViewModel.localDeviceName,
                             navigateUp = {
                                 navController.navigateUp()
