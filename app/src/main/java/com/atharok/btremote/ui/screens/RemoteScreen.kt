@@ -43,6 +43,7 @@ import com.atharok.btremote.common.utils.getKeyboardLayout
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.domain.entities.RemoteNavigationEntity
 import com.atharok.btremote.domain.entities.remoteInput.MouseAction
+import com.atharok.btremote.domain.entities.remoteInput.PhysicalVolumeButtonAction
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.VirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.settings.RemoteSettings
@@ -54,6 +55,7 @@ import com.atharok.btremote.ui.components.BasicIconButton
 import com.atharok.btremote.ui.components.FadeAnimatedContent
 import com.atharok.btremote.ui.components.LoadingDialog
 import com.atharok.btremote.ui.components.MoreOverflowMenu
+import com.atharok.btremote.ui.components.PhysicalVolumeButtonsHandler
 import com.atharok.btremote.ui.theme.surfaceElevationMedium
 import com.atharok.btremote.ui.views.RemoteScreenHelpModalBottomSheet
 import com.atharok.btremote.ui.views.keyboard.AdvancedKeyboard
@@ -102,6 +104,12 @@ fun RemoteScreen(
     var isHelpBottomSheetVisible: Boolean by remember { mutableStateOf(false) }
 
     BackHandler(enabled = true, onBack = closeApp)
+
+    PhysicalVolumeButtonsHandler(
+        upAction = remoteSettings.physicalVolumeUpButtonAction,
+        downAction = remoteSettings.physicalVolumeDownButtonAction,
+        remoteViewModel = remoteViewModel
+    )
 
     DisposableEffect(isBluetoothServiceRunning) {
         if(!isBluetoothServiceRunning) {
@@ -339,7 +347,7 @@ private fun RemoteLayout(
                 useMinimalistRemote = useMinimalistRemote,
                 onMoreButtonsVisibleChanged = onMoreButtonsVisibleChanged,
                 sendRemoteKeyReport = sendRemoteKeyReport,
-                sendKeyboardKeyReport = sendKeyboardKeyReport,
+                sendKeyboardKeyReport = sendKeyboardKeyReport
             )
         }
     }
@@ -590,5 +598,46 @@ private fun TopBarActions(
                 navigateToSettings()
             }
         )
+    }
+}
+
+@Composable
+private fun PhysicalVolumeButtonsHandler(
+    upAction: PhysicalVolumeButtonAction,
+    downAction: PhysicalVolumeButtonAction,
+    remoteViewModel: RemoteViewModel
+) {
+    if(upAction != PhysicalVolumeButtonAction.DEFAULT || downAction != PhysicalVolumeButtonAction.DEFAULT) {
+        PhysicalVolumeButtonsHandler(
+            onVolumeUpPressed = {
+                upAction.doPhysicalVolumeAction {
+                    remoteViewModel.sendReport(it.hidReportId, it.pressedBytes)
+                }
+            },
+            onVolumeUpReleased = {
+                upAction.doPhysicalVolumeAction {
+                    remoteViewModel.sendReport(it.hidReportId, it.releasedBytes)
+                }
+            },
+            onVolumeDownPressed = {
+                downAction.doPhysicalVolumeAction {
+                    remoteViewModel.sendReport(it.hidReportId, it.pressedBytes)
+                }
+            },
+            onVolumeDownReleased = {
+                downAction.doPhysicalVolumeAction {
+                    remoteViewModel.sendReport(it.hidReportId, it.releasedBytes)
+                }
+            }
+        )
+    }
+}
+
+private fun PhysicalVolumeButtonAction.doPhysicalVolumeAction(
+    sendReport: (PhysicalVolumeButtonAction) -> Unit
+): Boolean {
+    return when (this) {
+        PhysicalVolumeButtonAction.DEFAULT -> false
+        else -> { sendReport(this); true }
     }
 }

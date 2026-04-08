@@ -29,7 +29,7 @@ class RemoteViewModel(
 
     // ---- Send ----
 
-    private fun sendReport(id: Int, bytes: ByteArray): Boolean {
+    fun sendReport(id: Int, bytes: ByteArray): Boolean {
         return useCase.sendReport(id, bytes)
     }
 

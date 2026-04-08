@@ -129,6 +129,8 @@
     <string name="touchpad_description">Navigation via touch gestures</string>
     <string name="use_enter_for_selection_title">Use the Enter key for selection</string>
     <string name="use_enter_for_selection_summary">Enable this option only if the select button does not work</string>
+    <string name="assign_action_volume_up_button">Assign an action to the volume up button</string>
+    <string name="assign_action_volume_down_button">Assign an action to the volume down button</string>
     <string name="advanced_options">Advanced Options</string>
     <string name="hide_bluetooth_activation_button">Hide Bluetooth activation button at app startup</string>
     <string name="about">About</string>
@@ -137,6 +139,7 @@
     <string name="website">Website</string>
     <string name="source_code">Source code</string>
     <string name="code_version">Version %1$s</string>
+    <string name="default_option">Default</string>
 
     <!-- Keyboard -->
     <string name="keyboard">Keyboard</string>
@@ -171,6 +174,8 @@
     <string name="ctrl">Ctrl</string>
     <string name="alt">Alt</string>
     <string name="alt_gr">Alt Gr</string>
+    <string name="page_up">Page Up</string>
+    <string name="page_down">Page Down</string>
 
     <!-- Remote button description -->
     <string name="pick">Pick</string>

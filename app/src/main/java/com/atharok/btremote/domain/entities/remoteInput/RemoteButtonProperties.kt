@@ -262,5 +262,17 @@ enum class RemoteButtonProperties(
         input = byteArrayOf(0x00, KeyboardKey.KEY_TAB.byte),
         icon = AppIcons.KeyboardTab,
         stringRes = R.string.keyboard_tab
+    ),
+
+    KeyboardPageUp(
+        input = byteArrayOf(0x00, KeyboardKey.KEY_PAGE_UP.byte),
+        icon = AppIcons.KeyboardPageUp,
+        stringRes = R.string.page_up
+    ),
+
+    KeyboardPageDown(
+        input = byteArrayOf(0x00, KeyboardKey.KEY_PAGE_DOWN.byte),
+        icon = AppIcons.KeyboardPageDown,
+        stringRes = R.string.page_down
     )
 }

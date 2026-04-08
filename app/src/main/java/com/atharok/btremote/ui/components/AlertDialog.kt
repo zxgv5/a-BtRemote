@@ -1,10 +1,12 @@
 package com.atharok.btremote.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +22,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.dimensionResource
 import com.atharok.btremote.R
 import com.atharok.btremote.ui.theme.surfaceElevationMedium
@@ -91,7 +95,10 @@ fun ListDialog(
     TemplateDialog(
         title = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                TextLarge(text = dialogTitle)
+                TextLarge(
+                    text = dialogTitle,
+                    maxLines = 2
+                )
                 dialogMessage?.let {
                     TextNormal(
                         text = it,
@@ -133,6 +140,10 @@ fun ListDialog(
                 }
             }
         },
+        modifier = if(LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT)
+            Modifier.heightIn(max = LocalWindowInfo.current.containerDpSize.height * 3 / 5)
+        else
+            Modifier,
         confirmButtonText = confirmButtonText,
         onConfirmation = {
             onConfirmation(selected.intValue)

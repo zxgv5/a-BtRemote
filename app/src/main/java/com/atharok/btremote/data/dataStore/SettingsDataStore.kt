@@ -24,6 +24,7 @@ import com.atharok.btremote.common.utils.DEFAULT_USE_MINIMALIST_REMOTE
 import com.atharok.btremote.common.utils.USE_MOUSE_NAVIGATION_BY_DEFAULT
 import com.atharok.btremote.common.utils.isDynamicColorsAvailable
 import com.atharok.btremote.domain.entities.RemoteNavigationEntity
+import com.atharok.btremote.domain.entities.remoteInput.PhysicalVolumeButtonAction
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.settings.AppearanceSettings
 import com.atharok.btremote.domain.entities.settings.RemoteSettings
@@ -58,6 +59,8 @@ class SettingsDataStore(private val context: Context) {
         private const val HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY = "hide_bluetooth_activation_button_key"
 
         private const val USE_MOUSE_NAVIGATION_BY_DEFAULT_KEY = "use_mouse_navigation_by_default_key"
+        private const val PHYSICAL_VOLUME_BUTTON_UP_ACTION_KEY = "physical_volume_button_up_action_key"
+        private const val PHYSICAL_VOLUME_BUTTON_DOWN_ACTION_KEY = "physical_volume_button_down_action_key"
     }
 
     private val themeKey = stringPreferencesKey(THEME_KEY)
@@ -78,6 +81,8 @@ class SettingsDataStore(private val context: Context) {
     private val autoConnectDeviceAddressKey = stringPreferencesKey(AUTO_CONNECT_DEVICE_ADDRESS_KEY)
     private val hideBluetoothActivationButtonKey = booleanPreferencesKey(HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY)
     private val useMouseNavigationByDefaultKey = booleanPreferencesKey(USE_MOUSE_NAVIGATION_BY_DEFAULT_KEY)
+    private val physicalVolumeUpButtonActionKey = stringPreferencesKey(PHYSICAL_VOLUME_BUTTON_UP_ACTION_KEY)
+    private val physicalVolumeDownButtonActionKey = stringPreferencesKey(PHYSICAL_VOLUME_BUTTON_DOWN_ACTION_KEY)
 
     private fun Flow<Preferences>.catchException(): Flow<Preferences> = this.catch {
         if (it is IOException) {
@@ -158,7 +163,17 @@ class SettingsDataStore(private val context: Context) {
                 },
                 useMinimalistRemote = preferences[useMinimalistRemoteKey] ?: DEFAULT_USE_MINIMALIST_REMOTE,
                 useEnterForSelection = preferences[useEnterForSelectionKey] ?: DEFAULT_USE_ENTER_FOR_SELECTION,
-                useMouseNavigationByDefault = preferences[useMouseNavigationByDefaultKey] ?: USE_MOUSE_NAVIGATION_BY_DEFAULT
+                useMouseNavigationByDefault = preferences[useMouseNavigationByDefaultKey] ?: USE_MOUSE_NAVIGATION_BY_DEFAULT,
+                physicalVolumeUpButtonAction = try {
+                    PhysicalVolumeButtonAction.valueOf(preferences[physicalVolumeUpButtonActionKey] ?: PhysicalVolumeButtonAction.DEFAULT.name)
+                } catch (_: IllegalArgumentException) {
+                    PhysicalVolumeButtonAction.DEFAULT
+                },
+                physicalVolumeDownButtonAction = try {
+                    PhysicalVolumeButtonAction.valueOf(preferences[physicalVolumeDownButtonActionKey] ?: PhysicalVolumeButtonAction.DEFAULT.name)
+                } catch (_: IllegalArgumentException) {
+                    PhysicalVolumeButtonAction.DEFAULT
+                }
             )
         }
 
@@ -231,6 +246,18 @@ class SettingsDataStore(private val context: Context) {
     suspend fun saveUseMouseNavigationByDefault(useMouseNavigationByDefault: Boolean) {
         context.dataStore.edit {
             it[useMouseNavigationByDefaultKey] = useMouseNavigationByDefault
+        }
+    }
+
+    suspend fun savePhysicalVolumeUpButtonAction(physicalVolumeButtonAction: PhysicalVolumeButtonAction) {
+        context.dataStore.edit {
+            it[physicalVolumeUpButtonActionKey] = physicalVolumeButtonAction.name
+        }
+    }
+
+    suspend fun savePhysicalVolumeDownButtonAction(physicalVolumeButtonAction: PhysicalVolumeButtonAction) {
+        context.dataStore.edit {
+            it[physicalVolumeDownButtonActionKey] = physicalVolumeButtonAction.name
         }
     }
 

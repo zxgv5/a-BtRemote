@@ -39,6 +39,8 @@ import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.KeyboardDoubleArrowDown
+import androidx.compose.material.icons.rounded.KeyboardDoubleArrowUp
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.LinkOff
 import androidx.compose.material.icons.rounded.Lock
@@ -159,6 +161,8 @@ object AppIcons {
     val KeyboardArrowLeft get() = Icons.AutoMirrored.Rounded.KeyboardArrowLeft
     val KeyboardArrowDown get() = Icons.Rounded.KeyboardArrowDown
     val KeyboardArrowRight get() = Icons.AutoMirrored.Rounded.KeyboardArrowRight
+    val KeyboardPageUp get() = Icons.Rounded.KeyboardDoubleArrowUp
+    val KeyboardPageDown get() = Icons.Rounded.KeyboardDoubleArrowDown
 
     val Send get() = Icons.AutoMirrored.Rounded.Send
 

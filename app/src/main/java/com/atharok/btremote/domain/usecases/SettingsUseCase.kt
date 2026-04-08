@@ -1,6 +1,7 @@
 package com.atharok.btremote.domain.usecases
 
 import com.atharok.btremote.domain.entities.RemoteNavigationEntity
+import com.atharok.btremote.domain.entities.remoteInput.PhysicalVolumeButtonAction
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.settings.AppearanceSettings
 import com.atharok.btremote.domain.entities.settings.RemoteSettings
@@ -78,6 +79,14 @@ class SettingsUseCase(private val dataStoreRepository: DataStoreRepository) {
 
     suspend fun saveUseMouseNavigationByDefault(useMouseNavigationByDefault: Boolean) {
         dataStoreRepository.saveUseMouseNavigationByDefault(useMouseNavigationByDefault)
+    }
+
+    suspend fun savePhysicalVolumeUpButtonAction(physicalVolumeButtonAction: PhysicalVolumeButtonAction) {
+        dataStoreRepository.savePhysicalVolumeUpButtonAction(physicalVolumeButtonAction)
+    }
+
+    suspend fun savePhysicalVolumeDownButtonAction(physicalVolumeButtonAction: PhysicalVolumeButtonAction) {
+        dataStoreRepository.savePhysicalVolumeDownButtonAction(physicalVolumeButtonAction)
     }
 
     // ---- Others ----

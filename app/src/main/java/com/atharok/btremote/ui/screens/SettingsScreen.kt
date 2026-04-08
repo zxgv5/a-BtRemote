@@ -48,6 +48,7 @@ import com.atharok.btremote.common.utils.SOURCE_CODE_LINK
 import com.atharok.btremote.common.utils.WEB_SITE_LINK
 import com.atharok.btremote.common.utils.isDynamicColorsAvailable
 import com.atharok.btremote.domain.entities.RemoteNavigationEntity
+import com.atharok.btremote.domain.entities.remoteInput.PhysicalVolumeButtonAction
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.settings.AppearanceSettings
 import com.atharok.btremote.domain.entities.settings.RemoteSettings
@@ -227,6 +228,36 @@ fun SettingsScreen(
                 secondaryText = stringResource(id = R.string.use_enter_for_selection_summary),
                 checked = remoteSettings.useEnterForSelection,
                 onCheckedChange = { settingsViewModel.saveUseEnterForSelection(it) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    )
+            )
+
+            SettingsListDialog(
+                title = R.string.assign_action_volume_up_button,
+                dialogMessage = null,
+                value = remoteSettings.physicalVolumeUpButtonAction,
+                onValueChange = { settingsViewModel.savePhysicalVolumeUpButtonAction(it) },
+                items = PhysicalVolumeButtonAction.entries,
+                convertValueToString = { context.getString(it.stringRes) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    )
+            )
+
+            SettingsListDialog(
+                title = R.string.assign_action_volume_down_button,
+                dialogMessage = null,
+                value = remoteSettings.physicalVolumeDownButtonAction,
+                onValueChange = { settingsViewModel.savePhysicalVolumeDownButtonAction(it) },
+                items = PhysicalVolumeButtonAction.entries,
+                convertValueToString = { context.getString(it.stringRes) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
