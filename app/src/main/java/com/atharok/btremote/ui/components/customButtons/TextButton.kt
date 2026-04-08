@@ -138,7 +138,7 @@ fun TextKeyboardKey(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(dimensionResource(id = R.dimen.padding_min)),
+                .padding(dimensionResource(id = R.dimen.padding_small)),
             contentAlignment = Alignment.Center
         ) {
             AdaptiveText(
