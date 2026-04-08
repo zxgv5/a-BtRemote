@@ -133,7 +133,7 @@
     <string name="help_remote_control_buttons_are_not_working_check_4">• Затем повторно выполните сопряжение двух устройств с помощью этого приложения.</string>
     <string name="help_keyboard_wrong_character_sent_message">Если отправляемые символы некорректны, вам нужно настроить физическую клавиатуру на удалённом устройстве в соответствии с языком, выбранным в настройках приложения.</string>
     <string name="unpair_device_failure">Ошибка! Устройство не удалось отсоединить.</string>
-    <string name="automatic_connect">Автоматическое подключение</string>
+    <string name="automatic_connect">Автоматически подключать</string>
     <string name="disabled_automatic_connection_message">Хотите отключить автоматическое подключение?</string>
     <string name="pairing_from_the_remote_device">Сопряжение с удаленным устройством</string>
     <string name="name_of_this_device">Имя этого устройства: %1$s.</string>
@@ -160,7 +160,7 @@
     <string name="navigation_mode">Режим навигации</string>
     <string name="d_pad_description">Навигация через элементы управления направлением</string>
     <string name="touchpad">Сенсорная панель</string>
-    <string name="minimalist_interface_info">Не отображаются кнопки ТВ-каналов</string>
+    <string name="minimalist_interface_info">Не отображает кнопки ТВ-каналов</string>
     <string name="d_pad">Геймпад</string>
     <string name="keyboard_portuguese_br">Португальский (Бразилия)</string>
     <string name="keyboard_greek">Греческий</string>
@@ -197,7 +197,7 @@
     <string name="pairing_from_a_remote_device_step_2_content_2">- Откройте настройки Bluetooth.\n- Выберите вариант сопряжения нового устройства.\n- Устройство \"%1$s\" должно появиться в списке доступных устройств.\n- Выберите устройство \"%1$s\", чтобы начать сопряжение.</string>
     <string name="pairing_from_a_remote_device_step_3_content_1">Если сопряжение прошло успешно, устройство Android должно автоматически подключиться к удаленному устройству. Однако это соединение не использует протокол HID (Human Interface Device), что препятствует работе пульта дистанционного управления. Чтобы решить эту проблему:</string>
     <string name="pairing_from_a_remote_device_step_4_content">Если вы выполнили все предыдущие шаги, сопряжение прошло успешно, и вы отключили оба устройства, вы можете нажать кнопку \"%1$s\". Удаленное устройство должно появиться в списке сопряженных устройств. Выберите его, чтобы установить соединение с использованием протокола HID.</string>
-    <string name="use_minimalist_interface">Используйте минималистичный интерфейс</string>
+    <string name="use_minimalist_interface">Использовать минималистичный интерфейс</string>
     <string name="help_remote_control_buttons_are_not_working_message_2">Каждое приложение, использующее протокол HID, может использовать свой профиль. Если вы ранее сопрягали устройства с помощью другого приложения, вам может потребоваться повторное сопряжение, чтобы сбросить профиль. Без этой процедуры кнопки могут работать неправильно или передавать неверные значения.</string>
     <string name="open">Открыть</string>
     <string name="connected_off">Нет подключенных устройств</string>
@@ -209,7 +209,7 @@
     <string name="help_hid_service_not_initialized_message_1">Если сообщение указывает на то, что служба HID не инициализирована, перейдите в настройки разработчика вашего устройства и найдите параметр «Отключить профиль устройства Bluetooth HID»:</string>
     <string name="help_info_hid_service_not_initialized_message">Служба HID не инициализирована. Пожалуйста, ознакомьтесь со справкой.</string>
     <string name="help_hid_service_not_initialized_message_2">• Если эта опция доступна, отключите её, затем перезапустите устройство. После перезапуска профиль HID должен работать нормально.</string>
-    <string name="use_enter_for_selection_title">Для выбора используйте клавишу Ввод</string>
+    <string name="use_enter_for_selection_title">Для выбора использовать клавишу Ввод</string>
     <string name="use_enter_for_selection_summary">Включите эту опцию только если клавиша выбора не работает</string>
     <string name="remove_from_favorites">Убрать из избранного</string>
     <string name="favorites">Избранное</string>
