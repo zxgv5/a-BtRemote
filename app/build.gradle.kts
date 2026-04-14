@@ -13,8 +13,8 @@ android {
         applicationId = "com.atharok.btremote"
         minSdk = 28
         targetSdk = 36
-        versionCode = 23
-        versionName = "1.10.1"
+        versionCode = 24
+        versionName = "1.11.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
