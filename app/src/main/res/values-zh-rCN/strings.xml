@@ -226,4 +226,9 @@
     <string name="use_mouse_navigation_by_default">默认使用鼠标导航</string>
     <string name="keyboard_tab">Tab</string>
     <string name="play_pause">播放/暂停</string>
+    <string name="assign_action_volume_up_button">为音量调高按钮分配操作</string>
+    <string name="assign_action_volume_down_button">为音量调低按钮分配操作</string>
+    <string name="default_option">默认</string>
+    <string name="page_up">向上翻页</string>
+    <string name="page_down">向下翻页</string>
 </resources>

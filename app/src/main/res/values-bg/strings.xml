@@ -218,4 +218,9 @@
     <string name="use_mouse_navigation_by_default">Използване на навигация с мишката по подразбиране</string>
     <string name="keyboard_tab">Раздел</string>
     <string name="play_pause">Възпроизвеждане / Пауза</string>
+    <string name="assign_action_volume_up_button">Присвояване на действие на бутона за увеличаване на звука</string>
+    <string name="assign_action_volume_down_button">Присвояване на действие на бутона за намаляване на звука</string>
+    <string name="default_option">По подразбиране</string>
+    <string name="page_up">Страница нагоре</string>
+    <string name="page_down">Страница надолу</string>
 </resources>

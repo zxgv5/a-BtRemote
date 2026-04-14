@@ -218,4 +218,9 @@
     <string name="use_mouse_navigation_by_default">Navegación con el ratón por defecto</string>
     <string name="keyboard_tab">Tab</string>
     <string name="play_pause">Reproducir / Pausar</string>
+    <string name="assign_action_volume_up_button">Asigna una acción al botón de subir volumen</string>
+    <string name="assign_action_volume_down_button">Asigna una acción al botón de bajar volumen</string>
+    <string name="default_option">Por defecto</string>
+    <string name="page_up">Subir en la página</string>
+    <string name="page_down">Bajar en la página</string>
 </resources>
