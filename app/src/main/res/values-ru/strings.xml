@@ -96,9 +96,9 @@
     <string name="previous_channel">Предыдущий канал</string>
     <!-- Mouse -->
     <string name="mouse">Мышь</string>
-    <string name="mouse_click_left">Щёлкните левой кнопкой мыши</string>
-    <string name="mouse_click_right">Щёлкните правой кнопкой мыши</string>
-    <string name="mouse_click_middle">Щёлкните средней кнопкой</string>
+    <string name="mouse_click_left">Левая кнопка мыши</string>
+    <string name="mouse_click_right">Правая кнопка мыши</string>
+    <string name="mouse_click_middle">Средняя кнопка мыши</string>
     <string name="mouse_wheel_up">Проведите пальцем вверх</string>
     <string name="mouse_wheel_down">Проведите пальцем вниз</string>
     <string name="mouse_pad_tap">Нажмите</string>
@@ -239,4 +239,9 @@
     <string name="blue_menu_button">Синяя</string>
     <string name="yellow_menu_button">Жёлтая</string>
     <string name="keyboard_tab">Вкладка</string>
+    <string name="assign_action_volume_up_button">Назначить действие на кнопку увеличения громкости</string>
+    <string name="assign_action_volume_down_button">Назначить действие на кнопку уменьшения громкости</string>
+    <string name="default_option">По умолчанию</string>
+    <string name="page_up">Страница вверх</string>
+    <string name="page_down">Страница вниз</string>
 </resources>
