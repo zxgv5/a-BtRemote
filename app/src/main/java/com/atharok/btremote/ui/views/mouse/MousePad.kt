@@ -1,28 +1,39 @@
 package com.atharok.btremote.ui.views.mouse
 
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.changedToDown
-import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
+import com.atharok.btremote.common.utils.Ref
+import com.atharok.btremote.common.utils.TAP_DRIFT_MAX_PX
+import com.atharok.btremote.common.utils.TAP_DURATION_MAX
 import com.atharok.btremote.domain.entities.remoteInput.MouseAction
 import com.atharok.btremote.ui.components.DefaultElevatedCard
-import kotlin.jvm.internal.Ref.FloatRef
 
 @Composable
 fun MousePad(
-    mouseSpeed: FloatRef,
-    updateMouseInput: (input: MouseAction) -> Unit,
-    updateTouchPosition: (Float, Float) -> Unit,
-    updateWheel: (Float) -> Unit,
+    mouseSpeed: Float,
+    scrollSpeed: Float,
+    sendMouseAction: (input: MouseAction) -> Unit,
+    sendMousePosition: (Float, Float) -> Unit,
+    sendMouseScroll: (Float) -> Unit,
     shape: Shape,
     modifier: Modifier = Modifier
 ) {
+    val tapStartTimestamp = remember { Ref(0L) }
+    val tapFingerCount = remember { Ref(0) }
+    val tapAccumulatedDrift = remember { Ref(0f) }
+    val scrollAccumulator = remember { Ref(0f) }
+
     DefaultElevatedCard(
         modifier = modifier,
         shape = shape
@@ -32,37 +43,37 @@ fun MousePad(
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     awaitEachGesture {
+                        awaitFirstDown()
                         while (true) {
                             val event = awaitPointerEvent()
                             val inputChanges = event.changes
 
-                            when (inputChanges.size) {
+                            doMove(
+                                mouseSpeed = mouseSpeed,
+                                inputChanges = inputChanges,
+                                sendMousePosition = sendMousePosition
+                            )
 
-                                // 1 finger
-                                1 -> {
-                                    val inputChange = inputChanges.first()
+                            doTap(
+                                inputChanges = inputChanges,
+                                tapStartTimestamp = tapStartTimestamp.value,
+                                onTapStartTimestampChange = { tapStartTimestamp.value = it },
+                                tapFingerCount = tapFingerCount.value,
+                                onTapFingerCountChange = { tapFingerCount.value = it },
+                                tapAccumulatedDrift = tapAccumulatedDrift.value,
+                                onTapAccumulatedDriftChange = { tapAccumulatedDrift.value = it },
+                                sendMouseAction = sendMouseAction
+                            )
 
-                                    moveMouse(
-                                        mouseSpeed = mouseSpeed.element,
-                                        inputChange = inputChange,
-                                        updateTouchPosition = updateTouchPosition
-                                    )
-                                    doTap(
-                                        inputChange = inputChange,
-                                        updateMouseInput = updateMouseInput
-                                    )
-                                }
+                            doWheel(
+                                inputChanges = inputChanges,
+                                scrollSpeed = scrollSpeed,
+                                scrollAccumulator = scrollAccumulator,
+                                sendMouseScroll = sendMouseScroll
+                            )
 
-                                // 2 fingers
-                                2 -> {
-                                    doWheel(
-                                        inputChanges = inputChanges,
-                                        updateMouseInput = updateMouseInput,
-                                        updateWheel = updateWheel
-                                    )
-                                }
-                            }
                             inputChanges.forEach { it.consume() }
+
                         }
                     }
                 }
@@ -72,56 +83,89 @@ fun MousePad(
 
 // ---- Actions ----
 
-private fun moveMouse(
+private fun doMove(
     mouseSpeed: Float,
-    inputChange: PointerInputChange,
-    updateTouchPosition: (Float, Float) -> Unit
+    inputChanges: List<PointerInputChange>,
+    sendMousePosition: (Float, Float) -> Unit
 ) {
-    updateTouchPosition(
-        (inputChange.position.x - inputChange.previousPosition.x) * mouseSpeed,
-        (inputChange.position.y - inputChange.previousPosition.y) * mouseSpeed
-    )
+    if(inputChanges.size != 1) return
+    val delta: Offset = inputChanges.first().positionChange()
+    sendMousePosition(delta.x * mouseSpeed, delta.y * mouseSpeed)
 }
 
-private var tapTimestamp: Long = 0L
 private fun doTap(
-    inputChange: PointerInputChange,
-    updateMouseInput: (input: MouseAction) -> Unit
+    inputChanges: List<PointerInputChange>,
+    tapStartTimestamp: Long,
+    onTapStartTimestampChange: (Long) -> Unit,
+    tapFingerCount: Int,
+    onTapFingerCountChange: (Int) -> Unit,
+    tapAccumulatedDrift: Float,
+    onTapAccumulatedDriftChange: (Float) -> Unit,
+    sendMouseAction: (input: MouseAction) -> Unit
 ) {
-    val currentTime = System.currentTimeMillis()
+    // Store the maximum number of fingers that simultaneously touched the pad, used to determine
+    // the tap action (1 finger = left click, 2 fingers = right click, 3 fingers = middle click).
+    if (inputChanges.size > tapFingerCount) {
+        onTapFingerCountChange(inputChanges.size)
+    }
 
-    when {
-        inputChange.changedToDown() -> tapTimestamp = currentTime
-        inputChange.changedToUp() -> {
-            val position = inputChange.position
-            val previousPosition = inputChange.previousPosition
-            if(currentTime - tapTimestamp < 200 && position.x == previousPosition.x && position.y == previousPosition.y) {
-                updateMouseInput(MouseAction.PAD_TAP)
+    // If a first finger touches the pad, store the timestamp of the initial contact.
+    val isFingerDown = inputChanges.any { it.changedToDown() }
+    if (isFingerDown && tapStartTimestamp == 0L) {
+        onTapStartTimestampChange(System.currentTimeMillis())
+        return
+    }
+
+    // Track how much the fingers have moved on the pad. If they moved too much, the gesture will
+    // not be considered a tap.
+    onTapAccumulatedDriftChange(
+        tapAccumulatedDrift + inputChanges.maxOf { it.positionChange().getDistance() }
+    )
+
+    // If all fingers are lifted, check if the gesture qualifies as a tap
+    val isAllFingersUp = inputChanges.none { it.pressed }
+    if (isAllFingersUp) {
+        val tapDuration = System.currentTimeMillis() - tapStartTimestamp
+
+        if (tapDuration < TAP_DURATION_MAX && tapAccumulatedDrift < TAP_DRIFT_MAX_PX) {
+            when (tapFingerCount) {
+                1 -> sendMouseAction(MouseAction.MOUSE_CLICK_LEFT)
+                2 -> sendMouseAction(MouseAction.MOUSE_CLICK_RIGHT)
+                3 -> sendMouseAction(MouseAction.MOUSE_CLICK_MIDDLE)
             }
-            tapTimestamp = 0L
+            sendMouseAction(MouseAction.NONE)
         }
+
+        // Reset state
+        onTapStartTimestampChange(0L)
+        onTapFingerCountChange(0)
+        onTapAccumulatedDriftChange(0f)
     }
 }
 
 private fun doWheel(
     inputChanges: List<PointerInputChange>,
-    updateMouseInput: (input: MouseAction) -> Unit,
-    updateWheel: (Float) -> Unit
+    scrollSpeed: Float,
+    scrollAccumulator: Ref<Float>,
+    sendMouseScroll: (Float) -> Unit
 ) {
-    var posY = 0f
-    inputChanges.forEach {
-        posY += it.position.y - it.previousPosition.y
-    }
+    if(inputChanges.size != 2) return
 
-    when {
-        posY != 0f -> updateWheel(posY / 10f)
-        else -> updateMouseInput(MouseAction.NONE)
-    }
+    // Average the delta Y across all fingers using positionChange() for consistency
+    val avgDeltaY = inputChanges
+        .map { it.positionChange().y }
+        .average()
+        .toFloat()
 
-    for (inputChange in inputChanges) {
-        if(inputChange.changedToUp()) {
-            updateMouseInput(MouseAction.NONE)
-            break
-        }
+    if (avgDeltaY == 0f) return // Nothing to scroll
+
+    // Accumulate movement until a full scroll step is reached
+    scrollAccumulator.value += avgDeltaY
+
+    val steps = (scrollAccumulator.value / 20f).toInt()
+    if (steps != 0) {
+        sendMouseScroll(steps * scrollSpeed)
+        sendMouseScroll(0f)
+        scrollAccumulator.value -= steps * 20f
     }
 }

@@ -3,65 +3,42 @@ package com.atharok.btremote.ui.views.mouse
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.atharok.btremote.R
 import com.atharok.btremote.common.utils.AppIcons
+import com.atharok.btremote.common.utils.Ref
 import com.atharok.btremote.domain.entities.remoteInput.MouseAction
 import com.atharok.btremote.ui.components.customButtons.EmptySurfaceButton
-import com.atharok.btremote.ui.components.customButtons.IconSurfaceButton
-import kotlin.jvm.internal.Ref.BooleanRef
-import kotlin.jvm.internal.Ref.FloatRef
-
-private data class MouseScrolling(
-    val mouseX: Float = 0f,
-    val mouseY: Float = 0f,
-    val mouseWheel: Float = 0f,
-)
+import com.atharok.btremote.ui.components.customButtons.IconHoldButton
 
 @Composable
 fun MousePadLayout(
     mouseSpeed: Float,
+    scrollSpeed: Float,
     shouldInvertMouseScrollingDirection: Boolean,
     useGyroscope: Boolean,
     sendMouseInput: (MouseAction, Float, Float, Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val mouseAction: MutableState<MouseAction> = remember { mutableStateOf(MouseAction.NONE) }
-    val mouseScrolling: MutableState<MouseScrolling> = remember { mutableStateOf(MouseScrolling()) }
-
-    val mouseSpeedRef = remember { FloatRef() }
-    mouseSpeedRef.element = mouseSpeed
-
-    val shouldInvertMouseScrollingDirectionRef = remember { BooleanRef() }
-    shouldInvertMouseScrollingDirectionRef.element = shouldInvertMouseScrollingDirection
-
-    LaunchedEffect(mouseAction.value, mouseScrolling.value) {
-        sendMouseInput(mouseAction.value, mouseScrolling.value.mouseX, mouseScrolling.value.mouseY, mouseScrolling.value.mouseWheel)
-        if (mouseAction.value == MouseAction.PAD_TAP) {
-            mouseAction.value = MouseAction.NONE
-        }
-    }
+    val mouseAction: Ref<MouseAction> = remember { Ref(MouseAction.NONE) }
 
     if(useGyroscope) {
         MouseGyroscope(
             mouseSpeed = mouseSpeed,
             onMousePositionChange = { x: Float, y: Float ->
-                mouseScrolling.value = MouseScrolling(mouseX = x, mouseY = y)
+                sendMouseInput(mouseAction.value, x, y, 0f)
             }
         )
     }
@@ -73,17 +50,18 @@ fun MousePadLayout(
                 .padding(bottom = dimensionResource(id = R.dimen.padding_min))
         ) {
             MousePad(
-                mouseSpeed = mouseSpeedRef,
-                updateMouseInput = {
+                mouseSpeed = mouseSpeed,
+                scrollSpeed = scrollSpeed,
+                sendMouseAction = {
                     mouseAction.value = it
+                    sendMouseInput(mouseAction.value, 0f, 0f, 0f)
                 },
-                updateTouchPosition = { x: Float, y: Float ->
-                    mouseScrolling.value = MouseScrolling(mouseX = x, mouseY = y)
+                sendMousePosition = { x: Float, y: Float ->
+                    sendMouseInput(mouseAction.value, x, y, 0f)
                 },
-                updateWheel = { wheel: Float ->
-                    mouseScrolling.value = MouseScrolling(
-                        mouseWheel = wheel * if(shouldInvertMouseScrollingDirectionRef.element) -1f else 1f
-                    )
+                sendMouseScroll = { wheel: Float ->
+                    val mouseWheel = wheel * if(shouldInvertMouseScrollingDirection) -1f else 1f
+                    sendMouseInput(mouseAction.value, 0f, 0f, mouseWheel)
                 },
                 shape = RoundedCornerShape(
                     topStart = dimensionResource(id = R.dimen.card_corner_radius),
@@ -97,9 +75,9 @@ fun MousePadLayout(
             )
 
             ScrollMouseButtonsLayout(
-                mouseScrolling = mouseScrolling.value,
-                onMouseScrollingChange = {
-                    mouseScrolling.value = it
+                scrollSpeed = scrollSpeed,
+                sendMouseScroll = {
+                    sendMouseInput(mouseAction.value, 0f, 0f, it)
                 },
                 modifier = Modifier
                     .weight(0.15f)
@@ -108,8 +86,9 @@ fun MousePadLayout(
         }
 
         MouseButtonsLayout(
-            onMouseActionChange = {
+            sendMouseAction = {
                 mouseAction.value = it
+                sendMouseInput(mouseAction.value, 0f, 0f, 0f)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,123 +102,53 @@ fun MousePadLayout(
 
 @Composable
 private fun MouseButtonsLayout(
-    onMouseActionChange: (MouseAction) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val layoutDirection = LocalLayoutDirection.current
-
-    if(layoutDirection == LayoutDirection.Rtl) {
-        MouseButtonsLayoutRTL(onMouseActionChange, modifier)
-    } else {
-        MouseButtonsLayoutLTR(onMouseActionChange, modifier)
-    }
-}
-
-@Composable
-private fun MouseButtonsLayoutLTR(
-    onMouseActionChange: (MouseAction) -> Unit,
+    sendMouseAction: (MouseAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.Absolute.Left) {
 
         // Start
         EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_LEFT) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
+            touchDown = { sendMouseAction(MouseAction.MOUSE_CLICK_LEFT) },
+            touchUp = { sendMouseAction(MouseAction.NONE) },
             modifier = Modifier
                 .weight(0.38f)
                 .fillMaxHeight()
-                .padding(end = dimensionResource(id = R.dimen.padding_min)),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 0.dp,
-                bottomEnd = 0.dp,
-                bottomStart = dimensionResource(id = R.dimen.card_corner_radius)
+                .absolutePadding(right = dimensionResource(id = R.dimen.padding_min)),
+            shape = AbsoluteRoundedCornerShape(
+                topLeft = 0.dp,
+                topRight = 0.dp,
+                bottomRight = 0.dp,
+                bottomLeft = dimensionResource(id = R.dimen.card_corner_radius)
             )
         )
 
         // Center
         EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_MIDDLE) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
+            touchDown = { sendMouseAction(MouseAction.MOUSE_CLICK_MIDDLE) },
+            touchUp = { sendMouseAction(MouseAction.NONE) },
             modifier = Modifier
                 .weight(0.24f)
                 .fillMaxHeight()
                 .padding(
-                    start = dimensionResource(id = R.dimen.padding_min),
-                    end = dimensionResource(id = R.dimen.padding_min)
+                    horizontal = dimensionResource(id = R.dimen.padding_min)
                 ),
             shape = RectangleShape
         )
 
         // End
         EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_RIGHT) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
+            touchDown = { sendMouseAction(MouseAction.MOUSE_CLICK_RIGHT) },
+            touchUp = { sendMouseAction(MouseAction.NONE) },
             modifier = Modifier
                 .weight(0.38f)
                 .fillMaxHeight()
-                .padding(start = dimensionResource(id = R.dimen.padding_min)),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 0.dp,
-                bottomEnd = dimensionResource(id = R.dimen.card_corner_radius),
-                bottomStart = 0.dp
-            )
-        )
-    }
-}
-
-@Composable
-private fun MouseButtonsLayoutRTL(
-    onMouseActionChange: (MouseAction) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.Absolute.Left) {
-
-        // Start
-        EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_LEFT) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(start = dimensionResource(id = R.dimen.padding_min)),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 0.dp,
-                bottomEnd = dimensionResource(id = R.dimen.card_corner_radius),
-                bottomStart = 0.dp
-            )
-        )
-
-        // Center
-        EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_MIDDLE) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
-            modifier = Modifier
-                .weight(0.24f)
-                .fillMaxHeight()
-                .padding(
-                    start = dimensionResource(id = R.dimen.padding_min),
-                    end = dimensionResource(id = R.dimen.padding_min)
-                ),
-            shape = RectangleShape
-        )
-
-        // End
-        EmptySurfaceButton(
-            touchDown = { onMouseActionChange(MouseAction.MOUSE_CLICK_RIGHT) },
-            touchUp = { onMouseActionChange(MouseAction.NONE) },
-            modifier = Modifier
-                .weight(0.38f)
-                .fillMaxHeight()
-                .padding(end = dimensionResource(id = R.dimen.padding_min)),
-            shape = RoundedCornerShape(
-                topStart = 0.dp,
-                topEnd = 0.dp,
-                bottomEnd = 0.dp,
-                bottomStart = dimensionResource(id = R.dimen.card_corner_radius)
+                .absolutePadding(left = dimensionResource(id = R.dimen.padding_min)),
+            shape = AbsoluteRoundedCornerShape(
+                topLeft = 0.dp,
+                topRight = 0.dp,
+                bottomRight = dimensionResource(id = R.dimen.card_corner_radius),
+                bottomLeft = 0.dp
             )
         )
     }
@@ -249,65 +158,45 @@ private fun MouseButtonsLayoutRTL(
 
 @Composable
 private fun ScrollMouseButtonsLayout(
-    mouseScrolling: MouseScrolling,
-    onMouseScrollingChange: (MouseScrolling) -> Unit,
+    scrollSpeed: Float,
+    sendMouseScroll: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        IconSurfaceButton(
+        IconHoldButton(
             image = AppIcons.MouseScrollUp,
             contentDescription = stringResource(id = R.string.mouse_wheel_up),
-            touchDown = {
-                onMouseScrollingChange(
-                    MouseScrolling(
-                        mouseX = mouseScrolling.mouseX,
-                        mouseY = mouseScrolling.mouseY,
-                        mouseWheel = 1f
-                    )
-                )
+            onHold = {
+                sendMouseScroll(1f)
             },
-            touchUp = {
-                onMouseScrollingChange(
-                    MouseScrolling(
-                        mouseX = mouseScrolling.mouseX,
-                        mouseY = mouseScrolling.mouseY,
-                        mouseWheel = 0f
-                    )
-                )
+            onRelease = {
+                sendMouseScroll(0f)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f)
                 .padding(bottom = dimensionResource(id = R.dimen.padding_min)),
+            durationBetweenRepeatsInMillis = getScrollDurationBetweenRepeats(scrollSpeed),
             shape = RoundedCornerShape(topEnd = dimensionResource(id = R.dimen.card_corner_radius))
         )
 
-        IconSurfaceButton(
+        IconHoldButton(
             image = AppIcons.MouseScrollDown,
             contentDescription = stringResource(id = R.string.mouse_wheel_down),
-            touchDown = {
-                onMouseScrollingChange(
-                    MouseScrolling(
-                        mouseX = mouseScrolling.mouseX,
-                        mouseY = mouseScrolling.mouseY,
-                        mouseWheel = -1f
-                    )
-                )
+            onHold = {
+                sendMouseScroll(-1f)
             },
-            touchUp = {
-                onMouseScrollingChange(
-                    MouseScrolling(
-                        mouseX = mouseScrolling.mouseX,
-                        mouseY = mouseScrolling.mouseY,
-                        mouseWheel = 0f
-                    )
-                )
+            onRelease = {
+                sendMouseScroll(0f)
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(0.5f)
                 .padding(top = dimensionResource(id = R.dimen.padding_min)),
+            durationBetweenRepeatsInMillis = getScrollDurationBetweenRepeats(scrollSpeed),
             shape = RectangleShape
         )
     }
 }
+
+private fun getScrollDurationBetweenRepeats(speed: Float): Long = speed.takeIf { it > 0f }?.let { (100f / it).toLong().coerceIn(16L, 200L) } ?: 100L
