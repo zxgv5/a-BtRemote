@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.atharok.btremote.R
 import com.atharok.btremote.common.extensions.getAppVersion
+import com.atharok.btremote.common.extensions.round
 import com.atharok.btremote.common.utils.AppIcons
 import com.atharok.btremote.common.utils.SOURCE_CODE_LINK
 import com.atharok.btremote.common.utils.WEB_SITE_LINK
@@ -288,8 +289,20 @@ fun SettingsScreen(
 
             SettingsSlider(
                 value = remoteSettings.mouseSpeed,
-                onValueChange = { settingsViewModel.saveMouseSpeed(it) },
+                onValueChange = { settingsViewModel.saveMouseSpeed(it.round(2)) },
                 info = stringResource(id = R.string.mouse_pointer_speed) + " (x${remoteSettings.mouseSpeed})",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    )
+            )
+
+            SettingsSlider(
+                value = remoteSettings.mouseScrollSpeed,
+                onValueChange = { settingsViewModel.saveMouseScrollSpeed(it.round(2)) },
+                info = stringResource(id = R.string.mouse_scroll_speed) + " (x${remoteSettings.mouseScrollSpeed})",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -693,8 +706,8 @@ private fun SettingsSlider(
         Slider(
             value = value,
             onValueChange = onValueChange,
-            valueRange = 1f..5f,
-            steps = 15,
+            valueRange = 0.25f..5f,
+            steps = 18
         )
     }
 }

@@ -41,6 +41,10 @@ class SettingsUseCase(private val dataStoreRepository: DataStoreRepository) {
         dataStoreRepository.saveMouseSpeed(mouseSpeed)
     }
 
+    suspend fun saveMouseScrollSpeed(scrollSpeed: Float) {
+        dataStoreRepository.saveMouseScrollSpeed(scrollSpeed)
+    }
+
     suspend fun saveInvertMouseScrollingDirection(invertScrollingDirection: Boolean) {
         dataStoreRepository.saveInvertMouseScrollingDirection(invertScrollingDirection)
     }

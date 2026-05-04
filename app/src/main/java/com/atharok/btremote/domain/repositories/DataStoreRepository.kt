@@ -28,6 +28,8 @@ interface DataStoreRepository {
 
     suspend fun saveMouseSpeed(mouseSpeed: Float)
 
+    suspend fun saveMouseScrollSpeed(scrollSpeed: Float)
+
     suspend fun saveInvertMouseScrollingDirection(invertScrollingDirection: Boolean)
 
     suspend fun saveUseGyroscope(useGyroscope: Boolean)

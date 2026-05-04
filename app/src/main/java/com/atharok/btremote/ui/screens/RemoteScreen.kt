@@ -412,7 +412,7 @@ private fun NavigationLayout(
             NavigationToggle.MOUSE -> {
                 MousePadLayout(
                     mouseSpeed = remoteSettings.mouseSpeed,
-                    scrollSpeed = 1f,
+                    scrollSpeed = remoteSettings.mouseScrollSpeed,
                     shouldInvertMouseScrollingDirection = remoteSettings.shouldInvertMouseScrollingDirection,
                     useGyroscope = remoteSettings.useGyroscope,
                     sendMouseInput = sendMouseKeyReport,

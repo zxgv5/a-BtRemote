@@ -44,6 +44,10 @@ class DataStoreRepositoryImpl(
         settingsDataStore.saveMouseSpeed(mouseSpeed)
     }
 
+    override suspend fun saveMouseScrollSpeed(scrollSpeed: Float) {
+        settingsDataStore.saveMouseScrollSpeed(scrollSpeed)
+    }
+
     override suspend fun saveInvertMouseScrollingDirection(invertScrollingDirection: Boolean) {
         settingsDataStore.saveInvertMouseScrollingDirection(invertScrollingDirection)
     }
