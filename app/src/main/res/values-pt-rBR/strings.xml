@@ -218,4 +218,9 @@
     <string name="green_menu_button">Verde</string>
     <string name="blue_menu_button">Azul</string>
     <string name="yellow_menu_button">Amarelo</string>
+    <string name="assign_action_volume_up_button">Atribuir uma ação ao botão de aumentar volume</string>
+    <string name="assign_action_volume_down_button">Atribuir uma ação ao botão de diminuir volume</string>
+    <string name="default_option">Padrão</string>
+    <string name="page_up">Page Up</string>
+    <string name="page_down">Page Down</string>
 </resources>
