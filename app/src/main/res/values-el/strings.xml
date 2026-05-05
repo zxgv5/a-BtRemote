@@ -244,4 +244,5 @@
     <string name="default_option">Προεπιλογή</string>
     <string name="assign_action_volume_down_button">Αντιστοίχιση ενέργειας στο κουμπί μείωσης έντασης ήχου</string>
     <string name="assign_action_volume_up_button">Αντιστοίχιση ενέργειας στο κουμπί αύξησης έντασης ήχου</string>
+    <string name="mouse_scroll_speed">Ταχύτητα κύλισης</string>
 </resources>
