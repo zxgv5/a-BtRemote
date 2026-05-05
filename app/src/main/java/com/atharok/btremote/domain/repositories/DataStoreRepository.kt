@@ -62,6 +62,9 @@ interface DataStoreRepository {
     fun getAutoConnectDeviceAddressFlow(): Flow<String>
     suspend fun saveAutoConnectDeviceAddress(macAddress: String)
 
+    fun showRemoteButtonsInNotification(): Flow<Boolean>
+    suspend fun saveShowRemoteButtonsInNotification(show: Boolean)
+
     fun hideBluetoothActivationButton(): Flow<Boolean>
     suspend fun saveHideBluetoothActivationButton(hide: Boolean)
 }

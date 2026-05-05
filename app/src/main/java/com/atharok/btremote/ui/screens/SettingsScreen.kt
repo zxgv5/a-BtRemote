@@ -79,6 +79,7 @@ fun SettingsScreen(
         .remoteSettingsFlow.collectAsStateWithLifecycle(RemoteSettings())
 
     // Advanced Options
+    val showRemoteButtonsInNotification: Boolean by settingsViewModel.showRemoteButtonsInNotificationFlow.collectAsStateWithLifecycle(initialValue = false)
     val hideBluetoothActivationButton: Boolean by settingsViewModel.hideBluetoothActivationButtonFlow.collectAsStateWithLifecycle(initialValue = false)
 
     AppScaffold(
@@ -429,6 +430,19 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.advanced_options),
                 icon = AppIcons.Settings,
                 iconDescription = stringResource(id = R.string.advanced_options),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    )
+            )
+
+            SettingsSwitch(
+                primaryText = stringResource(id = R.string.show_remote_buttons_in_notification),
+                secondaryText = null,
+                checked = showRemoteButtonsInNotification,
+                onCheckedChange = { settingsViewModel.saveShowRemoteButtonsInNotification(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

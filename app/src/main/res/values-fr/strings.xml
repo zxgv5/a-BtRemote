@@ -121,6 +121,7 @@
     <string name="assign_action_volume_up_button">Attribuer une action au bouton volume haut</string>
     <string name="assign_action_volume_down_button">Attribuer une action au bouton volume bas</string>
     <string name="advanced_options">Options avancées</string>
+    <string name="show_remote_buttons_in_notification">Afficher les boutons de la télécommande dans la notification</string>
     <string name="hide_bluetooth_activation_button">Masquer le bouton d’activation Bluetooth au démarrage de l’application</string>
     <string name="about">À propos</string>
     <string name="language">Langue</string>

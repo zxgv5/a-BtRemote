@@ -36,6 +36,7 @@ import com.atharok.btremote.presentation.services.NotificationBroadcastReceiver.
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -54,7 +55,10 @@ class BluetoothHidService : Service() {
                 when(it.state) {
                     STATE_CONNECTED -> {
                         if(currentConnectionState != STATE_CONNECTED) {
-                            updateNotificationForConnectedState(it.deviceName)
+                            updateNotificationForConnectedState(
+                                deviceName = it.deviceName,
+                                showRemoteButtonsInNotification = useCase.showRemoteButtonsInNotification().first()
+                            )
                             currentConnectionState = STATE_CONNECTED
                         }
                         MediaControlWidget().updateAll(this@BluetoothHidService)
@@ -108,51 +112,54 @@ class BluetoothHidService : Service() {
     }
 
     private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.connected_off))
-            .setOngoing(true)
+        return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).apply {
+            setSmallIcon(R.drawable.notification_icon)
+            setContentText(getString(R.string.connected_off))
+            setOngoing(true)
             //.setContentIntent(createOpenApplicationPendingIntent())
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .addAction(
+            setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            addAction(
                 NotificationCompat.Action.Builder(
                     R.drawable.round_launch_24,
                     getString(R.string.open),
                     createOpenApplicationPendingIntent()
                 ).build()
             )
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setVibrate(longArrayOf(0))
-            .build()
+            setPriority(NotificationCompat.PRIORITY_MIN)
+            setVibrate(longArrayOf(0))
+        }.build()
     }
 
-    private fun updateNotificationForConnectedState(deviceName: String) {
-        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.notification_icon)
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.connected_on, deviceName))
-            .setOngoing(true)
-            //.setContentIntent(createOpenApplicationPendingIntent())
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomBigContentView(configureRemoteViews())
-            .addAction(
+    private fun updateNotificationForConnectedState(
+        deviceName: String,
+        showRemoteButtonsInNotification: Boolean
+    ) {
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).apply {
+            setSmallIcon(R.drawable.notification_icon)
+            setContentText(getString(R.string.connected_on, deviceName))
+            setOngoing(true)
+            //setContentIntent(createOpenApplicationPendingIntent())
+            setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            if(showRemoteButtonsInNotification) {
+                setCustomBigContentView(configureRemoteViews())
+            }
+            addAction(
                 NotificationCompat.Action.Builder(
                     R.drawable.round_launch_24,
                     getString(R.string.open),
                     createOpenApplicationPendingIntent()
                 ).build()
             )
-            .addAction(
+            addAction(
                 NotificationCompat.Action.Builder(
                     R.drawable.round_link_off_24,
                     getString(R.string.disconnect),
                     createPendingIntent(ACTION_DISCONNECT)
                 ).build()
             )
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setVibrate(longArrayOf(0))
-            .build()
+            setPriority(NotificationCompat.PRIORITY_MIN)
+            setVibrate(longArrayOf(0))
+        }.build()
 
         notificationManager.notify(NOTIFICATION_ID, notification)
     }

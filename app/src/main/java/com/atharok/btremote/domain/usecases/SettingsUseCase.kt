@@ -95,6 +95,11 @@ class SettingsUseCase(private val dataStoreRepository: DataStoreRepository) {
 
     // ---- Others ----
 
+    fun showRemoteButtonsInNotification(): Flow<Boolean> = dataStoreRepository.showRemoteButtonsInNotification()
+    suspend fun saveShowRemoteButtonsInNotification(show: Boolean) {
+        dataStoreRepository.saveShowRemoteButtonsInNotification(show)
+    }
+
     fun hideBluetoothActivationButton(): Flow<Boolean> = dataStoreRepository.hideBluetoothActivationButton()
     suspend fun saveHideBluetoothActivationButton(hide: Boolean) {
         dataStoreRepository.saveHideBluetoothActivationButton(hide)

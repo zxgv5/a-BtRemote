@@ -4,6 +4,7 @@ import com.atharok.btremote.common.utils.REMOTE_REPORT_ID
 import com.atharok.btremote.domain.entities.DeviceHidConnectionState
 import com.atharok.btremote.domain.repositories.BluetoothRepository
 import com.atharok.btremote.domain.repositories.DataStoreRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -36,4 +37,6 @@ class BluetoothHidServiceUseCase(
     fun sendRemoteReport(bytes: ByteArray): Boolean {
         return bluetoothRepository.sendReport(REMOTE_REPORT_ID, bytes)
     }
+
+    fun showRemoteButtonsInNotification(): Flow<Boolean> = dataStoreRepository.showRemoteButtonsInNotification()
 }

@@ -55,14 +55,14 @@ class SettingsDataStore(private val context: Context) {
         private const val USE_MINIMALIST_REMOTE_KEY = "use_minimalist_remote_key"
         private const val REMOTE_NAVIGATION_KEY = "remote_navigation_key"
         private const val USE_ENTER_FOR_SELECTION_KEY = "use_enter_for_selection_key"
-
-        private const val FAVORITE_DEVICES_KEY = "favorite_devices_key"
-        private const val AUTO_CONNECT_DEVICE_ADDRESS_KEY = "auto_connect_device_address_key"
-        private const val HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY = "hide_bluetooth_activation_button_key"
-
         private const val USE_MOUSE_NAVIGATION_BY_DEFAULT_KEY = "use_mouse_navigation_by_default_key"
         private const val PHYSICAL_VOLUME_BUTTON_UP_ACTION_KEY = "physical_volume_button_up_action_key"
         private const val PHYSICAL_VOLUME_BUTTON_DOWN_ACTION_KEY = "physical_volume_button_down_action_key"
+
+        private const val FAVORITE_DEVICES_KEY = "favorite_devices_key"
+        private const val AUTO_CONNECT_DEVICE_ADDRESS_KEY = "auto_connect_device_address_key"
+        private const val SHOW_REMOTE_BUTTONS_IN_NOTIFICATION_KEY = "show_remote_buttons_in_notification_key"
+        private const val HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY = "hide_bluetooth_activation_button_key"
     }
 
     private val themeKey = stringPreferencesKey(THEME_KEY)
@@ -80,12 +80,13 @@ class SettingsDataStore(private val context: Context) {
     private val useMinimalistRemoteKey = booleanPreferencesKey(USE_MINIMALIST_REMOTE_KEY)
     private val remoteNavigationKey = stringPreferencesKey(REMOTE_NAVIGATION_KEY)
     private val useEnterForSelectionKey = booleanPreferencesKey(USE_ENTER_FOR_SELECTION_KEY)
-    private val favoriteDevicesKey = stringPreferencesKey(FAVORITE_DEVICES_KEY)
-    private val autoConnectDeviceAddressKey = stringPreferencesKey(AUTO_CONNECT_DEVICE_ADDRESS_KEY)
-    private val hideBluetoothActivationButtonKey = booleanPreferencesKey(HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY)
     private val useMouseNavigationByDefaultKey = booleanPreferencesKey(USE_MOUSE_NAVIGATION_BY_DEFAULT_KEY)
     private val physicalVolumeUpButtonActionKey = stringPreferencesKey(PHYSICAL_VOLUME_BUTTON_UP_ACTION_KEY)
     private val physicalVolumeDownButtonActionKey = stringPreferencesKey(PHYSICAL_VOLUME_BUTTON_DOWN_ACTION_KEY)
+    private val favoriteDevicesKey = stringPreferencesKey(FAVORITE_DEVICES_KEY)
+    private val autoConnectDeviceAddressKey = stringPreferencesKey(AUTO_CONNECT_DEVICE_ADDRESS_KEY)
+    private val showRemoteButtonsInNotificationKey = booleanPreferencesKey(SHOW_REMOTE_BUTTONS_IN_NOTIFICATION_KEY)
+    private val hideBluetoothActivationButtonKey = booleanPreferencesKey(HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY)
 
     private fun Flow<Preferences>.catchException(): Flow<Preferences> = this.catch {
         if (it is IOException) {
@@ -304,6 +305,20 @@ class SettingsDataStore(private val context: Context) {
     }
 
     // ---- Advanced Options ----
+
+    val showRemoteButtonsInNotificationFlow: Flow<Boolean> by lazy {
+        context.dataStore.data
+            .catchException()
+            .map { preferences ->
+                preferences[showRemoteButtonsInNotificationKey] == true
+            }
+    }
+
+    suspend fun saveShowRemoteButtonsInNotification(show: Boolean) {
+        context.dataStore.edit {
+            it[showRemoteButtonsInNotificationKey] = show
+        }
+    }
 
     val hideBluetoothActivationButtonFlow: Flow<Boolean> by lazy {
         context.dataStore.data

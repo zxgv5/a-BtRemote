@@ -108,6 +108,11 @@ class DataStoreRepositoryImpl(
         settingsDataStore.saveAutoConnectDeviceAddress(macAddress)
     }
 
+    override fun showRemoteButtonsInNotification(): Flow<Boolean> = settingsDataStore.showRemoteButtonsInNotificationFlow
+    override suspend fun saveShowRemoteButtonsInNotification(show: Boolean) {
+        settingsDataStore.saveShowRemoteButtonsInNotification(show)
+    }
+
     override fun hideBluetoothActivationButton(): Flow<Boolean> = settingsDataStore.hideBluetoothActivationButtonFlow
     override suspend fun saveHideBluetoothActivationButton(hide: Boolean) {
         settingsDataStore.saveHideBluetoothActivationButton(hide)

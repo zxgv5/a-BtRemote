@@ -98,6 +98,11 @@ class SettingsViewModel(
 
     // ---- Others ----
 
+    val showRemoteButtonsInNotificationFlow: Flow<Boolean> get() = useCase.showRemoteButtonsInNotification()
+    fun saveShowRemoteButtonsInNotification(show: Boolean) = viewModelScope.launch {
+        useCase.saveShowRemoteButtonsInNotification(show)
+    }
+
     val hideBluetoothActivationButtonFlow: Flow<Boolean> get() = useCase.hideBluetoothActivationButton()
     fun saveHideBluetoothActivationButton(hide: Boolean) = viewModelScope.launch {
         useCase.saveHideBluetoothActivationButton(hide)

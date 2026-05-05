@@ -133,6 +133,7 @@
     <string name="assign_action_volume_up_button">Assign an action to the volume up button</string>
     <string name="assign_action_volume_down_button">Assign an action to the volume down button</string>
     <string name="advanced_options">Advanced Options</string>
+    <string name="show_remote_buttons_in_notification">Show remote buttons in notification</string>
     <string name="hide_bluetooth_activation_button">Hide Bluetooth activation button at app startup</string>
     <string name="about">About</string>
     <string name="language">Language</string>
