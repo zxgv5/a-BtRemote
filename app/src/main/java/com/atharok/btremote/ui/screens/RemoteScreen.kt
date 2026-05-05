@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -77,10 +76,8 @@ private enum class NavigationToggle {
 
 @Composable
 fun RemoteScreen(
-    isBluetoothServiceRunning: Boolean,
     bluetoothDeviceHidConnectionState: DeviceHidConnectionState,
     closeApp: () -> Unit,
-    navigateUp: () -> Unit,
     navigateToSettings: () -> Unit,
     modifier: Modifier = Modifier,
     remoteViewModel: RemoteViewModel = koinViewModel(),
@@ -110,20 +107,6 @@ fun RemoteScreen(
         downAction = remoteSettings.physicalVolumeDownButtonAction,
         remoteViewModel = remoteViewModel
     )
-
-    DisposableEffect(isBluetoothServiceRunning) {
-        if(!isBluetoothServiceRunning) {
-            navigateUp()
-        }
-        onDispose {}
-    }
-
-    DisposableEffect(bluetoothDeviceHidConnectionState.state) {
-        if(bluetoothDeviceHidConnectionState.state == BluetoothHidDevice.STATE_DISCONNECTED) {
-            navigateUp()
-        }
-        onDispose {}
-    }
 
     StatelessRemoteScreen(
         deviceName = bluetoothDeviceHidConnectionState.deviceName,

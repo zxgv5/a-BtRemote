@@ -48,7 +48,6 @@ import org.koin.compose.viewmodel.koinViewModel
 fun DeviceDiscoveryScreen(
     permissions: Array<String>,
     arePermissionsGranted: Boolean,
-    isBluetoothEnabled: Boolean,
     isBluetoothServiceRunning: Boolean,
     bluetoothDeviceHidConnectionState: DeviceHidConnectionState,
     navigateUp: () -> Unit,
@@ -60,7 +59,6 @@ fun DeviceDiscoveryScreen(
 
     if(permissionState.value) {
         DeviceDiscoveryScreen(
-            isBluetoothEnabled = isBluetoothEnabled,
             isBluetoothServiceRunning = isBluetoothServiceRunning,
             bluetoothDeviceHidConnectionState = bluetoothDeviceHidConnectionState,
             navigateUp = navigateUp,
@@ -85,7 +83,6 @@ fun DeviceDiscoveryScreen(
 
 @Composable
 private fun DeviceDiscoveryScreen(
-    isBluetoothEnabled: Boolean,
     isBluetoothServiceRunning: Boolean,
     bluetoothDeviceHidConnectionState: DeviceHidConnectionState,
     navigateUp: () -> Unit,
@@ -107,25 +104,15 @@ private fun DeviceDiscoveryScreen(
         }
     }
 
-    LaunchedEffect(isBluetoothEnabled) {
-        if(!isBluetoothEnabled) {
-            deviceDiscoveryViewModel.cancelDiscovery()
-        }
-    }
-
     LaunchedEffect(isBluetoothServiceRunning) {
         if(!isBluetoothServiceRunning) {
-            deviceDiscoveryViewModel.cancelDiscovery()
             navigateUp()
         }
     }
 
-    DisposableEffect(bluetoothDeviceHidConnectionState.state) {
+    LaunchedEffect(bluetoothDeviceHidConnectionState.state) {
         if(bluetoothDeviceHidConnectionState.state == BluetoothHidDevice.STATE_CONNECTED) {
             navigateToRemoteScreen(bluetoothDeviceHidConnectionState.deviceName)
-        }
-        onDispose {
-            deviceDiscoveryViewModel.cancelDiscovery()
         }
     }
 

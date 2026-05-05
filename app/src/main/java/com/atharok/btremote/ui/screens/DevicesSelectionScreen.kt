@@ -73,7 +73,6 @@ fun DevicesSelectionScreen(
     isBluetoothHidProfileRegistered: Boolean,
     bluetoothDeviceHidConnectionState: DeviceHidConnectionState,
     closeApp: () -> Unit,
-    navigateUp: () -> Unit,
     navigateToRemoteScreen: (deviceName: String) -> Unit,
     navigateToDeviceDiscoveryScreen: () -> Unit,
     navigateToDistantDevicePairScreen: () -> Unit,
@@ -95,14 +94,6 @@ fun DevicesSelectionScreen(
     var deviceToUnpair: InternalDevice? by remember { mutableStateOf(null) }
 
     BackHandler(enabled = true, onBack = closeApp)
-
-    // If the device's Bluetooth is disabled, we stop the service and return to the previous view.
-    /*LaunchedEffect(isBluetoothEnabled) {
-        if(!isBluetoothEnabled) {
-            BluetoothHidService.stop(context)
-            navigateUp()
-        }
-    }*/
 
     // If the service isn't started and Bluetooth is enabled, we start the service.
     LaunchedEffect(isBluetoothServiceRunning) {

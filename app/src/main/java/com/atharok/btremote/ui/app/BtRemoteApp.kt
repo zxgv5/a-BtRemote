@@ -1,5 +1,6 @@
 package com.atharok.btremote.ui.app
 
+import android.bluetooth.BluetoothHidDevice
 import android.content.Context
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.displayCutout
@@ -90,6 +91,18 @@ fun BtRemoteApp(
                     }
                 }
 
+                LaunchedEffect(bluetoothDeviceHidConnectionState) {
+                    if(bluetoothDeviceHidConnectionState.state == BluetoothHidDevice.STATE_DISCONNECTED &&
+                        navController.currentDestination?.route != AppNavDestination.DeviceSelectionDestination.route &&
+                        navController.currentDestination?.route != AppNavDestination.DeviceDiscoveryDestination.route
+                        ) {
+                        navController.popBackStack(
+                            route = AppNavDestination.DeviceSelectionDestination.route,
+                            inclusive = false
+                        )
+                    }
+                }
+
                 // ---- NavHost ----
 
                 AppNavHost(
@@ -156,7 +169,6 @@ fun BtRemoteApp(
                             isBluetoothHidProfileRegistered = isBluetoothHidProfileRegistered,
                             bluetoothDeviceHidConnectionState = bluetoothDeviceHidConnectionState,
                             closeApp = { context.getActivity()?.moveTaskToBack(true) },
-                            navigateUp = { navController.navigateUp() },
                             navigateToRemoteScreen = {
                                 navController.navigateTo(AppNavDestination.RemoteDestination.route)
                             },
@@ -178,7 +190,6 @@ fun BtRemoteApp(
                                 context = context,
                                 permissions = bluetoothScanPermissions
                             ),
-                            isBluetoothEnabled = isBluetoothEnabled,
                             isBluetoothServiceRunning = isBluetoothServiceRunning,
                             bluetoothDeviceHidConnectionState = bluetoothDeviceHidConnectionState,
                             navigateUp = { navController.navigateUp() },
@@ -202,10 +213,8 @@ fun BtRemoteApp(
 
                     remoteScreen = {
                         RemoteScreen(
-                            isBluetoothServiceRunning = isBluetoothServiceRunning,
                             bluetoothDeviceHidConnectionState = bluetoothDeviceHidConnectionState,
                             closeApp = { context.getActivity()?.moveTaskToBack(true) },
-                            navigateUp = { navController.navigateUp() },
                             navigateToSettings = navigateToSettings,
                             modifier = Modifier
                         )
