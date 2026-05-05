@@ -224,4 +224,5 @@
     <string name="page_up">Subir en la página</string>
     <string name="page_down">Bajar en la página</string>
     <string name="mouse_scroll_speed">Velocidad del desplazamiento</string>
+    <string name="show_remote_buttons_in_notification">Mostrar botones del control remoto en la notificación</string>
 </resources>
