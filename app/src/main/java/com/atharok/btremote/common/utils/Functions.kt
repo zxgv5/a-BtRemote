@@ -3,6 +3,7 @@ package com.atharok.btremote.common.utils
 import android.os.Build
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.KeyboardLanguage
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.AdvancedKeyboardLayout
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.ArabicAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.BulgarianAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.CzechAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.EnglishUKAdvancedKeyboardLayout
@@ -19,6 +20,7 @@ import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboar
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.SpanishAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TurkishAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.UkrainianAdvancedKeyboardLayout
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.ArabicVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.BulgarianVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.CzechVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.EnglishUKVirtualKeyboardLayout
@@ -58,6 +60,7 @@ fun getKeyboardLayout(language: KeyboardLanguage): VirtualKeyboardLayout {
         KeyboardLanguage.BULGARIAN -> getKoin().get<BulgarianVirtualKeyboardLayout>()
         KeyboardLanguage.UKRAINIAN -> getKoin().get<UkrainianVirtualKeyboardLayout>()
         KeyboardLanguage.PERSIAN -> getKoin().get<PersianVirtualKeyboardLayout>()
+        KeyboardLanguage.ARABIC -> getKoin().get<ArabicVirtualKeyboardLayout>()
     }
 }
 
@@ -79,6 +82,7 @@ fun getAdvancedKeyboardLayout(language: KeyboardLanguage): AdvancedKeyboardLayou
         KeyboardLanguage.BULGARIAN -> getKoin().get<BulgarianAdvancedKeyboardLayout>()
         KeyboardLanguage.UKRAINIAN -> getKoin().get<UkrainianAdvancedKeyboardLayout>()
         KeyboardLanguage.PERSIAN -> getKoin().get<PersianAdvancedKeyboardLayout>()
+        KeyboardLanguage.ARABIC -> getKoin().get<ArabicAdvancedKeyboardLayout>()
     }
 }
 

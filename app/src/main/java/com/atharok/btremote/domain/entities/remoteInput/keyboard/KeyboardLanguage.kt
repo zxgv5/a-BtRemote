@@ -19,5 +19,6 @@ enum class KeyboardLanguage(@param:StringRes val language: Int) {
     HEBREW(R.string.keyboard_hebrew),
     BULGARIAN(R.string.keyboard_bulgarian),
     UKRAINIAN(R.string.keyboard_ukrainian),
-    PERSIAN(R.string.keyboard_persian)
+    PERSIAN(R.string.keyboard_persian),
+    ARABIC(R.string.keyboard_arabic)
 }

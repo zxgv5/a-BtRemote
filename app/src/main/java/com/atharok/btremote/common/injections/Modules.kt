@@ -17,6 +17,7 @@ import com.atharok.btremote.data.repositories.BluetoothRepositoryImpl
 import com.atharok.btremote.data.repositories.DataStoreRepositoryImpl
 import com.atharok.btremote.data.repositories.GyroscopeSensorRepositoryImpl
 import com.atharok.btremote.data.sensor.GyroscopeSensor
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.ArabicAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.BulgarianAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.CzechAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.EnglishUKAdvancedKeyboardLayout
@@ -33,6 +34,7 @@ import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboar
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.SpanishAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.TurkishAdvancedKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.advancedKeyboard.UkrainianAdvancedKeyboardLayout
+import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.ArabicVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.BulgarianVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.CzechVirtualKeyboardLayout
 import com.atharok.btremote.domain.entities.remoteInput.keyboard.virtualKeyboard.EnglishUKVirtualKeyboardLayout
@@ -116,6 +118,7 @@ private val androidModule: Module = module {
     single { BulgarianVirtualKeyboardLayout() }
     single { UkrainianVirtualKeyboardLayout() }
     single { PersianVirtualKeyboardLayout() }
+    single { ArabicVirtualKeyboardLayout() }
 
     single { EnglishUSAdvancedKeyboardLayout(context = androidContext()) }
     single { EnglishUKAdvancedKeyboardLayout(context = androidContext()) }
@@ -133,6 +136,7 @@ private val androidModule: Module = module {
     single { BulgarianAdvancedKeyboardLayout(context = androidContext()) }
     single { UkrainianAdvancedKeyboardLayout(context = androidContext()) }
     single { PersianAdvancedKeyboardLayout(context = androidContext()) }
+    single { ArabicAdvancedKeyboardLayout(context = androidContext()) }
 
     factory<Locale> {
         androidContext().resources.configuration.locales[0]
