@@ -231,4 +231,6 @@
     <string name="default_option">默认</string>
     <string name="page_up">向上翻页</string>
     <string name="page_down">向下翻页</string>
+    <string name="mouse_scroll_speed">滚动速度</string>
+    <string name="show_remote_buttons_in_notification">在通知中显示遥控按钮</string>
 </resources>
