@@ -233,4 +233,5 @@
     <string name="page_down">向下翻页</string>
     <string name="mouse_scroll_speed">滚动速度</string>
     <string name="show_remote_buttons_in_notification">在通知中显示遥控按钮</string>
+    <string name="keyboard_arabic">阿拉伯语</string>
 </resources>
