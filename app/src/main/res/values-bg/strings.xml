@@ -225,4 +225,5 @@
     <string name="page_down">Страница надолу</string>
     <string name="mouse_scroll_speed">Скорост на превъртане</string>
     <string name="show_remote_buttons_in_notification">Показване на бутоните на дистанционното управление в известията</string>
+    <string name="keyboard_arabic">Арабски</string>
 </resources>
