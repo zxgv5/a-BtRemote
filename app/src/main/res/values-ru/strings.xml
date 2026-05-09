@@ -246,4 +246,5 @@
     <string name="page_down">Страница вниз</string>
     <string name="mouse_scroll_speed">Скорость прокрутки</string>
     <string name="show_remote_buttons_in_notification">Отображать кнопки пульта дистанционного управления в уведомлении</string>
+    <string name="keyboard_arabic">Арабский</string>
 </resources>
