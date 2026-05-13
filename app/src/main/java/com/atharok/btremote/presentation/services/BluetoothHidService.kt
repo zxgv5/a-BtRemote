@@ -114,7 +114,7 @@ class BluetoothHidService : Service() {
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.notification_icon)
-            setContentText(getString(R.string.connected_off))
+            setContentTitle(getString(R.string.connected_off))
             setOngoing(true)
             //.setContentIntent(createOpenApplicationPendingIntent())
             setStyle(NotificationCompat.DecoratedCustomViewStyle())
@@ -136,13 +136,15 @@ class BluetoothHidService : Service() {
     ) {
         val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).apply {
             setSmallIcon(R.drawable.notification_icon)
-            setContentText(getString(R.string.connected_on, deviceName))
+            if(showRemoteButtonsInNotification) {
+                setContentText(getString(R.string.connected_on, deviceName))
+                setCustomBigContentView(configureRemoteViews())
+            } else {
+                setContentTitle(getString(R.string.connected_on, deviceName))
+            }
             setOngoing(true)
             //setContentIntent(createOpenApplicationPendingIntent())
             setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            if(showRemoteButtonsInNotification) {
-                setCustomBigContentView(configureRemoteViews())
-            }
             addAction(
                 NotificationCompat.Action.Builder(
                     R.drawable.round_launch_24,
