@@ -53,7 +53,13 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
+        popEnterTransition = popEnterTransition,
+        popExitTransition = popExitTransition,
+        predictivePopEnterTransition = { swipeEdge -> popEnterTransition() },
+        predictivePopExitTransition = { swipeEdge -> popExitTransition() }
     ) {
 
         composable(
@@ -71,7 +77,7 @@ fun AppNavHost(
             enterTransition = enterTransition,
             exitTransition = exitTransition,
             popEnterTransition = popEnterTransition,
-            popExitTransition = popExitTransition
+            popExitTransition = popExitTransition,
         ) {
             settingsScreen()
         }
