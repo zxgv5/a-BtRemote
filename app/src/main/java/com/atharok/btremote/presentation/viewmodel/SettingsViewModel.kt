@@ -98,6 +98,11 @@ class SettingsViewModel(
 
     // ---- Others ----
 
+    val showAppOverLockScreenFlow: Flow<Boolean> get() = useCase.showAppOverLockScreen()
+    fun saveShowAppOverLockScreen(show: Boolean) = viewModelScope.launch {
+        useCase.saveShowAppOverLockScreen(show)
+    }
+
     val showRemoteButtonsInNotificationFlow: Flow<Boolean> get() = useCase.showRemoteButtonsInNotification()
     fun saveShowRemoteButtonsInNotification(show: Boolean) = viewModelScope.launch {
         useCase.saveShowRemoteButtonsInNotification(show)

@@ -30,4 +30,8 @@ class AppScopeViewModel(
     val isBluetoothHidProfileRegistered: StateFlow<Boolean> get() = useCase.isBluetoothHidProfileRegistered()
 
     val deviceHidConnectionState: StateFlow<DeviceHidConnectionState> get() = useCase.getDeviceHidConnectionState()
+
+    // ---- Advanced Options ----
+
+    val showAppOverLockScreenFlow: Flow<Boolean> = useCase.showAppOverLockScreenFlow
 }

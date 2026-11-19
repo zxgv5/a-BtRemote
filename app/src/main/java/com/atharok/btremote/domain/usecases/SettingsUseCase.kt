@@ -95,6 +95,11 @@ class SettingsUseCase(private val dataStoreRepository: DataStoreRepository) {
 
     // ---- Others ----
 
+    fun showAppOverLockScreen(): Flow<Boolean> = dataStoreRepository.showAppOverLockScreen()
+    suspend fun saveShowAppOverLockScreen(show: Boolean) {
+        dataStoreRepository.saveShowAppOverLockScreen(show)
+    }
+
     fun showRemoteButtonsInNotification(): Flow<Boolean> = dataStoreRepository.showRemoteButtonsInNotification()
     suspend fun saveShowRemoteButtonsInNotification(show: Boolean) {
         dataStoreRepository.saveShowRemoteButtonsInNotification(show)

@@ -108,6 +108,11 @@ class DataStoreRepositoryImpl(
         settingsDataStore.saveAutoConnectDeviceAddress(macAddress)
     }
 
+    override fun showAppOverLockScreen(): Flow<Boolean> = settingsDataStore.showAppOverLockScreenFlow
+    override suspend fun saveShowAppOverLockScreen(show: Boolean) {
+        settingsDataStore.saveShowAppOverLockScreen(show)
+    }
+
     override fun showRemoteButtonsInNotification(): Flow<Boolean> = settingsDataStore.showRemoteButtonsInNotificationFlow
     override suspend fun saveShowRemoteButtonsInNotification(show: Boolean) {
         settingsDataStore.saveShowRemoteButtonsInNotification(show)

@@ -62,6 +62,9 @@ interface DataStoreRepository {
     fun getAutoConnectDeviceAddressFlow(): Flow<String>
     suspend fun saveAutoConnectDeviceAddress(macAddress: String)
 
+    fun showAppOverLockScreen(): Flow<Boolean>
+    suspend fun saveShowAppOverLockScreen(show: Boolean)
+
     fun showRemoteButtonsInNotification(): Flow<Boolean>
     suspend fun saveShowRemoteButtonsInNotification(show: Boolean)
 

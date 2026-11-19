@@ -61,6 +61,7 @@ class SettingsDataStore(private val context: Context) {
 
         private const val FAVORITE_DEVICES_KEY = "favorite_devices_key"
         private const val AUTO_CONNECT_DEVICE_ADDRESS_KEY = "auto_connect_device_address_key"
+        private const val SHOW_APP_OVER_LOCK_SCREEN_KEY = "show_app_over_lock_screen_key"
         private const val SHOW_REMOTE_BUTTONS_IN_NOTIFICATION_KEY = "show_remote_buttons_in_notification_key"
         private const val HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY = "hide_bluetooth_activation_button_key"
     }
@@ -85,6 +86,7 @@ class SettingsDataStore(private val context: Context) {
     private val volumePhysicalButtonActionDownKey = stringPreferencesKey(VOLUME_PHYSICAL_BUTTON_ACTION_DOWN_KEY)
     private val favoriteDevicesKey = stringPreferencesKey(FAVORITE_DEVICES_KEY)
     private val autoConnectDeviceAddressKey = stringPreferencesKey(AUTO_CONNECT_DEVICE_ADDRESS_KEY)
+    private val showAppOverLockScreenKey = booleanPreferencesKey(SHOW_APP_OVER_LOCK_SCREEN_KEY)
     private val showRemoteButtonsInNotificationKey = booleanPreferencesKey(SHOW_REMOTE_BUTTONS_IN_NOTIFICATION_KEY)
     private val hideBluetoothActivationButtonKey = booleanPreferencesKey(HIDE_BLUETOOTH_ACTIVATION_BUTTON_KEY)
 
@@ -305,6 +307,20 @@ class SettingsDataStore(private val context: Context) {
     }
 
     // ---- Advanced Options ----
+
+    val showAppOverLockScreenFlow: Flow<Boolean> by lazy {
+        context.dataStore.data
+            .catchException()
+            .map { preferences ->
+                preferences[showAppOverLockScreenKey] == true
+            }
+    }
+
+    suspend fun saveShowAppOverLockScreen(show: Boolean) {
+        context.dataStore.edit {
+            it[showAppOverLockScreenKey] = show
+        }
+    }
 
     val showRemoteButtonsInNotificationFlow: Flow<Boolean> by lazy {
         context.dataStore.data

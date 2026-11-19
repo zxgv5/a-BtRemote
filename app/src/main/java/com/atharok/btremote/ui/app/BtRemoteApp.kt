@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.atharok.btremote.common.extensions.getActivity
+import com.atharok.btremote.common.extensions.setShowOverLockScreen
 import com.atharok.btremote.common.utils.arePermissionsGranted
 import com.atharok.btremote.common.utils.bluetoothConnectPermissions
 import com.atharok.btremote.common.utils.bluetoothScanPermissions
@@ -69,6 +71,16 @@ fun BtRemoteApp(
             if(!appScopeViewModel.isBluetoothSupported) {
                 BluetoothNotSupportScreen()
             } else {
+
+                val showAppOverLockScreen by appScopeViewModel.showAppOverLockScreenFlow
+                    .collectAsStateWithLifecycle(false)
+
+                if(showAppOverLockScreen) {
+                    DisposableEffect(context) {
+                        context.setShowOverLockScreen(enabled = true)
+                        onDispose { context.setShowOverLockScreen(enabled = false) }
+                    }
+                }
 
                 val isBluetoothServiceRunning: Boolean by appScopeViewModel.isBluetoothServiceRunning.collectAsStateWithLifecycle()
                 val isBluetoothHidProfileRegistered: Boolean by appScopeViewModel.isBluetoothHidProfileRegistered.collectAsStateWithLifecycle()

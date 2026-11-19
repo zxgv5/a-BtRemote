@@ -20,7 +20,7 @@ import com.atharok.btremote.common.utils.DATA_STORE_PREFERENCES_SETTINGS_NAME
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATA_STORE_PREFERENCES_SETTINGS_NAME)
 
-fun Context.getActivity(): ComponentActivity? = when (this) {
+tailrec fun Context.getActivity(): ComponentActivity? = when (this) {
     is ComponentActivity -> this
     is ContextWrapper -> baseContext.getActivity()
     else -> null
@@ -55,4 +55,15 @@ fun Context.getAppVersion(): String {
     } catch (e: Exception) {
         this.getString(R.string.unknown)
     }
+}
+
+/**
+ * Shows (or stops showing) the hosting Activity above the lock screen.
+ * Does nothing if this Context is not backed by an Activity.
+ *
+ * @param enabled true to show above the lock screen, false to restore the default behavior.
+ */
+fun Context.setShowOverLockScreen(enabled: Boolean) {
+    val activity = this.getActivity() ?: return
+    activity.setShowWhenLocked(enabled)
 }

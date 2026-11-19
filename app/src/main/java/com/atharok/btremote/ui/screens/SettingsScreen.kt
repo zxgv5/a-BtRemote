@@ -79,6 +79,7 @@ fun SettingsScreen(
         .remoteSettingsFlow.collectAsStateWithLifecycle(RemoteSettings())
 
     // Advanced Options
+    val showAppOverLockScreen: Boolean by settingsViewModel.showAppOverLockScreenFlow.collectAsStateWithLifecycle(initialValue = false)
     val showRemoteButtonsInNotification: Boolean by settingsViewModel.showRemoteButtonsInNotificationFlow.collectAsStateWithLifecycle(initialValue = false)
     val hideBluetoothActivationButton: Boolean by settingsViewModel.hideBluetoothActivationButtonFlow.collectAsStateWithLifecycle(initialValue = false)
 
@@ -430,6 +431,19 @@ fun SettingsScreen(
                 text = stringResource(id = R.string.advanced_options),
                 icon = AppIcons.Settings,
                 iconDescription = stringResource(id = R.string.advanced_options),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    )
+            )
+
+            SettingsSwitch(
+                primaryText = stringResource(id = R.string.setting_show_over_lock_screen_title),
+                secondaryText = stringResource(id = R.string.setting_show_over_lock_screen_summary),
+                checked = showAppOverLockScreen,
+                onCheckedChange = { settingsViewModel.saveShowAppOverLockScreen(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(

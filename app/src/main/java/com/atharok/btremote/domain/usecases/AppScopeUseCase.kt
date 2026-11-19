@@ -41,4 +41,8 @@ class AppScopeUseCase(
     fun getDeviceHidConnectionState(): StateFlow<DeviceHidConnectionState> {
         return bluetoothRepository.getDeviceHidConnectionState()
     }
+
+    // ---- Advanced Options ----
+
+    val showAppOverLockScreenFlow: Flow<Boolean> get() = dataStoreRepository.showAppOverLockScreen()
 }
